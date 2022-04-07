@@ -1,0 +1,7 @@
+{
+  "name": "WeHearYouAll-SeiYou",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
