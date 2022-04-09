@@ -2,6 +2,7 @@ import { IonHeader, IonButtons, IonBackButton, IonTitle, IonContent, IonList, Io
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
+import './YourVoiceList.css';
 
 export const VOICE_DATA = [
     {id: 'd1', name: 'Alvin', image: 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'},

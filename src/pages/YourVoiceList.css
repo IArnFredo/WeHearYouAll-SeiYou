@@ -1,0 +1,8 @@
+.bg-app {
+    background-size: cover;
+    background: url('../../public/assets/images/background.png') !important;
+}
+
+ion-content {
+    --background: transparent;
+}
