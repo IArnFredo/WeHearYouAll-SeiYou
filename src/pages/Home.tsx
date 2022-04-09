@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonTabBar, IonTabButton, IonTabs, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+
 import './Home.css';
 import { homeOutline, searchOutline, menuOutline } from 'ionicons/icons';
 

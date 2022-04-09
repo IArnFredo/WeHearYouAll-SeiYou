@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+
 import './Home.css';
 
 const LandingScreen: React.FC = () => {
