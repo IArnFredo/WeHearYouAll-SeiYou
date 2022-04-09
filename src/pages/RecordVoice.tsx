@@ -1,5 +1,6 @@
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonRow, IonText, IonToolbar } from '@ionic/react'
 import React from 'react'
+import './RecordVoice.css';
 
 const RecordVoice: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const RecordVoice: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='content ion-text-center' fullscreen>
+      <IonContent className='rcContent ion-text-center' fullscreen>
         <IonButton className='recButton' color='danger'>
           <img src="../assets/images/recButton.png" alt="" />
         </IonButton><br />
