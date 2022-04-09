@@ -1,8 +1,11 @@
+import { IonPage } from '@ionic/react';
 import React from 'react';
 
-const UploadVoice = () => {
+const UploadVoice: React.FC = () => {
   return (
-    <div>UploadVoice</div>
+    <IonPage>
+      
+    </IonPage>
   );
 };
 
