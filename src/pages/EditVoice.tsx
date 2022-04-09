@@ -1,4 +1,19 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonRow,
+  IonTextarea,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 import React, { useRef } from 'react';
 import './EditVoice.css';
 
