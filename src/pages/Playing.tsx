@@ -5,7 +5,6 @@ import {
   IonButtons,
   IonPage,
   IonContent,
-  IonApp,
 } from "@ionic/react";
 import React from "react";
 import "./Playing.css";

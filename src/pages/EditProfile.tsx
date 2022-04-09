@@ -1,8 +1,11 @@
+import { IonPage } from '@ionic/react'
 import React from 'react'
 
-const EditProfile = () => {
+const EditProfile: React.FC = () => {
   return (
-    <div>EditProfile</div>
+    <IonPage>
+      <h1>Edit Profile</h1>
+    </IonPage>
   )
 }
 

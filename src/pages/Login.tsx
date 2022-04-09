@@ -1,24 +1,20 @@
 import {
-    IonContent, 
-    IonHeader, 
+    IonContent,
     IonPage, 
     IonTitle, 
     IonToolbar,
     IonRow,
     IonCol,
-    IonIcon,
     IonItem,
     IonLabel,
     IonInput,
     IonButton,
-    IonAlert,
     IonGrid,
     IonBackButton,
     IonButtons,
   } from '@ionic/react';
-  import React from 'react';
-  import { arrowBack, backspace, personCircle } from 'ionicons/icons';
-  import './Account.css';
+import React from 'react';
+import './Account.css';
   
   const Login: React.FC = () => {
     return (

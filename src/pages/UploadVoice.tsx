@@ -29,7 +29,7 @@ const UploadVoice: React.FC = () => {
         </IonButtons>
         <IonTitle>Upload New Voice</IonTitle>
       </IonToolbar>
-      <IonContent className='ion-padding content'>
+      <IonContent className='ion-padding'>
         <IonGrid className='ion-text-center'>
           <IonRow>
             <IonCol>

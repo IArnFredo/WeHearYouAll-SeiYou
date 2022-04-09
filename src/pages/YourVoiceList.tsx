@@ -14,9 +14,9 @@ import {
     IonToolbar
 } from "@ionic/react";
 
-const YourVoiceList = () => {
+const YourVoiceList: React.FC = () => {
   return (
-    <IonApp>
+    <IonPage>
         <IonHeader>
             <IonButtons slot="start">
                 <IonBackButton />
@@ -30,7 +30,7 @@ const YourVoiceList = () => {
                 <IonInput value={text}></IonInput>
             </IonItem> */}
         </IonContent>
-    </IonApp>
+    </IonPage>
   );
 };
 
