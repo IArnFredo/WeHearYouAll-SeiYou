@@ -13,16 +13,22 @@ import {
     IonButton,
     IonAlert,
     IonGrid,
+    IonBackButton,
+    IonButtons,
   } from '@ionic/react';
-  import { personCircle } from 'ionicons/icons';
-  import './Home.css';
+  import React from 'react';
+  import { arrowBack, backspace, personCircle } from 'ionicons/icons';
+  import './Login.css';
   
   const Login: React.FC = () => {
     return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login</IonTitle>
+            <IonButtons slot="start">
+                <IonBackButton defaultHref="/@welcome"/>
+            </IonButtons>
+            <IonTitle>Sign In</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding ion-text-center">
@@ -34,21 +40,13 @@ import {
             </IonRow>
             <IonRow>
                 <IonCol>
-                    <IonIcon
-                        style={{ fontSize: "70px", color: "#0040ff" }}
-                        icon={personCircle}
-                    />
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonTitle>Sign in to your Account</IonTitle>
+                    <p id="label">Sign in to your Account</p>
                 </IonCol>
             </IonRow>
             <IonRow>
                 <IonCol>
                     <IonItem>
-                        <IonLabel position="floating"> Email</IonLabel>
+                        <IonLabel position="floating"> <p id="label">Email</p></IonLabel>
                         <IonInput type="email"></IonInput>
                     </IonItem>
                 </IonCol>
@@ -56,19 +54,20 @@ import {
             <IonRow>
                 <IonCol>
                     <IonItem>
-                        <IonLabel position="floating"> Password</IonLabel>
-                        <IonInput
-                            type="password"
-                            >
+                        <IonLabel position="floating"> <p id="label">Password</p></IonLabel>
+                        <IonInput type="password">
                         </IonInput>
                     </IonItem>
                 </IonCol>
             </IonRow>
             <IonRow>
                 <IonCol>
-                <IonButton expand="block">Sign In</IonButton>
-                <p style={{ fontSize: "medium" }}>
-                    Don't have an account? <a href="#">Sign up!</a>
+                <IonButton id="login-button" shape="round">Sign In</IonButton>
+                <p id="label-2">
+                    Forgot Password?
+                </p>
+                <p id="label-2">
+                    Create New Account!
                 </p>
                 </IonCol>
             </IonRow>
