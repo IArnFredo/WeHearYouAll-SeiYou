@@ -2,7 +2,7 @@ import { IonBackButton, IonButton, IonButtons, IonCardContent, IonCardHeader, Io
 import React from 'react';
 import './Profile.css';
 
-const AnotherProfile = () => {
+const AnotherProfile: React.FC = () => {
   return (
     <IonPage>
       <IonToolbar>

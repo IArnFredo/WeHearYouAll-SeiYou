@@ -3,7 +3,7 @@ import { arrowUpOutline, logoInstagram, pencilOutline, playOutline } from 'ionic
 import React from 'react';
 import './Profile.css';
 
-const Profile = () => {
+const Profile: React.FC = () => {
   return (
     <IonPage>
         <IonContent fullscreen className='ion-padding' id='bg'>

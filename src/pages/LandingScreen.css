@@ -1,0 +1,19 @@
+.landingContent {
+    --background: url('../../public/assets/images/background.png');
+}
+
+.skipButton {
+    position: absolute;
+    top: 18px;
+    right: 5px;
+    text-transform: initial;
+}
+
+.text1 {
+    font-size: small;
+}
+
+.text2 {
+    font-size: small;
+    color: grey;
+}

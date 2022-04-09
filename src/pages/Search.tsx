@@ -1,8 +1,11 @@
+import { IonPage } from '@ionic/react'
 import React from 'react'
 
-const Search = () => {
+const Search: React.FC = () => {
   return (
-    <div>Search</div>
+    <IonPage>
+      <h1>AnotherProfile</h1>
+    </IonPage>
   )
 }
 
