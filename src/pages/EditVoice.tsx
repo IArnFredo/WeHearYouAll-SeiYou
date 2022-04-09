@@ -17,16 +17,18 @@ const EditVoice: React.FC = () => {
         <IonGrid className='ion-text-center'>
           <IonRow>
             <IonCol>
-              <IonItem>
+              <IonItem className='voice-name'>
                 <IonInput autofocus ref={voiceNameRef} placeholder="Voice Name"></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonItem>
-                <IonLabel position="stacked">Voice Description</IonLabel>
-                <IonTextarea className='voice-desc' rows={8}></IonTextarea>
+              <IonItem lines='none'>
+                <IonLabel position='stacked' color='dark'>
+                  <span className='voice-desc-label'>Voice Description</span>
+                </IonLabel>
+                <IonTextarea autoGrow className='voice-desc-textarea' rows={8}></IonTextarea>
               </IonItem>
             </IonCol>
           </IonRow>

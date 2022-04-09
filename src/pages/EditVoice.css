@@ -15,8 +15,17 @@ ion-content {
   text-transform: none;
 }
 
-.voice-desc {
+.voice-name {
+  margin: 0 15px;
+}
+
+.voice-desc-label {
+  padding: 0 15px;
+  font-size: 1.3em;
+}
+
+.voice-desc-textarea {
   --background: #F2F2F2;
-  padding: 10px;
+  padding: 15px;
   border-radius: 10px;
 }

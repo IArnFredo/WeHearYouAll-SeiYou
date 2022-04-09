@@ -1,4 +1,20 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonText, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonRow,
+  IonText,
+  IonTextarea,
+  IonTitle,
+  IonToolbar
+} from '@ionic/react';
 import React, { useRef } from 'react';
 import './UploadVoice.css';
 
@@ -8,7 +24,7 @@ const UploadVoice: React.FC = () => {
   return (
     <IonPage className='bg-app'>
       <IonToolbar>
-        <IonButtons slot="start">
+        <IonButtons slot='start'>
           <IonBackButton defaultHref='/@profile' />
         </IonButtons>
         <IonTitle>Upload New Voice</IonTitle>
@@ -27,16 +43,18 @@ const UploadVoice: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonItem>
-                <IonInput ref={voiceNameRef} placeholder="Voice Name"></IonInput>
+              <IonItem className='voice-name'>
+                <IonInput ref={voiceNameRef} placeholder='Voice Name'></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonItem>
-                <IonLabel position="stacked">Voice Description</IonLabel>
-                <IonTextarea autoGrow className='voice-desc' rows={8}></IonTextarea>
+              <IonItem lines='none'>
+                <IonLabel position='stacked' color='dark'>
+                  <span className='voice-desc-label'>Voice Description</span>
+                </IonLabel>
+                <IonTextarea autoGrow className='voice-desc-textarea' rows={8}></IonTextarea>
               </IonItem>
             </IonCol>
           </IonRow>
