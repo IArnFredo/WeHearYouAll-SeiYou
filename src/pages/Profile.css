@@ -9,3 +9,11 @@
 .text-profile {
     text-align: center;
 }
+
+ion-button {
+    --background: #F7BF50;
+    --background-focused: #bf7f00;
+    --background-hover: #bf7f00;
+    --color: #000;
+    text-transform: none;
+}
