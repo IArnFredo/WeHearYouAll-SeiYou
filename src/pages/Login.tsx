@@ -18,19 +18,17 @@ import {
   } from '@ionic/react';
   import React from 'react';
   import { arrowBack, backspace, personCircle } from 'ionicons/icons';
-  import './Login.css';
+  import './Account.css';
   
   const Login: React.FC = () => {
     return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
+      <IonToolbar>
             <IonButtons slot="start">
                 <IonBackButton defaultHref="/@welcome"/>
             </IonButtons>
             <IonTitle>Sign In</IonTitle>
         </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen className="ion-padding ion-text-center">
         <IonGrid>
             <IonRow>
