@@ -1,22 +1,29 @@
-import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonText, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useRef } from 'react';
+import './UploadVoice.css';
 
 const UploadVoice: React.FC = () => {
   const voiceNameRef = useRef<HTMLIonInputElement>(null);
 
   return (
-    <IonPage>
+    <IonPage className='bg-app'>
       <IonToolbar>
         <IonButtons slot="start">
           <IonBackButton defaultHref='/@profile' />
         </IonButtons>
         <IonTitle>Upload New Voice</IonTitle>
       </IonToolbar>
-      <IonContent className='ion-padding'>
+      <IonContent className='ion-padding content'>
         <IonGrid className='ion-text-center'>
           <IonRow>
-            <IonButton>Select Voice</IonButton>
-            <IonCol>No voice file selected</IonCol>
+            <IonCol>
+              <IonButton shape='round' className='select-voice-btn'>Select Voice</IonButton>
+            </IonCol>
+            <IonCol className='ion-align-self-center'>
+              <IonText>
+                <span className='select-voice-status'>No voice file selected</span>
+              </IonText>
+            </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
@@ -29,13 +36,13 @@ const UploadVoice: React.FC = () => {
             <IonCol>
               <IonItem>
                 <IonLabel position="stacked">Voice Description</IonLabel>
-                <IonTextarea placeholder="Voice description..."></IonTextarea>
+                <IonTextarea autoGrow className='voice-desc' rows={8}></IonTextarea>
               </IonItem>
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonButton>Upload Voice</IonButton>
+              <IonButton shape='round' className='upload-btn'>Upload Voice</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>

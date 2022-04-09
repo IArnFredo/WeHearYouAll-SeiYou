@@ -1,0 +1,22 @@
+.bg-app{
+  background-size: cover;
+  background: url('../../public/assets/images/background.png') !important;
+}
+
+ion-content {
+  --background: transparent;
+}
+
+.upload-btn {
+  --background: #F7BF50;
+  --background-focused: #bf7f00;
+  --background-hover: #bf7f00;
+  --color: #000;
+  text-transform: none;
+}
+
+.voice-desc {
+  --background: #F2F2F2;
+  padding: 10px;
+  border-radius: 10px;
+}

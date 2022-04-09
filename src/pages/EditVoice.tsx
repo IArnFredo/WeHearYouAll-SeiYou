@@ -1,23 +1,24 @@
 import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useRef } from 'react';
+import './EditVoice.css';
 
 const EditVoice: React.FC = () => {
   const voiceNameRef = useRef<HTMLIonInputElement>(null);
 
   return (
-    <IonPage>
+    <IonPage className='bg-app'>
       <IonToolbar>
         <IonButtons slot="start">
           <IonBackButton defaultHref='/@your-voice-list' />
         </IonButtons>
-        <IonTitle>Upload New Voice</IonTitle>
+        <IonTitle>Edit Voice</IonTitle>
       </IonToolbar>
-      <IonContent className='ion-padding'>
+      <IonContent className='ion-padding content'>
         <IonGrid className='ion-text-center'>
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonInput ref={voiceNameRef} placeholder="Voice Name"></IonInput>
+                <IonInput autofocus ref={voiceNameRef} placeholder="Voice Name"></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
@@ -25,13 +26,13 @@ const EditVoice: React.FC = () => {
             <IonCol>
               <IonItem>
                 <IonLabel position="stacked">Voice Description</IonLabel>
-                <IonTextarea placeholder="Voice description..."></IonTextarea>
+                <IonTextarea className='voice-desc' rows={8}></IonTextarea>
               </IonItem>
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonButton>Update Voice</IonButton>
+              <IonButton shape='round' className='upload-btn'>Update Voice</IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
