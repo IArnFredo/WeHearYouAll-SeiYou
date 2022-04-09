@@ -1,8 +1,8 @@
 import {
-    IonContent, 
-    IonHeader, 
-    IonPage, 
-    IonTitle, 
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
     IonToolbar,
     IonRow,
     IonCol,
@@ -15,96 +15,91 @@ import {
     IonGrid,
     IonBackButton,
     IonButtons,
-  } from '@ionic/react';
-  import React from 'react';
-  import { arrowBack, backspace, personCircle } from 'ionicons/icons';
-  import './Account.css';
-  
-  const Register: React.FC = () => {
-    return (
-    <IonPage>
-      <IonToolbar>
-            <IonButtons slot="start">
-                <IonBackButton defaultHref="/@welcome"/>
-            </IonButtons>
-            <IonTitle>Create new account</IonTitle>
-        </IonToolbar>
-      <IonContent fullscreen className="ion-padding ion-text-center">
-        <IonGrid>
-            <IonRow>
-                <IonCol>
+    IonText,
+} from '@ionic/react';
+import React from 'react';
+import { arrowBack, backspace, personCircle } from 'ionicons/icons';
+import './Account.css';
 
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <p id="label">Account Information</p>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonItem>
-                        <IonLabel position="floating"> <p id="label">Email</p></IonLabel>
-                        <IonInput type="email"></IonInput>
-                    </IonItem>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonItem>
-                        <IonLabel position="floating"> <p id="label">Password</p></IonLabel>
-                        <IonInput type="password">
-                        </IonInput>
-                    </IonItem>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonItem>
-                        <IonLabel position="floating"> <p id="label">Confirm Password</p></IonLabel>
-                        <IonInput type="password">
-                        </IonInput>
-                    </IonItem>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <p id="label">Personal Information</p>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonItem>
-                        <IonLabel position="floating"> <p id="label">Name</p></IonLabel>
-                        <IonInput id="input" type="text" placeholder="Name" ></IonInput>
-                    </IonItem>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonLabel position="fixed"> <p id="label">Gender</p></IonLabel>
-                    <IonButton id="login-button" shape="round">Male</IonButton>
-                    <IonButton id="login-button" shape="round">Female</IonButton>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonItem>
-                        <IonLabel position="stacked"> <p id="label">Date of Birth</p></IonLabel>
-                        <IonInput id="input" type="date"></IonInput>
-                    </IonItem>
-                </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol>
-                    <IonButton id="login-button" shape="round">Sign Up</IonButton>
-                </IonCol>
-            </IonRow>
-        </IonGrid>
-      </IonContent>
-    </IonPage>
+const Register: React.FC = () => {
+    return (
+        <IonPage>
+            <IonToolbar>
+                <IonButtons slot="start">
+                    <IonBackButton defaultHref="/@welcome" />
+                    <IonText>Create new Account</IonText>
+                </IonButtons>
+            </IonToolbar>
+            <IonContent fullscreen className="ion-padding ion-text-center">
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            <p id="label">Account Information</p>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel position="floating"> <p id="label">Email</p></IonLabel>
+                                <IonInput type="email"></IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel position="floating"> <p id="label">Password</p></IonLabel>
+                                <IonInput type="password">
+                                </IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel position="floating"> <p id="label">Confirm Password</p></IonLabel>
+                                <IonInput type="password">
+                                </IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <p id="label">Personal Information</p>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel position="floating"> <p id="label">Name</p></IonLabel>
+                                <IonInput id="input" type="text" placeholder="Name" ></IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonLabel position="fixed"> <p id="label">Gender</p></IonLabel>
+                            <IonButton id="login-button" shape="round">Male</IonButton>
+                            <IonButton id="login-button" shape="round">Female</IonButton>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonLabel position="stacked"> <p id="label">Date of Birth</p></IonLabel>
+                                <IonInput id="input" type="date"></IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonButton id="login-button" shape="round">Sign Up</IonButton>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
+            </IonContent>
+        </IonPage>
     );
-  };
-  
-  export default Register;
-  
+};
+
+export default Register;

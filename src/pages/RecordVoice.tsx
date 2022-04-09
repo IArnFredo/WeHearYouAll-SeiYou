@@ -5,14 +5,12 @@ import './RecordVoice.css';
 const RecordVoice: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar className='tool'>
-          <IonButtons slot='start'>
-            <IonBackButton defaultHref='/@profile'></IonBackButton>
-            <IonText>Record Your Voice</IonText>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <IonToolbar className='tool'>
+        <IonButtons slot='start'>
+          <IonBackButton defaultHref='/@profile'></IonBackButton>
+          <IonText>Record Your Voice</IonText>
+        </IonButtons>
+      </IonToolbar>
       <IonContent className='rcContent ion-text-center' fullscreen>
         <IonButton className='recButton' color='danger'>
           <img src="../assets/images/recButton.png" alt="" />
