@@ -4,8 +4,8 @@ import './Home.css';
 const LandingScreen: React.FC = () => {
   return (
     <IonPage>
-      <IonContent fullscreen>
-        <img src="" alt="" />
+      <IonContent className='content' fullscreen>
+
       </IonContent>
     </IonPage>
   );
