@@ -58,7 +58,7 @@ const YourVoiceList = () => {
           <IonTitle>Your Voices</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="bg-app">
           <IonTitle class="ion-margin ion-text-center">Voices</IonTitle>
           <IonList>
             {VOICE_DATA.map(voice => (
