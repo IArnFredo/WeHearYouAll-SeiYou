@@ -1,0 +1,11 @@
+.avatar-profile {
+    border-radius: 100%;
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 7%;
+    padding-bottom: 7%;
+}
+
+.text-profile {
+    text-align: center;
+}

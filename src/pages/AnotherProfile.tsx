@@ -1,8 +1,9 @@
+import { IonButton, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonRow } from '@ionic/react'
 import React from 'react'
 
 const AnotherProfile = () => {
   return (
-    <div>AnotherProfile</div>
+    <p>Another Profile</p>
   )
 }
 
