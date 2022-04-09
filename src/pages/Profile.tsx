@@ -19,14 +19,10 @@ const Profile = () => {
                             <IonButton href='' expand="block"><IonIcon className='button-icon' icon={pencilOutline}/>Edit Profile</IonButton>
                             <IonButton href='' expand="block"><IonIcon className='button-icon' icon={playOutline}/>Your Voices</IonButton>
                             <IonButton href='' expand="block"><IonIcon className='button-icon' icon={arrowUpOutline}/>Upload New Voices</IonButton>
-                            
-                            
-                            {/* <IonButton expand="block">A button</IonButton> */}
                         </IonCardContent>
                 </IonCol>
-            </IonRow>
-            
-        </IonContent>
+            </IonRow>     
+    </IonContent>
   );
 };
 
