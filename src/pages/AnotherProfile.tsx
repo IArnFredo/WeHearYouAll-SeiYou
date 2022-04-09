@@ -4,7 +4,7 @@ import './Profile.css';
 
 const AnotherProfile: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage className='bg-app'>
       <IonToolbar>
         <IonButtons slot="start">
           <IonBackButton defaultHref="/" />

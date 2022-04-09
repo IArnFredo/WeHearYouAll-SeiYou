@@ -5,7 +5,7 @@ import './Profile.css';
 
 const Profile: React.FC = () => {
   return (
-    <IonPage>
+    <IonPage className='bg-app'>
         <IonContent fullscreen className='ion-padding' id='bg'>
             <IonRow>
                 <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
@@ -17,9 +17,9 @@ const Profile: React.FC = () => {
                             
                     </IonCardHeader>
                     <IonCardContent>
-                        <IonButton href='' expand="block"><IonIcon className='button-icon' icon={pencilOutline}/>Edit Profile</IonButton>
-                        <IonButton href='' expand="block"><IonIcon className='button-icon' icon={playOutline}/>Your Voices</IonButton>
-                        <IonButton href='' expand="block"><IonIcon className='button-icon' icon={arrowUpOutline}/>Upload New Voices</IonButton>
+                        <IonButton href='' expand="block" shape="round"><IonIcon className='button-icon' icon={pencilOutline}/>Edit Profile</IonButton>
+                        <IonButton href='' expand="block" shape="round"><IonIcon className='button-icon' icon={playOutline}/>Your Voices</IonButton>
+                        <IonButton href='' expand="block" shape="round"><IonIcon className='button-icon' icon={arrowUpOutline}/>Upload New Voices</IonButton>
                     </IonCardContent>
                 </IonCol>
             </IonRow>     

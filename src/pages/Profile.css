@@ -1,3 +1,7 @@
+.bg-app {
+    background: url('../../public/assets/images/background.png') !important;
+}
+
 .avatar-profile {
     border-radius: 100%;
     padding-left: 25%;
@@ -17,3 +21,4 @@ ion-button {
     --color: #000;
     text-transform: none;
 }
+
