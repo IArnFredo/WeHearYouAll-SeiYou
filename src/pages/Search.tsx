@@ -1,5 +1,4 @@
-import { IonAvatar, IonContent, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonList, IonPage, IonSearchbar, IonSegment, IonSegmentButton, IonText } from '@ionic/react'
-import { createSharp, trashSharp } from 'ionicons/icons';
+import { IonAvatar, IonContent, IonItem, IonLabel, IonList, IonPage, IonSearchbar, IonSegment, IonSegmentButton } from '@ionic/react'
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import './Search.css';
