@@ -1,4 +1,4 @@
-import { IonButtons, IonBackButton, IonTitle, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage } from '@ionic/react';
+import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage } from '@ionic/react';
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -55,10 +55,10 @@ const YourVoiceList = () => {
         <IonButtons slot="start">
             <IonBackButton defaultHref="/@profile"/>
         </IonButtons>
-        <IonText>Your Voices</IonText>
+        <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>
       <IonContent>
-          <IonTitle class="ion-margin ion-text-center">Voices</IonTitle>
+          <h3 className="ion-margin ion-text-center">Voices</h3>
           <IonList>
             {VOICE_DATA.map(voice => (
               <IonItemSliding key={voice.id} ref={slidingOptionRef}>

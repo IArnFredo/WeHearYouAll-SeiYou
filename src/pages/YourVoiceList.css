@@ -8,7 +8,6 @@ ion-content {
 }
 
 ion-toolbar {
-    /* --background: url('../../public/assets/images/background.png') !important; */
     --background: transparent;
 }
 

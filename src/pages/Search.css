@@ -1,0 +1,40 @@
+.bg-app {
+    background-size: cover;
+    background: url('../../public/assets/images/background.png') !important;
+}
+
+ion-content {
+    --background: transparent;
+}
+
+.title h1 {
+    margin-top: 50px;
+}
+
+.searchBar {
+    margin: auto;
+    width: 95%;
+    --border-radius: 10px;
+    --background: rgb(227, 227, 227);
+}
+
+.segment {
+    width: 90%;
+    margin: auto;
+}
+
+.segment-btn {
+    border-radius: 20px !important;
+    height: 30px;
+    margin: 2px;
+    min-height: min-content;
+    text-transform: none;
+    --background: rgb(227, 227, 227);
+    --indicator-color: none;
+    --background-checked: var(--ion-color-primary);
+    --color-checked: #FFF;
+}
+
+.segment-label {
+    font-size: 12px;
+}
