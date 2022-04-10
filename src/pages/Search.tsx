@@ -11,7 +11,7 @@ const Search: React.FC = () => {
       </IonText>
       <IonContent>
         <IonSearchbar className="searchBar" value={searchText} onIonChange={e => setSearchText(e.detail.value!)} placeholder="Artist, Voices"></IonSearchbar>
-        <IonSegment className="segment" value="favorite">
+        <IonSegment className="segment" value="all">
           <IonSegmentButton className="segment-btn" value="all">
             <IonLabel className="segment-label">All</IonLabel>
           </IonSegmentButton>

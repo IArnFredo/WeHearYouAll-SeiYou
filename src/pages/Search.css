@@ -18,14 +18,21 @@ ion-content {
     --background: rgb(227, 227, 227);
 }
 
-.segment {
+.segment.md {
     width: 90%;
     margin: auto;
+}
+
+.segment.ios {
+    width: 60%;
+    margin-left: 20px;
+    --background: none;
 }
 
 .segment-btn {
     border-radius: 20px !important;
     height: 30px;
+    width: fit-content;
     margin: 2px;
     min-height: min-content;
     text-transform: none;
@@ -33,6 +40,8 @@ ion-content {
     --indicator-color: none;
     --background-checked: var(--ion-color-primary);
     --color-checked: #FFF;
+    --indicator-box-shadow: none;
+    --border-width: 0;
 }
 
 .segment-label {
