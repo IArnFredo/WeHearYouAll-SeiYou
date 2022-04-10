@@ -7,7 +7,7 @@ ion-content {
     --background: transparent;
 }
 
-.title h1 {
+.wrapper {
     margin-top: 50px;
 }
 
@@ -46,4 +46,21 @@ ion-content {
 
 .segment-label {
     font-size: 12px;
+}
+
+.vList {
+    border-radius: 10px;
+    margin: 5px;
+    height: 45px;
+}
+
+.avatar {
+    justify-content: center;
+    margin: auto;
+    height: 35px;
+    width: 35px;
+}
+
+.label {
+    margin-left: 5px;
 }
