@@ -6,3 +6,18 @@
 ion-content {
     --background: transparent;
 }
+
+ion-toolbar {
+    /* --background: url('../../public/assets/images/background.png') !important; */
+    --background: transparent;
+}
+
+.list {
+    border-radius: 12px;
+    margin: 0 8px 5px 8px;
+}
+
+.sliding {
+    border-radius: 12px;
+    margin: 0 8px 5px 0;
+}
