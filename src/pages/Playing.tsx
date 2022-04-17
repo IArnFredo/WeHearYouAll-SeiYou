@@ -15,11 +15,8 @@ import {
 } from "@ionic/react";
 import {
   alertCircleOutline,
-  playCircle,
-  playCircleOutline,
   playCircleSharp,
   playSkipBack,
-  playSkipBackOutline,
   playSkipForward,
   shareSocial,
 } from "ionicons/icons";

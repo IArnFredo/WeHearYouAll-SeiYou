@@ -1,0 +1,29 @@
+.edit-image-profile {
+    position: relative;
+}
+
+.radius-pic-edit-profile {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    object-fit: cover;
+    display: block;
+    opacity: 0.5;
+}
+
+.centered-title-edit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ion-item-bg{
+    background: rgba(255, 255, 255, 0);
+    --background: rgba(255, 255, 255, 0);
+}
+
+.inner-border-none{
+    --inner-border-width: 0px;
+}
