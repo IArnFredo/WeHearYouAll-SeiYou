@@ -14,7 +14,10 @@ ion-title {
     max-height: fit-content;
 }
 
-
-/* ion-content{
+.ion-notoolbar-playing{
     --background: transparent;
-} */
+}
+
+.ion-content-playing{
+    --background: transparent;
+}

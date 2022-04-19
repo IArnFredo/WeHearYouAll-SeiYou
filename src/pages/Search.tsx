@@ -20,7 +20,7 @@ const Search: React.FC = () => {
 
   return (
     <IonPage className='bg-app'>
-      <IonContent>
+      <IonContent id='ion-content-search'>
         <div className="wrapper">
           <h1 className="title ion-margin"><b>Search</b></h1>
         </div>
@@ -39,7 +39,7 @@ const Search: React.FC = () => {
         <h3 className="ion-margin ion-text-center">Voices</h3>
         <IonList className="ion-margin">
           {VOICE_DATA.map(voice => (
-            <IonItem color="medium" className="vList" lines="full"
+            <IonItem className="vList item-list-color-search" lines="full"
                     button
                     onClick={openVoiceHandler}>
               <IonAvatar className="avatar" slot="start">
@@ -53,7 +53,7 @@ const Search: React.FC = () => {
         <h3 className="ion-margin ion-text-center">Artists</h3>
         <IonList className="ion-margin">
           {VOICE_DATA.map(voice => (
-            <IonItem color="medium" className="vList" lines="full"
+            <IonItem className="vList item-list-color-search" lines="full"
                     button
                     onClick={openVoiceHandler}>
               <IonAvatar className="avatar" slot="start">

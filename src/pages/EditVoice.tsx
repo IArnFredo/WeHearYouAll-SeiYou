@@ -28,7 +28,7 @@ const EditVoice: React.FC = () => {
         </IonButtons>
         <IonTitle>Edit Voice</IonTitle>
       </IonToolbar>
-      <IonContent className='ion-padding content'>
+      <IonContent className='ion-padding ion-content-editvoice'>
         <IonGrid className='ion-text-center'>
           <IonRow>
             <IonCol>

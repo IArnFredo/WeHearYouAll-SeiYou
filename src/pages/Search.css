@@ -3,7 +3,7 @@
     background: url('../../public/assets/images/background.png') !important;
 }
 
-ion-content {
+.ion-content-search {
     --background: transparent;
 }
 
@@ -21,6 +21,10 @@ ion-content {
 .segment.md {
     width: 90%;
     margin: auto;
+}
+
+.item-list-color-search {
+    --background: #C4C4C4;
 }
 
 .segment.ios {

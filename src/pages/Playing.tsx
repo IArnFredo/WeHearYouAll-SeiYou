@@ -28,13 +28,13 @@ const Playing: React.FC = () => {
 
   return (
     <IonPage className={gender === "female" ? "" : "playing-app"}>
-      <IonToolbar>
+      <IonToolbar class="ion-notoolbar-playing">
         <IonButtons slot="start">
           <IonBackButton defaultHref="/" />
         </IonButtons>
         <IonTitle>Now Playing</IonTitle>
       </IonToolbar>
-      <IonContent className="ion-padding">
+      <IonContent className="ion-padding ion-content-playing">
         <IonRow>
           <IonCol className="ion-text-center ion-margin-top">
             <img
@@ -57,7 +57,7 @@ const Playing: React.FC = () => {
         </IonRow>
       </IonContent>
       <IonFooter style={{ position: "static" }}>
-        <IonToolbar>
+        <IonToolbar class='ion-notoolbar-playing'>
           <IonRow>
             <IonCol size="12" className="ion-text-justify">
               <IonRange

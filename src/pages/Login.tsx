@@ -26,7 +26,7 @@ const Login: React.FC = () => {
                     <IonText>Sign In</IonText>
                 </IonButtons>
             </IonToolbar>
-            <IonContent fullscreen className="ion-padding ion-text-center">
+            <IonContent fullscreen className="ion-padding ion-text-center ion-content-account">
                 <IonGrid>
                     <IonRow>
                         <IonCol>

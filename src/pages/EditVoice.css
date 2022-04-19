@@ -3,7 +3,7 @@
   background: url('../../public/assets/images/background.png') !important;
 }
 
-ion-content {
+.ion-content-editvoice {
   --background: transparent;
 }
 

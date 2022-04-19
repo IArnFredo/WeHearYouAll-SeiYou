@@ -51,13 +51,13 @@ const YourVoiceList = () => {
                 message={toastMessage}
                 duration={2000}
                 onDidDismiss={() => {setToastMessage('')}}/>
-      <IonToolbar>
+      <IonToolbar class="ion-toolbar-yourvoice">
         <IonButtons slot="start">
             <IonBackButton defaultHref="/@profile"/>
         </IonButtons>
         <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>
-      <IonContent>
+      <IonContent class='ion-content-yourvoice'>
           <h3 className="ion-margin ion-text-center">Voices</h3>
           <IonList>
             {VOICE_DATA.map(voice => (
@@ -71,7 +71,7 @@ const YourVoiceList = () => {
                     </IonItemOption>
                 </IonItemOptions>
 
-                <IonItem color="medium" className="list" lines="full"
+                <IonItem className="list item-list-color-yourvoice " lines="full"
                         button
                         onClick={playingVoiceHandler}>
                     <IonAvatar slot="start">
