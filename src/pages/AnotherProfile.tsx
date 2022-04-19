@@ -37,7 +37,7 @@ const AnotherProfile: React.FC = () => {
                 <IonLabel className="label">judul voice</IonLabel>
               </IonItem>
             
-        </IonList>
+          </IonList>
           </IonCol>
         </IonRow>     
       </IonContent>
