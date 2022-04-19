@@ -1,13 +1,13 @@
-import { IonHeader, IonButtons, IonBackButton, IonTitle, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar } from '@ionic/react';
+import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage } from '@ionic/react';
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import './YourVoiceList.css';
 
 export const VOICE_DATA = [
-    {id: 'd1', name: 'Alvin', image: 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'},
-    {id: 'd2', name: 'Martin', image: 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'},
-    {id: 'd3', name: 'Djong', image: 'https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg'}
+    {id: 'd1', name: 'Alvin', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png'},
+    {id: 'd2', name: 'Martin', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png'},
+    {id: 'd3', name: 'Djong', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png'}
 ];
 
 const YourVoiceList = () => {
@@ -39,7 +39,7 @@ const YourVoiceList = () => {
   };
 
   return (
-    <React.Fragment>
+    <IonPage className='bg-app'>
       <IonAlert isOpen={startDeleting}
           header="Are you sure?"
           message="Do you want to delete your Voice? This cannot be undone."
@@ -51,29 +51,27 @@ const YourVoiceList = () => {
                 message={toastMessage}
                 duration={2000}
                 onDidDismiss={() => {setToastMessage('')}}/>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-              <IonBackButton defaultHref="/@profile"/>
-          </IonButtons>
-          <IonTitle>Your Voices</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="bg-app">
-          <IonTitle class="ion-margin ion-text-center">Voices</IonTitle>
+      <IonToolbar>
+        <IonButtons slot="start">
+            <IonBackButton defaultHref="/@profile"/>
+        </IonButtons>
+        <IonText class="ion-margin">Your Voices</IonText>
+      </IonToolbar>
+      <IonContent>
+          <h3 className="ion-margin ion-text-center">Voices</h3>
           <IonList>
             {VOICE_DATA.map(voice => (
               <IonItemSliding key={voice.id} ref={slidingOptionRef}>
                 <IonItemOptions side="end">
-                    <IonItemOption color="warning" onClick={startEditVoiceHandler}>
+                    <IonItemOption className="sliding" color="warning" onClick={startEditVoiceHandler}>
                         <IonIcon slot="icon-only" icon={createSharp}></IonIcon>
                     </IonItemOption>
-                    <IonItemOption color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
+                    <IonItemOption className="sliding" color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
                         <IonIcon slot="icon-only" icon={trashSharp}></IonIcon>
                     </IonItemOption>
                 </IonItemOptions>
 
-                <IonItem lines="full"
+                <IonItem color="medium" className="list" lines="full"
                         button
                         onClick={playingVoiceHandler}>
                     <IonAvatar slot="start">
@@ -85,7 +83,7 @@ const YourVoiceList = () => {
             ))}
           </IonList>
       </IonContent>
-    </React.Fragment>
+    </IonPage>
   );
 };
 
