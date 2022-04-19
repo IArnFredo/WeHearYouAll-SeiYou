@@ -29,7 +29,7 @@ const AnotherProfile: React.FC = () => {
           <IonCardTitle class='text-profile'>Voices</IonCardTitle>
           <IonList className="ion-margin">
             
-              <IonItem color="medium" className="vList" lines="full"
+              <IonItem className="vList" lines="full"
                       button>
                 <IonAvatar className="avatar" slot="start">
                     <img src='https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg' alt="" />

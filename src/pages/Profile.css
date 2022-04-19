@@ -22,3 +22,7 @@ ion-button {
     text-transform: none;
 }
 
+.vList {
+    --background: #C4C4C4;
+}
+
