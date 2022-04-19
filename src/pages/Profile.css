@@ -20,6 +20,8 @@ ion-button {
     --background-hover: #bf7f00;
     --color: #000;
     text-transform: none;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 .vList {
