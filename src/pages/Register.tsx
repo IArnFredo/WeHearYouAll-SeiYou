@@ -18,7 +18,7 @@ import {
     IonText,
 } from '@ionic/react';
 import React from 'react';
-import { arrowBack, backspace, personCircle } from 'ionicons/icons';
+import { arrowBack, backspace, logoGoogle, personCircle } from 'ionicons/icons';
 import './Account.css';
 
 const Register: React.FC = () => {
@@ -34,6 +34,11 @@ const Register: React.FC = () => {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
+                            <IonButton id="google-button" expand='full' shape="round">
+                                <IonIcon className='ion-margin-end' icon={logoGoogle}></IonIcon>
+                                <p>Continue with Google</p>
+                            </IonButton>
+                            <p>Or</p>
                             <p id="label">Account Information</p>
                         </IonCol>
                     </IonRow>
