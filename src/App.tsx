@@ -40,19 +40,19 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/@another-profile" component={AnotherProfile} />
-        <Route exact path="/@edit-profile" component={EditProfile} />
-        <Route exact path="/@edit-voice" component={EditVoice} />
-        <Route exact path="/@welcome" component={LandingScreen} />
-        <Route exact path="/@login" component={Login} />
-        <Route exact path="/@playing" component={Playing} />
-        <Route exact path="/@profile" component={Profile} />
-        <Route exact path="/@record-voice" component={RecordVoice} />
-        <Route exact path="/@register" component={Register} />
-        <Route exact path="/@search" component={Search} />
-        <Route exact path="/@upload-voice" component={UploadVoice} />
-        <Route exact path="/@your-voice-list" component={YourVoiceList} />
+        <Route path="/" component={Home} />
+        <Route path="/@another-profile" component={AnotherProfile} />
+        <Route path="/@edit-profile" component={EditProfile} />
+        <Route path="/@edit-voice" component={EditVoice} />
+        <Route path="/@welcome" component={LandingScreen} />
+        <Route path="/@login" component={Login} />
+        <Route path="/@playing" component={Playing} />
+        <Route path="/@profile" component={Profile} />
+        <Route path="/@record-voice" component={RecordVoice} />
+        <Route path="/@register" component={Register} />
+        <Route path="/@search" component={Search} />
+        <Route path="/@upload-voice" component={UploadVoice} />
+        <Route path="/@your-voice-list" component={YourVoiceList} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
