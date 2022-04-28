@@ -1,7 +1,6 @@
 import {
   IonContent,
   IonPage,
-  IonTitle,
   IonToolbar,
   IonRow,
   IonCol,
@@ -20,69 +19,80 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  getRedirectResult,
-  signInWithRedirect,
-  linkWithPopup,
   signInWithEmailAndPassword,
   getAuth,
+  User,
+  signOut,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { logoGoogle } from "ionicons/icons";
+import { collection, addDoc, getFirestore, onSnapshot, query, where, getDocs } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
+import { add, logoGoogle } from "ionicons/icons";
 import "./Account.css";
-import { signInWithGoogle } from "../firebaseConfig";
+import "../firebaseConfig";
+import app from "../firebaseConfig";
+import { useHistory } from "react-router";
+const auth = getAuth(app);
+const db = getFirestore();
+const storage = getStorage();
+const provider = new GoogleAuthProvider();
 
 const Login: React.FC = () => {
-  const [login, setLogin] = useState("");
-  let hasLogin = "false";
-  hasLogin = localStorage.getItem("hasLogin")!;
+  const [user, setUser] = useState<User | null>(null);
 
-  let photoURL = "";
-  photoURL = localStorage.getItem("photoURL")!;
 
-  // const googleSign = () => {
-  //     signInWithPopup(auth, provider)
-  //     .then((result) => {
-  //         // This gives you a Google Access Token. You can use it to access the Google API.
-  //         const credential = GoogleAuthProvider.credentialFromResult(result)!;
-  //         const token = credential.accessToken;
-  //         // The signed-in user info.
-  //         const user = result.user;
-  //         setLogin("login");
-  //         // console.log(user);
-  //         // ...
-  //     }).catch((error) => {
-  //         // Handle Errors here.
-  //         const errorCode = error.code;
-  //         const errorMessage = error.message;
-  //         // The email of the user's account used.
-  //         const email = error.email;
-  //         // The AuthCredential type that was used.
-  //         const credential = GoogleAuthProvider.credentialFromError(error);
-  //         // ...
-  //     });
+  // usestate localStorage
+  const [uid, setUID] = useState<Array<any>>([]);
+  const history = useHistory();
 
-  // };
+  useEffect(() => {
+    // var uid = JSON.parse(localStorage.getItem("user") as string);
+    // console.log(uid.uid);
+    onAuthStateChanged(auth, (auser) => {
+      if (auser) {
+        setUser(auser);
+        localStorage.setItem("user", JSON.stringify(auser));
+      } else {
+        setUser(null);
+      }
+    });
+  }, [user]);
 
-  // linkWithPopup(auth.currentUser, provider).then((result) => {
-  //     // Accounts successfully linked.
-  //     const credential = GoogleAuthProvider.credentialFromResult(result);
-  //     const user = result.user;
-  //     // ...
-  //   }).catch((error) => {
-  //     // Handle Errors here.
-  //     // ...
-  //   });
+  const SignOut = () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.clear();
+        setUser(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  // setInterval(() => {
-  //     console.log(user);
-  // },1000);
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
+  // Sign in email pass
 
   const Email = useRef<HTMLIonInputElement>(null);
-  // const [email, setEmail] = useState(initialCount);
   const Password = useRef<HTMLIonInputElement>(null);
 
-  const auth = getAuth();
   const LoginWithEmail = () => {
     let email = Email.current?.value as string;
     let password = Password.current?.value as string;
@@ -90,34 +100,13 @@ const Login: React.FC = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        localStorage.setItem("hasLogin", "true");
-        localStorage.setItem("photoURL", user.photoURL!);
-        console.log(user);
+        localStorage.setItem("user", JSON.stringify(user));
         // ...
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
       });
-
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     console.log(user);
-    //     sendEmailVerification(auth.currentUser!).then(() => {
-    //       console.log("email sent");
-    //       // ...
-    //     });
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     console.log(errorCode);
-    //     console.log(errorMessage);
-    //   });
   };
 
   return (
@@ -135,7 +124,7 @@ const Login: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol>
-              {hasLogin == "true" && (
+              {user ? (
                 <IonContent>
                   <IonButton
                     onClick={signInWithGoogle}
@@ -146,12 +135,27 @@ const Login: React.FC = () => {
                     <IonIcon class="ion-margin-end" icon={logoGoogle} />
                     <IonLabel>Continue With Google</IonLabel>
                   </IonButton>
-                  <p>{localStorage.getItem("name")}</p>
+                  <p>{user.displayName}</p>
                   <IonAvatar>
-                      <img src={localStorage.getItem("photoURL")!} alt="" />
+                    {user.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        referrerPolicy="no-referrer"
+                        alt="user"
+                      />
+                    ) : null}
                   </IonAvatar>
+                  <IonButton
+                    onClick={SignOut}
+                    id="google-button"
+                    expand="full"
+                    shape="round"
+                  >
+                    <IonIcon class="ion-margin-end" icon={logoGoogle} />
+                    <IonLabel>Sign Out</IonLabel>
+                  </IonButton>
                 </IonContent>
-              )}
+              ) : null}
               <IonButton
                 onClick={signInWithGoogle}
                 id="google-button"

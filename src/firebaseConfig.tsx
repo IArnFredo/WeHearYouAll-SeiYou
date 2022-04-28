@@ -18,31 +18,4 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-
-
-
-const provider = new GoogleAuthProvider();
-export const signInWithGoogle = () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-
-      
-      localStorage.setItem("name", result.user.displayName!);
-      localStorage.setItem("hasLogin", "true");
-      localStorage.setItem("photoURL", result.user.photoURL!);
-      let name = localStorage.getItem("name");
-      console.log(result);
-      useHistory().push("/@register");
-      // window.location.replace('/@register');
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
-};
+export default app;
