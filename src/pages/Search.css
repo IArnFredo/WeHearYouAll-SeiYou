@@ -7,10 +7,6 @@
     --background: transparent;
 }
 
-.wrapper {
-    margin-top: 50px;
-}
-
 .searchBar {
     margin: auto;
     width: 95%;
@@ -46,6 +42,12 @@
     --color-checked: #FFF;
     --indicator-box-shadow: none;
     --border-width: 0;
+}
+
+.search-title{
+    margin-top: 30px;
+    margin-left: 20px;
+    font-size: 28px;
 }
 
 .segment-label {

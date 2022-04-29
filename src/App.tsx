@@ -31,6 +31,7 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
+
 /* Theme variables */
 import './theme/variables.css';
 import './firebaseConfig';
@@ -42,7 +43,7 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/">
-          <Redirect to="/@home" />
+          <Redirect to="/@welcome" />
         </Route>
         <Route path="/@home" component={MenuTabs} />
         <Route path="/@another-profile" component={MenuTabs} />

@@ -6,7 +6,7 @@ const LandingScreen: React.FC = () => {
     <IonPage>
       <IonContent className='landingContent' fullscreen>
         <div>
-          <IonButton className='skipButton' routerLink={'/'} fill='clear' color='light'>Skip</IonButton>
+          <IonButton className='skipButton' routerLink={'/@home'} fill='clear' color='light'>Skip</IonButton>
           <img src="../assets/images/landing.png" alt="" className='landingImg' />
         </div>
         <IonGrid className='ion-text-center ion-margin-top'>
