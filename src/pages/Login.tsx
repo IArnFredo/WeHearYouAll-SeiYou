@@ -42,11 +42,6 @@ const provider = new GoogleAuthProvider();
 const Login: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
-
-  // usestate localStorage
-  const [uid, setUID] = useState<Array<any>>([]);
-  const history = useHistory();
-
   useEffect(() => {
     // var uid = JSON.parse(localStorage.getItem("user") as string);
     // console.log(uid.uid);
@@ -111,7 +106,7 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonToolbar>
+      <IonToolbar class="toolbar-transparent">
         <IonButtons slot="start">
           <IonBackButton defaultHref="/@welcome" />
           <IonText>Sign In</IonText>

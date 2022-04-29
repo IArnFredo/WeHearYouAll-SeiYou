@@ -6,6 +6,7 @@ import {
   IonCol,
   IonContent,
   IonDatetime,
+  IonFooter,
   IonIcon,
   IonInput,
   IonItem,
@@ -17,21 +18,23 @@ import {
   IonRadio,
   IonRadioGroup,
   IonRow,
+  IonSegment,
+  IonSegmentButton,
   IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {pencilOutline } from "ionicons/icons";
+import { pencilOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import "./EditProfile.css";
 
 const EditProfile: React.FC = () => {
-  const [selected, setSelected] = useState<string>("Female");
-  const [selectedDate, setSelectedDate] = useState('2012-12-15');
+  const [gender, setGender] = useState<string>("Female");
+  const [selectedDate, setSelectedDate] = useState("2001-12-15");
 
   useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+    console.log(gender);
+  }, [gender]);
 
   useEffect(() => {
     console.log(selectedDate);
@@ -74,7 +77,7 @@ const EditProfile: React.FC = () => {
             </IonItem>
           </IonCol>
           <IonCol className="ion-text-center" size="12">
-            <IonRadioGroup
+            {/* <IonRadioGroup
               value={selected}
               onIonChange={(e) => setSelected(e.detail.value)}
             >
@@ -89,22 +92,50 @@ const EditProfile: React.FC = () => {
                 <IonLabel>Female</IonLabel>
                 <IonRadio value="Female"></IonRadio>
               </IonItem>
-            </IonRadioGroup>
+            </IonRadioGroup> */}
+            <IonLabel position="stacked">
+              {" "}
+              <p id="label">Gender</p>
+            </IonLabel>
+            <IonSegment
+              onIonChange={(e) => setGender(e.detail.value!)}
+              value={gender}
+              className="segment"
+            >
+              {""}
+              <IonSegmentButton class="segment-btn" value="Male">
+                <IonLabel>Male</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton class="segment-btn" value="Female">
+                <IonLabel>Female</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
           </IonCol>
           <IonCol className="ion-text-center" size="12">
-            <IonListHeader>
-              <IonLabel>Date Of Birth</IonLabel>
-            </IonListHeader>
+            <IonLabel position="stacked">
+              {" "}
+              <p id="label">Date of Birth</p>
+            </IonLabel>
             <IonItem>
-            <IonDatetime value={selectedDate} onIonChange={e => setSelectedDate(e.detail.value!)}></IonDatetime>
+              <IonDatetime
+                value={selectedDate}
+                onIonChange={(e) => setSelectedDate(e.detail.value!)}
+                presentation="date"
+              ></IonDatetime>
             </IonItem>
           </IonCol>
         </IonRow>
-        <IonRow class="ion-margin-top">
-          <IonCol class="ion-margin-top ion-text-center">
-          <IonButton expand="full" shape="round">Save</IonButton>
-          </IonCol>
-        </IonRow>
+        <IonFooter style={{ position: "sticky" }}>
+          <IonToolbar>
+            <IonRow class="ion-margin-top">
+              <IonCol class="ion-margin-top ion-text-center">
+                <IonButton expand="full" shape="round">
+                  Save
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonToolbar>
+        </IonFooter>
       </IonContent>
     </IonPage>
   );

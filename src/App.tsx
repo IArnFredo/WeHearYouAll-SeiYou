@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import AnotherProfile from './pages/AnotherProfile';
@@ -34,23 +34,28 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import './firebaseConfig';
+import MenuTabs from './tabsmenu/MenuTabs';
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route path="/" component={Home} />
-        <Route path="/@another-profile" component={AnotherProfile} />
+        <Route exact path="/">
+          <Redirect to="/@home" />
+        </Route>
+        <Route path="/@home" component={MenuTabs} />
+        <Route path="/@another-profile" component={MenuTabs} />
+        <Route path="/@profile" component={MenuTabs} />
+        <Route path="/@search" component={MenuTabs} />
+        {/* without tabs */}
         <Route path="/@edit-profile" component={EditProfile} />
         <Route path="/@edit-voice" component={EditVoice} />
         <Route path="/@welcome" component={LandingScreen} />
         <Route path="/@login" component={Login} />
-        <Route path="/@playing" component={Playing} />
-        <Route path="/@profile" component={Profile} />
+        <Route path="/@playing" component={Playing} exact={true} />
         <Route path="/@record-voice" component={RecordVoice} />
         <Route path="/@register" component={Register} />
-        <Route path="/@search" component={Search} />
         <Route path="/@upload-voice" component={UploadVoice} />
         <Route path="/@your-voice-list" component={YourVoiceList} />
       </IonRouterOutlet>

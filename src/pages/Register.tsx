@@ -20,6 +20,8 @@ import {
   IonListHeader,
   IonRadio,
   useIonAlert,
+  IonSegment,
+  IonSegmentButton,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import { arrowBack, backspace, logoGoogle, personCircle } from "ionicons/icons";
@@ -46,13 +48,14 @@ const Register: React.FC = () => {
   const confirmPassword = useRef<HTMLIonInputElement>(null);
   const name = useRef<HTMLIonInputElement>(null);
   const dob = useRef<HTMLIonInputElement>(null);
-  const [gender, setGender] = useState<"Male" | "Female">("Male");
+  const [gender, setGender] = useState("Male");
 
   useEffect(() => {
-      localStorage.getItem("user") && setUser(JSON.parse(localStorage.getItem("user") as string));
-      console.log(user);
+    localStorage.getItem("user") &&
+      setUser(JSON.parse(localStorage.getItem("user") as string));
+    console.log(user);
   }, []);
-
+  console.log(gender);
   console.log(user);
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
@@ -78,14 +81,14 @@ const Register: React.FC = () => {
         password: password.current!.value,
         name: name.current!.value,
         dob: dob.current!.value,
-        gender: gender
+        gender: gender,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   };
-  
+
   const signUp = async () => {
     // console.log(dob.current?.value as string);
     const enteredName = name.current?.value as string;
@@ -93,10 +96,11 @@ const Register: React.FC = () => {
     const pass = password.current?.value as string;
     const cPass = confirmPassword.current?.value as string;
     const date = dob.current?.value;
-    const pattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    const pattern =
+      /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     const result = pattern.test(enteredEmail);
 
-    if(enteredName?.toString().length === 0 || !enteredName) {
+    if (enteredName?.toString().length === 0 || !enteredName) {
       present({
         message: "<b>Name</b> field not entered!",
         header: "Warning",
@@ -104,14 +108,14 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(enteredEmail?.toString().length === 0 || !enteredEmail) {
+    if (enteredEmail?.toString().length === 0 || !enteredEmail) {
       present({
         message: "<b>Email!</b> field not entered!",
         header: "Warning",
         buttons: [{ text: "OK" }],
       });
       return;
-    }else if(result==!true){
+    } else if (result == !true) {
       present({
         message: "Email not valid.",
         header: "Warning",
@@ -119,7 +123,7 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(pass?.toString().length === 0 || !pass) {
+    if (pass?.toString().length === 0 || !pass) {
       present({
         message: "<b>Password!</b> field not entered!",
         header: "Warning",
@@ -127,7 +131,7 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(cPass?.toString().length === 0 || !cPass) {
+    if (cPass?.toString().length === 0 || !cPass) {
       present({
         message: "<b>Confirm Password!</b> field not entered!",
         header: "Warning",
@@ -135,7 +139,7 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(date?.toString().length === 0 || !date) {
+    if (date?.toString().length === 0 || !date) {
       present({
         message: "Please input your <b>Birth Date</b>!",
         header: "Warning",
@@ -143,7 +147,7 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(pass.length < 6) {
+    if (pass.length < 6) {
       present({
         message: "Password must at least 6 characters.",
         header: "Warning",
@@ -151,7 +155,7 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if(pass !== cPass) {
+    if (pass !== cPass) {
       present({
         message: "The password and confirmation password do not match.",
         header: "Warning",
@@ -162,46 +166,43 @@ const Register: React.FC = () => {
     addData();
   };
 
+  //   const createUserEmail = () => {
+  //     createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       // Signed in
+  //       const user = userCredential.user;
+  //       const pathReference =
+  //         "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
+  //       addData(pathReference, user.uid);
+  //       sendEmailVerification(auth.currentUser!).then(() => {
+  //         console.log("email sent");
+  //         // ...
+  //       });
+  //       // ...
+  //     })
+  //     .catch((error) => {
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       console.log(errorCode);
+  //       console.log(errorMessage);
+  //     });
+  //   }
 
-//   const createUserEmail = () => {
-//     createUserWithEmailAndPassword(auth, email, password)
-//     .then((userCredential) => {
-//       // Signed in
-//       const user = userCredential.user;
-//       const pathReference =
-//         "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
-//       addData(pathReference, user.uid);
-//       sendEmailVerification(auth.currentUser!).then(() => {
-//         console.log("email sent");
-//         // ...
-//       });
-//       // ...
-//     })
-//     .catch((error) => {
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       console.log(errorCode);
-//       console.log(errorMessage);
-//     });
-//   }
-
-  
-
-// const addData = async (pathReference: string, userID: string) => {
-//   try {
-//     // gender / tgl lahir belum
-//     const docRef = await addDoc(collection(db, "users"), {
-//       userId: userID,
-//       photoUrl: pathReference,
-//     });
-//     console.log("Document written with ID", docRef.id);
-//   } catch (err) {
-//     console.log("Error adding document : ", err);
-//   }
-// };
+  // const addData = async (pathReference: string, userID: string) => {
+  //   try {
+  //     // gender / tgl lahir belum
+  //     const docRef = await addDoc(collection(db, "users"), {
+  //       userId: userID,
+  //       photoUrl: pathReference,
+  //     });
+  //     console.log("Document written with ID", docRef.id);
+  //   } catch (err) {
+  //     console.log("Error adding document : ", err);
+  //   }
+  // };
   return (
     <IonPage>
-      <IonToolbar>
+      <IonToolbar class="toolbar-transparent">
         <IonButtons slot="start">
           <IonBackButton defaultHref="/@welcome" />
           <IonText>Create new Account</IonText>
@@ -272,13 +273,18 @@ const Register: React.FC = () => {
                   {" "}
                   <p id="label">Name</p>
                 </IonLabel>
-                <IonInput ref={name} id="input" type="text" placeholder="Name"></IonInput>
+                <IonInput
+                  ref={name}
+                  id="input"
+                  type="text"
+                  placeholder="Name"
+                ></IonInput>
               </IonItem>
             </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
-              <IonRadioGroup
+              {/* <IonRadioGroup
                 value={gender}
                 onIonChange={(e) => setGender(e.detail.value)}
               >
@@ -294,7 +300,24 @@ const Register: React.FC = () => {
                   <IonLabel>Female</IonLabel>
                   <IonRadio value="Female"></IonRadio>
                 </IonItem>
-              </IonRadioGroup>
+              </IonRadioGroup> */}
+              <IonLabel position="stacked">
+                {" "}
+                <p id="label">Gender</p>
+              </IonLabel>
+              <IonSegment
+                onIonChange={(e) => setGender(e.detail.value!)}
+                value={gender}
+                className="segment"
+              >
+                {""}
+                <IonSegmentButton class="segment-btn" value="Male">
+                  <IonLabel>Male</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton class="segment-btn" value="Female">
+                  <IonLabel>Female</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
             </IonCol>
           </IonRow>
           <IonRow>
