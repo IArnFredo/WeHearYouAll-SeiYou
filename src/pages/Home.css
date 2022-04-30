@@ -1,14 +1,15 @@
 .bg-app-home {
     background-size: cover;
-    background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 66%, rgba(255,170,0,1) 100%);
+    background: rgb(255, 255, 255);
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 66%, rgba(255, 170, 0, 1) 100%);
 }
 
-.toolbar-transparent{
+.toolbar-transparent {
     --background: transparent;
 }
 
 .home-recently-list {
+    padding-top: 0;
     background: transparent;
 }
 
@@ -25,6 +26,7 @@
 .home-subtitle {
     margin-left: 20px;
     font-size: 18px;
+    height: 50px;
 }
 
 .home-vList {
@@ -34,9 +36,18 @@
     --background: #C4C4C4;
 }
 
-.title-text{
+.title-text {
     font-size: 12px;
     padding: 0;
     margin: 4px;
-    width: 100px;
+}
+
+.float-btn {
+    width: 100%;
+}
+
+.home-float-btn {
+    margin-bottom: 3px;
+    border-radius: 10px;
+    --background: #f8c051;
 }
