@@ -26,8 +26,18 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signInWithRedirect,
+  getRedirectResult,
 } from "firebase/auth";
-import { collection, addDoc, getFirestore, onSnapshot, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  onSnapshot,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { getStorage, ref } from "firebase/storage";
 import { add, logoGoogle } from "ionicons/icons";
 import "./Account.css";
@@ -41,12 +51,33 @@ const provider = new GoogleAuthProvider();
 
 const Login: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
+  const history = useHistory();
 
   useEffect(() => {
     // var uid = JSON.parse(localStorage.getItem("user") as string);
     // console.log(uid.uid);
     onAuthStateChanged(auth, (auser) => {
       if (auser) {
+        getRedirectResult(auth)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access Google APIs.
+          const credential = GoogleAuthProvider.credentialFromResult(result!)!;
+          const token = credential.accessToken;
+    
+          // The signed-in user info.
+          const user = result!.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        });
         setUser(auser);
         localStorage.setItem("user", JSON.stringify(auser));
       } else {
@@ -67,20 +98,23 @@ const Login: React.FC = () => {
   };
 
   const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result);
-        localStorage.setItem("user", JSON.stringify(user));
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
+    // signInWithPopup(auth, provider)
+    //   .then((result) => {
+    //     console.log(result);
+    //     localStorage.setItem("user", JSON.stringify(user));
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // The email of the user's account used.
+    //     const email = error.email;
+    //     // The AuthCredential type that was used.
+    //     const credential = GoogleAuthProvider.credentialFromError(error);
+    //     // ...
+    //   });
+    provider.addScope("https://www.googleapis.com/auth/plus.login");
+    signInWithRedirect(auth, provider);
+
   };
 
   // Sign in email pass

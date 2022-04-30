@@ -2,12 +2,6 @@
     --background: url('../../public/assets/images/background.png');
 }
 
-.landingImg {
-    width: 100%;
-    height: 66%;
-    object-fit: cover;
-}
-
 .buttonCss {
     border-radius: 15px;
 }

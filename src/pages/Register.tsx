@@ -34,6 +34,7 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  getRedirectResult,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 

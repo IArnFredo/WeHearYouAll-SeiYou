@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchShowDuration: 2000,
       splashFullScreen: true,
-    }
+    },
   },
   appId: 'io.ionic.starter',
   appName: 'WeHearYouAll-SeiYou',
