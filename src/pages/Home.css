@@ -44,9 +44,12 @@
 
 .float-btn {
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .home-float-btn {
+    width: 85%;
     margin-bottom: 3px;
     border-radius: 10px;
     --background: #f8c051;

@@ -184,7 +184,7 @@ const Home: React.FC = () => {
 
         {/* Floating Play Button */}
         <IonFab className="float-btn" vertical="bottom" slot="fixed">
-          <IonItem className="home-float-btn ion-margin-horizontal" button>
+          <IonItem className="home-float-btn ion-margin-horizontal" button detail={false}>
             <IonAvatar className="avatar" slot="start">
               <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
             </IonAvatar>
