@@ -21,5 +21,13 @@
 .landingImg {
     width: 100%;
     height: 66%;
+    background-size: cover;
     object-fit: cover;
 }
+
+/* @media only screen and (max-width: 600px) {
+    .landingImg {
+        width: 100%;
+        height: 20%;
+    }
+} */

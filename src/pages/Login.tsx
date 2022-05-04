@@ -44,6 +44,8 @@ import "./Account.css";
 import "../firebaseConfig";
 import app from "../firebaseConfig";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import CryptoJS from "crypto-js";
 const auth = getAuth(app);
 const db = getFirestore();
 const storage = getStorage();
@@ -97,26 +99,6 @@ const Login: React.FC = () => {
       });
   };
 
-  const signInWithGoogle = () => {
-    // signInWithPopup(auth, provider)
-    //   .then((result) => {
-    //     console.log(result);
-    //     localStorage.setItem("user", JSON.stringify(user));
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // The email of the user's account used.
-    //     const email = error.email;
-    //     // The AuthCredential type that was used.
-    //     const credential = GoogleAuthProvider.credentialFromError(error);
-    //     // ...
-    //   });
-    provider.addScope("https://www.googleapis.com/auth/plus.login");
-    signInWithRedirect(auth, provider);
-
-  };
-
   // Sign in email pass
 
   const Email = useRef<HTMLIonInputElement>(null);
@@ -125,11 +107,13 @@ const Login: React.FC = () => {
   const LoginWithEmail = () => {
     let email = Email.current?.value as string;
     let password = Password.current?.value as string;
-    signInWithEmailAndPassword(auth, email, password)
+    const hash = CryptoJS.SHA1(password).toString();
+    signInWithEmailAndPassword(auth, email, hash)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         localStorage.setItem("user", JSON.stringify(user));
+        console.log(user);
         // ...
       })
       .catch((error) => {
@@ -153,17 +137,8 @@ const Login: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol>
-              {user ? (
+              {/* {user ? (
                 <IonContent>
-                  <IonButton
-                    onClick={signInWithGoogle}
-                    id="google-button"
-                    expand="full"
-                    shape="round"
-                  >
-                    <IonIcon class="ion-margin-end" icon={logoGoogle} />
-                    <IonLabel>Continue With Google</IonLabel>
-                  </IonButton>
                   <p>{user.displayName}</p>
                   <IonAvatar>
                     {user.photoURL ? (
@@ -184,17 +159,7 @@ const Login: React.FC = () => {
                     <IonLabel>Sign Out</IonLabel>
                   </IonButton>
                 </IonContent>
-              ) : null}
-              <IonButton
-                onClick={signInWithGoogle}
-                id="google-button"
-                expand="full"
-                shape="round"
-              >
-                <IonIcon class="ion-margin-end" icon={logoGoogle} />
-                <IonLabel>Continue With Google</IonLabel>
-              </IonButton>
-              <p>or</p>
+              ) : null} */}
               <p id="label">Sign in to your Account</p>
             </IonCol>
           </IonRow>
@@ -229,8 +194,8 @@ const Login: React.FC = () => {
               >
                 Sign In
               </IonButton>
-              <p id="label-2">Forgot Password?</p>
-              <p id="label-2">Create New Account!</p>
+              <Link className="link-to" to="/@forgot_password"><p id="label-2">Forgot Password?</p></Link>
+              <Link className="link-to" to="/@register"><p id="label-2">Create New Account!</p></Link>
             </IonCol>
           </IonRow>
         </IonGrid>

@@ -11,13 +11,16 @@ import {
   IonIcon,
   IonPage,
   IonRow,
+  useIonAlert,
 } from "@ionic/react";
+import { getAuth, signOut, User } from "firebase/auth";
 import {
   arrowUpOutline,
   caretForwardCircle,
   cloudUploadOutline,
   heart,
   logoInstagram,
+  logOutOutline,
   mic,
   pencilOutline,
   playOutline,
@@ -26,9 +29,34 @@ import {
 } from "ionicons/icons";
 import React, { useState } from "react";
 import "./Profile.css";
+const auth = getAuth();
 
 const Profile: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
+  // const [signOutConfirmation, setSignOutConfirmation] = useState(false);
+  const [present] = useIonAlert();
+  const [user, setUser] = useState<User | null>(null);
+
+  const SignOut = () => {
+    present({
+      message: "Are you sure you want to sign out?",
+      header: "Warning",
+      buttons: [{ text: "Yes", handler : () => {
+        signOut(auth)
+        .then(() => {
+          localStorage.clear();
+          setUser(null);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }}, {text: "No", handler: () => {
+        console.log("cancel");
+        return;
+      }}],
+    });
+  };
+
   return (
     <IonPage className="bg-app">
       <IonContent fullscreen className="ion-padding" id="bg">
@@ -37,7 +65,6 @@ const Profile: React.FC = () => {
             <img className="avatar-profile" src="./assets/images/shionne.jpg" />
             <IonCardHeader class="text-profile">
               <IonCardTitle>Yudhistira Aremaputra Wardhana</IonCardTitle>
-
               <IonCardSubtitle>Male, 20</IonCardSubtitle>
             </IonCardHeader>
             <IonCardContent>
@@ -66,6 +93,19 @@ const Profile: React.FC = () => {
                 Upload New Voices
               </IonButton>
             </IonCardContent>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol size="12">
+            <IonButton
+              expand="block"
+              shape="round"
+              onClick={SignOut}
+              color="danger"
+            >
+              <IonIcon className="button-icon" icon={logOutOutline} />
+              Sign Out
+            </IonButton>
           </IonCol>
         </IonRow>
       </IonContent>

@@ -37,6 +37,7 @@ import {
   getRedirectResult,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
+import CryptoJS from "crypto-js";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -56,35 +57,21 @@ const Register: React.FC = () => {
       setUser(JSON.parse(localStorage.getItem("user") as string));
     console.log(user);
   }, []);
-  console.log(gender);
+  // console.log(gender);
   console.log(user);
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result);
-        window.location.replace("/@register");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
-  };
 
-  const addData = async () => {
+  const addData = async (pathReference: string, userId: string, hash: string) => {
     try {
       const docRef = await addDoc(collection(db, "users"), {
+        UserID: userId!,
         email: email.current!.value,
-        password: password.current!.value,
+        password: hash,
         name: name.current!.value,
         dob: dob.current!.value,
         gender: gender,
+        photoUrl: pathReference,
       });
-      console.log("Document written with ID: ", docRef.id);
+      // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -101,14 +88,6 @@ const Register: React.FC = () => {
       /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     const result = pattern.test(enteredEmail);
 
-    if (enteredName?.toString().length === 0 || !enteredName) {
-      present({
-        message: "<b>Name</b> field not entered!",
-        header: "Warning",
-        buttons: [{ text: "OK" }],
-      });
-      return;
-    }
     if (enteredEmail?.toString().length === 0 || !enteredEmail) {
       present({
         message: "<b>Email!</b> field not entered!",
@@ -140,17 +119,9 @@ const Register: React.FC = () => {
       });
       return;
     }
-    if (date?.toString().length === 0 || !date) {
+    if (pass.length < 6 || pass.length > 16) {
       present({
-        message: "Please input your <b>Birth Date</b>!",
-        header: "Warning",
-        buttons: [{ text: "OK" }],
-      });
-      return;
-    }
-    if (pass.length < 6) {
-      present({
-        message: "Password must at least 6 characters.",
+        message: "Password must have 6 - 16 characters.",
         header: "Warning",
         buttons: [{ text: "OK" }],
       });
@@ -164,30 +135,50 @@ const Register: React.FC = () => {
       });
       return;
     }
-    addData();
-  };
+    if (enteredName?.toString().length === 0 || !enteredName) {
+      present({
+        message: "<b>Name</b> field not entered!",
+        header: "Warning",
+        buttons: [{ text: "OK" }],
+      });
+      return;
+    }
+    if (date?.toString().length === 0 || !date) {
+      present({
+        message: "Please input your <b>Birth Date</b>!",
+        header: "Warning",
+        buttons: [{ text: "OK" }],
+      });
+      return;
+    }
 
-  //   const createUserEmail = () => {
-  //     createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //       // Signed in
-  //       const user = userCredential.user;
-  //       const pathReference =
-  //         "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
-  //       addData(pathReference, user.uid);
-  //       sendEmailVerification(auth.currentUser!).then(() => {
-  //         console.log("email sent");
-  //         // ...
-  //       });
-  //       // ...
-  //     })
-  //     .catch((error) => {
-  //       const errorCode = error.code;
-  //       const errorMessage = error.message;
-  //       console.log(errorCode);
-  //       console.log(errorMessage);
-  //     });
-  //   }
+    const hash = CryptoJS.SHA1(pass).toString();
+
+    createUserWithEmailAndPassword(auth, enteredEmail, hash)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      localStorage.setItem("user", JSON.stringify(user));
+      const pathReference =
+        "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
+      addData(pathReference, user.uid, hash);
+      sendEmailVerification(auth.currentUser!).then(() => {
+        present({
+          message: "Verify your email to finish signing up for SeiYou!",
+          header: "Please Check Your Email",
+          buttons: [{ text: "OK" }],
+        });
+      });
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
+
+    // addData();
+  };
 
   // const addData = async (pathReference: string, userID: string) => {
   //   try {
@@ -216,16 +207,6 @@ const Register: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol>
-              <IonButton
-                id="google-button"
-                onClick={signInWithGoogle}
-                expand="full"
-                shape="round"
-              >
-                <IonIcon className="ion-margin-end" icon={logoGoogle}></IonIcon>
-                <p>Continue with Google</p>
-              </IonButton>
-              <p>Or</p>
               <p id="label">Account Information</p>
             </IonCol>
           </IonRow>
