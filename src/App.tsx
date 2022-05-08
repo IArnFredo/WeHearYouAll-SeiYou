@@ -53,7 +53,7 @@ const App: React.FC = () => (
         <Route path="/@edit-profile" component={EditProfile} />
         <Route path="/@edit-voice" component={EditVoice} />
         <Route path="/@welcome" component={LandingScreen} />
-        <Route path="/@login" component={Login} />
+        <Route path="/@login" component={Login} exact={true} />
         <Route path="/@playing" component={Playing} exact={true} />
         <Route path="/@record-voice" component={RecordVoice} />
         <Route path="/@register" component={Register} />

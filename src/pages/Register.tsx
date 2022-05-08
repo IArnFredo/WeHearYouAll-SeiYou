@@ -1,4 +1,5 @@
 import {
+  IonToast,
   IonContent,
   IonHeader,
   IonPage,
@@ -35,12 +36,14 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getRedirectResult,
+  updateProfile,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
+
 const Register: React.FC = () => {
   const db = getFirestore();
   const [user, setUser] = useState<User | null>(null);
@@ -71,7 +74,6 @@ const Register: React.FC = () => {
         gender: gender,
         photoUrl: pathReference,
       });
-      // console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -156,11 +158,19 @@ const Register: React.FC = () => {
 
     createUserWithEmailAndPassword(auth, enteredEmail, hash)
     .then((userCredential) => {
-      // Signed in
       const user = userCredential.user;
-      localStorage.setItem("user", JSON.stringify(user));
+      // Signed in
       const pathReference =
         "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
+        updateProfile(auth.currentUser!, {
+          displayName: enteredName, photoURL: pathReference,
+        }).then(() => {
+          localStorage.setItem("user", JSON.stringify(auth.currentUser!));
+          console.log(auth.currentUser!);
+        }).catch((error) => {
+          // An error occurred
+          // ...
+        });
       addData(pathReference, user.uid, hash);
       sendEmailVerification(auth.currentUser!).then(() => {
         present({
