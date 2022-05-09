@@ -40,7 +40,7 @@ import {
   trash,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import "./Profile.css";
 const auth = getAuth();
 const db = getFirestore();
@@ -60,8 +60,6 @@ const Profile: React.FC = () => {
     onAuthStateChanged(auth, (auser) => {
       if (auser) {
         setUser(auser);
-        localStorage.setItem("user", JSON.stringify(auser));
-        console.log(user);
       } else {
         setUser(null);
       }
@@ -127,7 +125,7 @@ const Profile: React.FC = () => {
 
   return (
     <IonPage className="bg-app">
-      {user ? (
+      {auth.currentUser ? (
         <IonContent fullscreen className="ion-padding" id="bg">
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
@@ -183,43 +181,7 @@ const Profile: React.FC = () => {
           </IonRow>
         </IonContent>
       ) : (
-        <IonContent className="landingContent" fullscreen>
-          {/* <div>
-            <IonButton
-              className="skipButton"
-              routerLink={"/@home"}
-              fill="clear"
-              color="light"
-            >
-              Skip
-            </IonButton>
-            <img
-              src="../assets/images/landing.png"
-              alt=""
-              className="landingImg"
-            />
-          </div> */}
-          <IonGrid className="ion-text-center ion-margin-top">
-            <IonLabel className="text1">Welcome to SeiYou</IonLabel>
-            <br />
-            <IonLabel className="text2">
-              Start your voice act here, it's free!
-            </IonLabel>
-            <IonRow className="ion-margin-top ion-justify-content-center">
-              <IonButton
-                fill="clear"
-                shape="round"
-                color="dark"
-                routerLink={"/@register"}
-              >
-                Sign Up
-              </IonButton>
-              <IonButton shape="round" routerLink={"/@login"}>
-                Sign In
-              </IonButton>
-            </IonRow>
-          </IonGrid>
-        </IonContent>
+       <Redirect to={"/@login"} />
       )}
 
       <IonActionSheet
@@ -248,6 +210,44 @@ const Profile: React.FC = () => {
       ></IonActionSheet>
     </IonPage>
   );
+
+//   <IonContent className="landingContent" fullscreen>
+//   <div>
+//     <IonButton
+//       className="skipButton"
+//       routerLink={"/@home"}
+//       fill="clear"
+//       color="light"
+//     >
+//       Skip
+//     </IonButton>
+//     <img
+//       src="../assets/images/landing.png"
+//       alt=""
+//       className="landingImg"
+//     />
+//   </div>
+//   <IonGrid className="ion-text-center ion-margin-top">
+//     <IonLabel className="text1">Welcome to SeiYou</IonLabel>
+//     <br />
+//     <IonLabel className="text2">
+//       Start your voice act here, it's free!
+//     </IonLabel>
+//     <IonRow className="ion-margin-top ion-justify-content-center">
+//       <IonButton
+//         fill="clear"
+//         shape="round"
+//         color="dark"
+//         routerLink={"/@register"}
+//       >
+//         Sign Up
+//       </IonButton>
+//       <IonButton shape="round" routerLink={"/@login"}>
+//         Sign In
+//       </IonButton>
+//     </IonRow>
+//   </IonGrid>
+// </IonContent>
 };
 
 export default Profile;
