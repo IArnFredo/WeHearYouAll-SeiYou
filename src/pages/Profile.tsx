@@ -1,16 +1,13 @@
 import {
   IonActionSheet,
   IonButton,
-  IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
   IonCol,
   IonContent,
-  IonGrid,
   IonIcon,
-  IonLabel,
   IonPage,
   IonRow,
   useIonAlert,
@@ -22,25 +19,17 @@ import {
   where,
   getDocs,
   getFirestore,
-  doc,
-  getDoc,
-  onSnapshot,
 } from "firebase/firestore";
 import {
   arrowUpOutline,
-  caretForwardCircle,
   cloudUploadOutline,
-  heart,
-  logoInstagram,
   logOutOutline,
   mic,
   pencilOutline,
   playOutline,
-  share,
-  trash,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import { Redirect, useHistory } from "react-router";
+import { Redirect } from "react-router";
 import "./Profile.css";
 const auth = getAuth();
 const db = getFirestore();
@@ -50,13 +39,11 @@ const Profile: React.FC = () => {
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [userAge, setAge] = useState<number>(0);
   const [readData, setReadData] = useState<Array<any>>([]);
+  const [signout, setSignOut] = useState<string>("false");
 
   const [present] = useIonAlert();
-  const history = useHistory();
 
   useEffect(() => {
-    // var uid = JSON.parse(localStorage.getItem("user") as string);
-    // console.log(uid.uid);
     onAuthStateChanged(auth, (auser) => {
       if (auser) {
         setUser(auser);
@@ -77,6 +64,8 @@ const Profile: React.FC = () => {
     }
     if (user !== null) {
       fetchData();
+    } else {
+      setReadData([]);
     }
   }, [user]);
 
@@ -88,8 +77,6 @@ const Profile: React.FC = () => {
     if (m < 0 || (m === 0 && today.getDate() < birthDate!.getDate())) {
       age--;
     }
-    // console.log(today);
-    // console.log(birthDate);
     setAge(age);
   };
 
@@ -105,7 +92,7 @@ const Profile: React.FC = () => {
               .then(() => {
                 localStorage.clear();
                 setUser(null);
-                history.push("/@login");
+                setSignOut("true");
               })
               .catch((error) => {
                 console.log(error);
@@ -121,6 +108,16 @@ const Profile: React.FC = () => {
         },
       ],
     });
+  };
+
+  const changePage = () => {
+    if (signout == "true") {
+      return <Redirect to="/@home" />;
+    } else if (auth.currentUser == null) {
+      return <Redirect to="/@login" exact={true} />;
+    } else {
+      return <Redirect to="/@profile" />;
+    }
   };
 
   return (
@@ -181,7 +178,7 @@ const Profile: React.FC = () => {
           </IonRow>
         </IonContent>
       ) : (
-       <Redirect to={"/@login"} />
+        changePage()
       )}
 
       <IonActionSheet
@@ -211,43 +208,43 @@ const Profile: React.FC = () => {
     </IonPage>
   );
 
-//   <IonContent className="landingContent" fullscreen>
-//   <div>
-//     <IonButton
-//       className="skipButton"
-//       routerLink={"/@home"}
-//       fill="clear"
-//       color="light"
-//     >
-//       Skip
-//     </IonButton>
-//     <img
-//       src="../assets/images/landing.png"
-//       alt=""
-//       className="landingImg"
-//     />
-//   </div>
-//   <IonGrid className="ion-text-center ion-margin-top">
-//     <IonLabel className="text1">Welcome to SeiYou</IonLabel>
-//     <br />
-//     <IonLabel className="text2">
-//       Start your voice act here, it's free!
-//     </IonLabel>
-//     <IonRow className="ion-margin-top ion-justify-content-center">
-//       <IonButton
-//         fill="clear"
-//         shape="round"
-//         color="dark"
-//         routerLink={"/@register"}
-//       >
-//         Sign Up
-//       </IonButton>
-//       <IonButton shape="round" routerLink={"/@login"}>
-//         Sign In
-//       </IonButton>
-//     </IonRow>
-//   </IonGrid>
-// </IonContent>
+  //   <IonContent className="landingContent" fullscreen>
+  //   <div>
+  //     <IonButton
+  //       className="skipButton"
+  //       routerLink={"/@home"}
+  //       fill="clear"
+  //       color="light"
+  //     >
+  //       Skip
+  //     </IonButton>
+  //     <img
+  //       src="../assets/images/landing.png"
+  //       alt=""
+  //       className="landingImg"
+  //     />
+  //   </div>
+  //   <IonGrid className="ion-text-center ion-margin-top">
+  //     <IonLabel className="text1">Welcome to SeiYou</IonLabel>
+  //     <br />
+  //     <IonLabel className="text2">
+  //       Start your voice act here, it's free!
+  //     </IonLabel>
+  //     <IonRow className="ion-margin-top ion-justify-content-center">
+  //       <IonButton
+  //         fill="clear"
+  //         shape="round"
+  //         color="dark"
+  //         routerLink={"/@register"}
+  //       >
+  //         Sign Up
+  //       </IonButton>
+  //       <IonButton shape="round" routerLink={"/@login"}>
+  //         Sign In
+  //       </IonButton>
+  //     </IonRow>
+  //   </IonGrid>
+  // </IonContent>
 };
 
 export default Profile;

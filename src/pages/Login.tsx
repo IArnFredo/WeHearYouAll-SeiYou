@@ -14,6 +14,7 @@ import {
   IonButtons,
   IonText,
   IonAvatar,
+  IonRedirect,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -36,9 +37,8 @@ const Login: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const history = useHistory();
 
+
   useEffect(() => {
-    // var uid = JSON.parse(localStorage.getItem("user") as string);
-    // console.log(uid.uid);
     onAuthStateChanged(auth, (auser) => {
       if (auser) {
         setUser(auser);
@@ -48,23 +48,11 @@ const Login: React.FC = () => {
     });
   }, [user]);
 
-  const SignOut = () => {
-    signOut(auth)
-      .then(() => {
-        localStorage.clear();
-        setUser(null);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const loginFailed = () => {
     setToastMessage("Email or Password is incorrect!");
   };
 
   // Sign in email pass
-
   const Email = useRef<HTMLIonInputElement>(null);
   const Password = useRef<HTMLIonInputElement>(null);
 
@@ -76,7 +64,7 @@ const Login: React.FC = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        history.push("/@profile");
+        return <Redirect to="/@profile" />;
         // ...
       })
       .catch((error) => {
@@ -88,15 +76,7 @@ const Login: React.FC = () => {
 
   return (
     <React.Fragment>
-      <IonToast
-        isOpen={!!toastMessage}
-        message={toastMessage}
-        duration={2000}
-        onDidDismiss={() => {
-          setToastMessage("");
-        }}
-      />
-      {auth.currentUser ? (
+      {user ? (
         <Redirect to={"/@profile"} />
       ) : (
         <IonPage>
@@ -159,6 +139,14 @@ const Login: React.FC = () => {
           </IonContent>
         </IonPage>
       )}
+      <IonToast
+        isOpen={!!toastMessage}
+        message={toastMessage}
+        duration={2000}
+        onDidDismiss={() => {
+          setToastMessage("");
+        }}
+      />
     </React.Fragment>
   );
 };
