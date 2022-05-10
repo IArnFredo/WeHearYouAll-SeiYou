@@ -47,27 +47,27 @@ setupIonicReact({
 
 const App: React.FC = () => (
   <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-              <Route exact path="/">
-                <Redirect to="/@welcome" />
-              </Route>
-              <Route path="/@home" component={MenuTabs} />
-              <Route path="/@another-profile" component={MenuTabs} />
-              <Route path="/@profile" component={MenuTabs} />
-              <Route path="/@search" component={MenuTabs} />
-              {/* without tabs */}
-              <Route path="/@edit-profile" component={EditProfile}  />
-              <Route path="/@edit-voice" component={EditVoice}  />
-              <Route path="/@welcome" component={LandingScreen}  />
-              <Route path="/@login" component={Login} exact={true}/>
-              <Route path="/@playing" component={Playing} exact={true} />
-              <Route path="/@record-voice" component={RecordVoice}  />
-              <Route path="/@register" component={Register} />
-              <Route path="/@upload-voice" component={UploadVoice} />
-              <Route path="/@your-voice-list" component={YourVoiceList}  />
-        </IonRouterOutlet>
-      </IonReactRouter>
+    <IonReactRouter>
+      <IonRouterOutlet>
+        <Route exact path="/">
+          <Redirect to="/@welcome" />
+        </Route>
+        <Route path="/@home" component={MenuTabs} />
+        <Route path="/@another-profile" component={MenuTabs} />
+        <Route path="/@profile" component={MenuTabs} />
+        <Route path="/@search" component={MenuTabs} />
+        {/* without tabs */}
+        <Route path="/@edit-profile" component={EditProfile} />
+        <Route path="/@edit-voice" component={EditVoice} />
+        <Route path="/@welcome" component={LandingScreen} />
+        <Route path="/@login" component={Login} exact={true} />
+        <Route path="/@playing" component={Playing} exact={true} />
+        <Route path="/@record-voice" component={RecordVoice} />
+        <Route path="/@register" component={Register} />
+        <Route path="/@upload-voice" component={UploadVoice} />
+        <Route path="/@your-voice-list" component={YourVoiceList} />
+      </IonRouterOutlet>
+    </IonReactRouter>
   </IonApp>
 );
 

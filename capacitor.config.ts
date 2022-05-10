@@ -8,6 +8,10 @@ const config: CapacitorConfig = {
       splashFullScreen: true,
     },
   },
+  "server": {
+    "url": "http://192.168.100.32:8100",
+    "cleartext": true
+  },
   appId: 'io.ionic.starter',
   appName: 'WeHearYouAll-SeiYou',
   webDir: 'build',

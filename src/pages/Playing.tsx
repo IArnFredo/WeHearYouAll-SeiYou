@@ -15,17 +15,62 @@ import {
 } from "@ionic/react";
 import {
   alertCircleOutline,
+  pauseCircleSharp,
   playCircleSharp,
   playSkipBack,
   playSkipForward,
   shareSocial,
 } from "ionicons/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Media } from "@awesome-cordova-plugins/media";
 import "./Playing.css";
 
-const Playing: React.FC = () => {
-  let gender = "male";
 
+const media = Media;
+const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
+fileMusic.seekTo(1);
+const Playing: React.FC = () => {
+  const [currentTime, setCurrentTime] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  let gender = "male";
+  
+  const status = fileMusic.onStatusUpdate.subscribe(status =>{
+    if (status.toString() === "1") {
+      setInterval(() => {
+        const dur = fileMusic.getDuration();
+        console.log(dur);
+        setDuration(dur);
+      }, 500)
+    }});
+
+  fileMusic.onSuccess.subscribe(() => {
+    console.log("Success");
+  });
+
+  fileMusic.onError.subscribe(error => {
+    console.log("Error: " + error);
+  });
+
+  useEffect(() => {
+    setInterval(() => {
+      fileMusic.getCurrentPosition().then((position) => {
+        setCurrentTime(position);
+      });
+    }, 1000);
+  }, []);
+
+  const PlayVoice = () => {
+    fileMusic.play();
+    setPlaying(true);
+    console.log("play");
+  }
+
+  const PauseVoice = () => {
+    fileMusic.pause();
+    setPlaying(false);
+    console.log("pause");
+  }
   return (
     <IonPage className={gender === "female" ? "" : "playing-app"}>
       <IonToolbar class="ion-notoolbar-playing">
@@ -67,10 +112,10 @@ const Playing: React.FC = () => {
               ></IonRange>
             </IonCol>
             <IonCol size="6">
-              <IonText className="ion-margin-start">00:00</IonText>
+              <IonText className="ion-margin-start">{currentTime}</IonText>
             </IonCol>
             <IonCol className="ion-text-right" size="6">
-              <IonText className="ion-margin-end">00:00</IonText>
+              <IonText className="ion-margin-end">{duration}</IonText>
             </IonCol>
 
             <IonCol className="ion-text-center" size="12">
@@ -80,9 +125,17 @@ const Playing: React.FC = () => {
               <IonButton fill="clear" color="dark">
                 <IonIcon size="small" icon={playSkipBack}></IonIcon>
               </IonButton>
-              <IonButton fill="clear" color="secondary">
-                <IonIcon size="large" icon={playCircleSharp}></IonIcon>
-              </IonButton>
+              {playing == false ?
+                (
+                  <IonButton fill="clear" color="secondary" onClick={PlayVoice}>
+                    <IonIcon size="large" icon={playCircleSharp}></IonIcon>
+                  </IonButton>
+                ) :
+                (
+                  <IonButton fill="clear" color="secondary" onClick={PauseVoice}>
+                    <IonIcon size="large" icon={pauseCircleSharp}></IonIcon>
+                  </IonButton>
+                )}
               <IonButton fill="clear" color="dark">
                 <IonIcon size="small" icon={playSkipForward}></IonIcon>
               </IonButton>
