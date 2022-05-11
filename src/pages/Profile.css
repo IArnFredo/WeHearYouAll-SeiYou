@@ -1,5 +1,5 @@
 .bg-app {
-    background: url('../../public/assets/images/background.png') !important;
+    --background: url('../../public/assets/images/background.png');
 }
 
 .avatar-profile {

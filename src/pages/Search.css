@@ -1,6 +1,6 @@
 .bg-app {
     background-size: cover;
-    background: url('../../public/assets/images/background.png') !important;
+    --background: url('../../public/assets/images/background.png') !important;
 }
 
 .ion-content-search {

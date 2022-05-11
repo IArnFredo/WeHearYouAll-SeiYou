@@ -1,3 +1,7 @@
+.bg-app {
+    --background: url('../../public/assets/images/background.png');
+}
+
 .edit-image-profile {
     position: relative;
 }

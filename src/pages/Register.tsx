@@ -40,6 +40,7 @@ import {
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import CryptoJS from "crypto-js";
+import { Redirect } from "react-router";
 
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
@@ -176,7 +177,9 @@ const Register: React.FC = () => {
         present({
           message: "Verify your email to finish signing up for SeiYou!",
           header: "Please Check Your Email",
-          buttons: [{ text: "OK" }],
+          buttons: [{ text: "OK", handler: () => {
+            return <Redirect to={"/@profile"}/>;
+          },}],
         });
       });
     })

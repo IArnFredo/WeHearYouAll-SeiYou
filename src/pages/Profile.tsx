@@ -58,14 +58,10 @@ const Profile: React.FC = () => {
         where("UserID", "==", auth?.currentUser?.uid)
       );
       const querySnapshot = await getDocs(q);
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const data = setReadData(snapshot.docs.map((doc) => doc.data()));
-      });
       const data = querySnapshot.docs.map((doc) => doc.data());
       setReadData(data);
       localStorage.setItem("dob", JSON.stringify(data[0].dob));
       AgeCal();
-      unsubscribe();
     }
     if (user !== null) {
       fetchData();
@@ -127,9 +123,9 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <IonPage className="bg-app">
+    <IonPage>
       {auth.currentUser !== null ? (
-        <IonContent fullscreen className="ion-padding" id="bg">
+        <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <img className="avatar-profile" src={user?.photoURL!} />
@@ -172,15 +168,17 @@ const Profile: React.FC = () => {
           </IonRow>
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+              <IonCardContent>
               <IonButton
-                expand="block"
-                shape="round"
-                onClick={SignOut}
-                color="danger"
-              >
-                <IonIcon className="button-icon" icon={logOutOutline} />
-                Sign Out
-              </IonButton>
+                  expand="block"
+                  shape="round"
+                  onClick={SignOut}
+                  color="danger"
+                >
+                  <IonIcon className="button-icon" icon={logOutOutline} />
+                  Sign Out
+                </IonButton>
+              </IonCardContent>                
             </IonCol>
           </IonRow>
         </IonContent>

@@ -1,4 +1,4 @@
-import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage } from '@ionic/react';
+import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol } from '@ionic/react';
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -58,6 +58,8 @@ const YourVoiceList = () => {
         <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>
       <IonContent class='ion-content-yourvoice'>
+        <IonRow>
+          <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
           <h3 className="ion-margin ion-text-center">Voices</h3>
           <IonList>
             {VOICE_DATA.map(voice => (
@@ -82,6 +84,9 @@ const YourVoiceList = () => {
               </IonItemSliding>
             ))}
           </IonList>
+          </IonCol>
+        </IonRow>
+          
       </IonContent>
     </IonPage>
   );
