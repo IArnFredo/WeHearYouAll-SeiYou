@@ -8,16 +8,92 @@ ion-title {
     background-size: cover;
 }
 
-.radius-pic{
+.radius-pic {
     border-radius: 20%;
     max-width: fit-content;
     max-height: fit-content;
 }
 
-.ion-notoolbar-playing{
+.ion-notoolbar-playing {
     --background: transparent;
 }
 
-.ion-content-playing{
+.ion-content-playing {
     --background: transparent;
+}
+
+.rhap_container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    font-family: inherit;
+    width: 100%;
+    padding: 5px 5px !important;
+    background-color: transparent !important;
+    box-shadow: 0 0 0px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.rhap_progress-bar {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #4e0000 !important;
+    border-radius: 100px !important;
+}
+
+.rhap_download-progress {
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    background-color: transparent !important;
+    border-radius: 2px;
+}
+
+.rhap_volume-container {
+    display: none !important;
+    align-items: center;
+    flex: 0 1 100px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.rhap_repeat-button {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+    color: #868686;
+    margin-right: 6px;
+    display: none;
+}
+
+.rhap_main-controls-button {
+    margin: 0 3px;
+    color: #868686;
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
+}
+
+.rhap_main-controls-button {
+    margin: 0 3px;
+    color: #505b74 !important;
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
+}
+
+.rhap_progress-indicator {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 3;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    top: -8px;
+    background: #505b74 !important;
+    border-radius: 50px;
+    box-shadow: rgba(176, 86, 86, 0.5) 0 0 5px;
 }

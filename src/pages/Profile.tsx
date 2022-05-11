@@ -19,6 +19,7 @@ import {
   where,
   getDocs,
   getFirestore,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   arrowUpOutline,
@@ -57,16 +58,21 @@ const Profile: React.FC = () => {
         where("UserID", "==", auth?.currentUser?.uid)
       );
       const querySnapshot = await getDocs(q);
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const data = setReadData(snapshot.docs.map((doc) => doc.data()));
+      });
       const data = querySnapshot.docs.map((doc) => doc.data());
       setReadData(data);
       localStorage.setItem("dob", JSON.stringify(data[0].dob));
       AgeCal();
+      unsubscribe();
     }
     if (user !== null) {
       fetchData();
     } else {
       setReadData([]);
     }
+    // return()=>data();
   }, [user]);
 
   const AgeCal = () => {
@@ -114,7 +120,7 @@ const Profile: React.FC = () => {
     if (signout == "true") {
       return <Redirect to="/@home" />;
     } else if (auth.currentUser == null) {
-      return <Redirect to="/@login" exact={true} />;
+      return <Redirect to="/@login" />;
     } else {
       return <Redirect to="/@profile" />;
     }
@@ -122,7 +128,7 @@ const Profile: React.FC = () => {
 
   return (
     <IonPage className="bg-app">
-      {auth.currentUser ? (
+      {auth.currentUser !== null ? (
         <IonContent fullscreen className="ion-padding" id="bg">
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
@@ -131,6 +137,7 @@ const Profile: React.FC = () => {
                 <IonCardHeader key={data.UserID} class="text-profile">
                   <IonCardTitle>{user?.displayName}</IonCardTitle>
                   <IonCardSubtitle>
+                    {user?.emailVerified ? "Verified" : "Not Verified"} <br />
                     {data.gender}, {userAge}
                   </IonCardSubtitle>
                 </IonCardHeader>
@@ -164,7 +171,7 @@ const Profile: React.FC = () => {
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size="12">
+            <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonButton
                 expand="block"
                 shape="round"

@@ -22,52 +22,55 @@ import {
   shareSocial,
 } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
-import { Media } from "@awesome-cordova-plugins/media";
 import "./Playing.css";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 
-const media = Media;
-const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
-fileMusic.seekTo(1);
+// const media = Media;
+// const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
+// fileMusic.seekTo(1);
 const Playing: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   let gender = "male";
-  
-  const status = fileMusic.onStatusUpdate.subscribe(status =>{
-    if (status.toString() === "1") {
-      setInterval(() => {
-        const dur = fileMusic.getDuration();
-        console.log(dur);
-        setDuration(dur);
-      }, 500)
-    }});
 
-  fileMusic.onSuccess.subscribe(() => {
-    console.log("Success");
-  });
 
-  fileMusic.onError.subscribe(error => {
-    console.log("Error: " + error);
-  });
+  // const status = fileMusic.onStatusUpdate.subscribe(status =>{
+  //   if (status.toString() === "1") {
+  //     setInterval(() => {
+  //       console.log(status);
+  //       const dur = fileMusic.getDuration();
+  //       console.log(dur);
+  //       setDuration(dur);
+  //     }, 500)
+  //   }});
 
-  useEffect(() => {
-    setInterval(() => {
-      fileMusic.getCurrentPosition().then((position) => {
-        setCurrentTime(position);
-      });
-    }, 1000);
-  }, []);
+  // fileMusic.onSuccess.subscribe(() => {
+  //   console.log("Success");
+  // });
+
+  // fileMusic.onError.subscribe(error => {
+  //   console.log("Error: " + error);
+  // });
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     fileMusic.getCurrentPosition().then((position) => {
+  //       setCurrentTime(position);
+  //     });
+  //   }, 1000);
+  // }, []);
 
   const PlayVoice = () => {
-    fileMusic.play();
+    // fileMusic.play();
     setPlaying(true);
     console.log("play");
   }
 
   const PauseVoice = () => {
-    fileMusic.pause();
+    // fileMusic.pause();
     setPlaying(false);
     console.log("pause");
   }
@@ -75,7 +78,7 @@ const Playing: React.FC = () => {
     <IonPage className={gender === "female" ? "" : "playing-app"}>
       <IonToolbar class="ion-notoolbar-playing">
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/" />
+          <IonBackButton defaultHref="/@home" />
         </IonButtons>
         <IonTitle>Now Playing</IonTitle>
       </IonToolbar>
@@ -105,7 +108,7 @@ const Playing: React.FC = () => {
         <IonToolbar class='ion-notoolbar-playing'>
           <IonRow>
             <IonCol size="12" className="ion-text-justify">
-              <IonRange
+              {/* <IonRange
                 max={100}
                 color="dark"
                 style={{ padding: "0px 14px" }}
@@ -139,7 +142,14 @@ const Playing: React.FC = () => {
               <IonButton fill="clear" color="dark">
                 <IonIcon size="small" icon={playSkipForward}></IonIcon>
               </IonButton>
-              <IonButton fill="clear" color="dark"></IonButton>
+              <IonButton fill="clear" color="dark"></IonButton> */}
+              <AudioPlayer
+                autoPlay={false}
+                layout="stacked"
+                src="https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a"
+                onPlay={e => console.log("onPlay")}
+              // other props here
+              />
             </IonCol>
           </IonRow>
         </IonToolbar>

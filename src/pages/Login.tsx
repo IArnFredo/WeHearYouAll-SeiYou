@@ -27,7 +27,7 @@ import {
 import "./Account.css";
 import "../firebaseConfig";
 import app from "../firebaseConfig";
-import { Redirect, useHistory } from "react-router";
+import { Redirect, useHistory, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import CryptoJS from "crypto-js";
 const auth = getAuth(app);
@@ -35,8 +35,6 @@ const auth = getAuth(app);
 const Login: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [user, setUser] = useState<User | null>(null);
-  const history = useHistory();
-
 
   useEffect(() => {
     onAuthStateChanged(auth, (auser) => {
@@ -64,7 +62,7 @@ const Login: React.FC = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        return <Redirect to="/@profile" />;
+        return <Redirect to="/@home" />;
         // ...
       })
       .catch((error) => {
@@ -75,69 +73,68 @@ const Login: React.FC = () => {
   };
 
   return (
-    <React.Fragment>
-      {user ? (
-        <Redirect to={"/@profile"} />
+    <IonPage>
+      <IonToolbar class="toolbar-transparent">
+        <IonButtons slot="start">
+          <IonBackButton defaultHref="/@welcome" />
+          <IonText>Sign In</IonText>
+        </IonButtons>
+      </IonToolbar>
+      {auth.currentUser !== null ? (
+        <Redirect exact to={"/@home"} />
       ) : (
-        <IonPage>
-          <IonToolbar class="toolbar-transparent">
-            <IonButtons slot="start">
-              <IonBackButton defaultHref="/@welcome" />
-              <IonText>Sign In</IonText>
-            </IonButtons>
-          </IonToolbar>
-          <IonContent
-            fullscreen
-            className="ion-padding ion-text-center ion-content-account"
-          >
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <p id="label">Sign in to your Account</p>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol>
-                  <IonItem>
-                    <IonLabel position="floating">
-                      {" "}
-                      <p id="label">Email</p>
-                    </IonLabel>
-                    <IonInput ref={Email} type="email"></IonInput>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol>
-                  <IonItem>
-                    <IonLabel position="floating">
-                      {" "}
-                      <p id="label">Password</p>
-                    </IonLabel>
-                    <IonInput ref={Password} type="password"></IonInput>
-                  </IonItem>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol>
-                  <IonButton
-                    onClick={LoginWithEmail}
-                    id="login-button"
-                    shape="round"
-                  >
-                    Sign In
-                  </IonButton>
-                  <Link className="link-to" to="/@forgot_password">
-                    <p id="label-2">Forgot Password?</p>
-                  </Link>
-                  <Link className="link-to" to="/@register">
-                    <p id="label-2">Create New Account!</p>
-                  </Link>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonContent>
-        </IonPage>
+        <IonContent
+          fullscreen
+          className="ion-padding ion-text-center ion-content-account"
+        >
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <p id="label">Sign in to your Account</p>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    {" "}
+                    <p id="label">Email</p>
+                  </IonLabel>
+                  <IonInput ref={Email} type="email"></IonInput>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonItem>
+                  <IonLabel position="floating">
+                    {" "}
+                    <p id="label">Password</p>
+                  </IonLabel>
+                  <IonInput ref={Password} type="password"></IonInput>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonButton
+                  onClick={LoginWithEmail}
+                  id="login-button"
+                  shape="round"
+                >
+                  Sign In
+                </IonButton>
+                <Link className="link-to" to="/@forgot_password">
+                  <p id="label-2">Forgot Password?</p>
+                </Link>
+                <Link className="link-to" to="/@register">
+                  <p id="label-2">Create New Account!</p>
+                </Link>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+
       )}
       <IonToast
         isOpen={!!toastMessage}
@@ -147,8 +144,8 @@ const Login: React.FC = () => {
           setToastMessage("");
         }}
       />
-    </React.Fragment>
+    </IonPage>
   );
 };
 
-export default Login;
+export default withRouter(Login);

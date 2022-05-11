@@ -2,8 +2,9 @@ import {
   Redirect,
   Route,
   Switch,
+  withRouter,
 } from "react-router-dom";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonApp, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import AnotherProfile from "./pages/AnotherProfile";
@@ -41,34 +42,71 @@ import "./theme/variables.css";
 import "./firebaseConfig";
 import MenuTabs from "./tabsmenu/MenuTabs";
 import React from "react";
+import { homeOutline, searchOutline, ellipsisVerticalCircleOutline } from "ionicons/icons";
+import SoundPlayer from "./pages/SoundPlayer";
 setupIonicReact({
   hardwareBackButton: false
 });
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/">
-          <Redirect to="/@welcome" />
-        </Route>
-        <Route path="/@home" component={MenuTabs} />
-        <Route path="/@another-profile" component={MenuTabs} />
-        <Route path="/@profile" component={MenuTabs} />
-        <Route path="/@search" component={MenuTabs} />
-        {/* without tabs */}
-        <Route path="/@edit-profile" component={EditProfile} />
-        <Route path="/@edit-voice" component={EditVoice} />
-        <Route path="/@welcome" component={LandingScreen} />
-        <Route path="/@login" component={Login} exact={true} />
-        <Route path="/@playing" component={Playing} exact={true} />
-        <Route path="/@record-voice" component={RecordVoice} />
-        <Route path="/@register" component={Register} />
-        <Route path="/@upload-voice" component={UploadVoice} />
-        <Route path="/@your-voice-list" component={YourVoiceList} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
 
+  return (
+    <IonApp>
+      <IonPage>
+        {/* <SoundPlayer/> */}
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <IonTabs>
+              <IonRouterOutlet>
+                <Switch>
+                  <Route exact path="/@another-profile">
+                    <AnotherProfile />
+                  </Route>
+                  <Route exact path="/@search">
+                    <Search />
+                  </Route>
+                  <Route exact path="/@home">
+                    <Home />
+                  </Route>
+                  <Route path="/@profile" component={Profile} />
+                </Switch>
+              </IonRouterOutlet>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="tab1" href="/@home">
+                  <IonIcon icon={homeOutline} />
+                  <IonLabel>Home</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="tab2" href="/@search">
+                  <IonIcon icon={searchOutline} />
+                  <IonLabel>Search</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="tab3" href="/@profile">
+                  <IonIcon icon={ellipsisVerticalCircleOutline} />
+                  <IonLabel>Profile</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            </IonTabs>
+
+            <Route exact path="/">
+              <Redirect to="/@welcome" />
+            </Route>
+
+            {/* without tabs */}
+            <Route path="/@edit-profile" component={EditProfile} />
+            <Route path="/@edit-voice" component={EditVoice} />
+            <Route path="/@welcome" component={LandingScreen} />
+            <Route path="/@login" component={Login} />
+            <Route path="/@playing" component={withRouter(Playing)} exact={true} />
+            <Route path="/@record-voice" component={RecordVoice} />
+            <Route path="/@register" component={Register} />
+            <Route path="/@upload-voice" component={UploadVoice} />
+            <Route path="/@your-voice-list" component={YourVoiceList} />
+            {/* </Switch> */}
+
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonPage>
+    </IonApp>
+  );
+};
 export default App;
