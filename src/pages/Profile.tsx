@@ -144,7 +144,7 @@ const Profile: React.FC = () => {
                   expand="block"
                   shape="round"
                 >
-                  <IonIcon className="button-icon" icon={pencilOutline} />
+                  <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
                   Edit Profile
                 </IonButton>
                 <IonButton
@@ -152,7 +152,7 @@ const Profile: React.FC = () => {
                   expand="block"
                   shape="round"
                 >
-                  <IonIcon className="button-icon" icon={playOutline} />
+                  <IonIcon className="button-icon" icon={playOutline} />&nbsp;
                   Your Voices
                 </IonButton>
                 <IonButton
@@ -160,7 +160,7 @@ const Profile: React.FC = () => {
                   expand="block"
                   shape="round"
                 >
-                  <IonIcon className="button-icon" icon={arrowUpOutline} />
+                  <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
                   Upload New Voices
                 </IonButton>
               </IonCardContent>
@@ -175,7 +175,7 @@ const Profile: React.FC = () => {
                   onClick={SignOut}
                   color="danger"
                 >
-                  <IonIcon className="button-icon" icon={logOutOutline} />
+                  <IonIcon className="button-icon" icon={logOutOutline} />&nbsp;
                   Sign Out
                 </IonButton>
               </IonCardContent>                

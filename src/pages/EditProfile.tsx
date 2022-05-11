@@ -25,7 +25,8 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { collection, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { getDatabase, ref, set } from "firebase/database";
 import { pencilOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import "./EditProfile.css";
@@ -36,10 +37,11 @@ const EditProfile: React.FC = () => {
 
   const auth = getAuth();
   const db = getFirestore();
+  const db2 = getDatabase();
   const [user, setUser] = useState<User | null>(null);
   const [profileData, setProfileD] = useState<Array<any>>([]);
   const [name, setName] = useState('');
-  const [gender, setGender] = useState<string>("");
+  const [gender, setGender] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState("2001-12-15");
 
   useEffect(() => {
@@ -56,6 +58,7 @@ const EditProfile: React.FC = () => {
           where("UserID", "==", auth?.currentUser?.uid)
         );
         const querySnapshot = await getDocs(q);
+        console.log(querySnapshot.docs[0].id);
         const data = querySnapshot.docs.map((doc) => doc.data());
         setProfileD(data);
         data.map((item) => {
@@ -76,7 +79,14 @@ const EditProfile: React.FC = () => {
   },[gender])
 
   const saveUpdate = async () => {
-    
+    // set(ref(db2, 'users/' + auth?.currentUser?.uid), {
+    //   name: name,
+    //   gender: gender,
+    //   dob: selectedDate,
+    //   // photoUrl: 
+    // })
+    // const docRef = doc()
+    // await setDoc()
   }
 
   return (
@@ -84,12 +94,17 @@ const EditProfile: React.FC = () => {
     <IonPage>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/" />
+          <IonBackButton defaultHref="/@profile" />
         </IonButtons>
         <IonTitle>Edit Profile</IonTitle>
       </IonToolbar>
       {profileData.map((data) => (
         <IonContent className="bg-app" key={data.id}>
+          {/* <IonRow>
+            <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+
+            </IonCol>
+          </IonRow> */}
           <IonRow>
             <IonCol size="12" className="ion-text-center edit-image-profile">
               <img
@@ -98,12 +113,12 @@ const EditProfile: React.FC = () => {
                 alt=""></img>
               <div className="centered-title-edit">
                 <IonIcon
-                  className="ion-margin-top"
-                  size="large"
+                  className="pencil"
+                  size="small"
                   color="dark"
                   icon={pencilOutline}
                 ></IonIcon>
-                <p style={{ color: "black" }}>Change</p>
+                {/* <p style={{ color: "black" }}>Change</p> */}
               </div>
             </IonCol>
             <IonCol className="ion-text-center" size="12">
@@ -112,7 +127,7 @@ const EditProfile: React.FC = () => {
                   Name
                 </IonLabel>
                 {/* lack ref on input */}
-                <IonInput value={name}></IonInput>
+                <IonInput value={name} onIonChange={e => setName(e.detail.value!)}></IonInput>
               </IonItem>
             </IonCol>
             <IonCol className="ion-text-center" size="12">
@@ -136,20 +151,21 @@ const EditProfile: React.FC = () => {
                 {" "}
                 <p id="label">Gender</p>
               </IonLabel>
-              {console.log('1', gender)}
-              <IonSegment
-                value={gender}
-                onIonChange={(e) => setGender(e.detail.value!)} 
-                className="segment"
-              >
-                {""}
-                <IonSegmentButton class="segment-btn" value="Male">
-                  <IonLabel>Male</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton class="segment-btn" value="Female">
-                  <IonLabel>Female</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
+              {gender !== '' && (
+                <IonSegment
+                  value={gender}
+                  onIonChange={(e) => setGender(e.detail.value!)} 
+                  className="segment"
+                >
+                  {""}
+                  <IonSegmentButton class="segment-btn" value="Male">
+                    <IonLabel>Male</IonLabel>
+                  </IonSegmentButton>
+                  <IonSegmentButton class="segment-btn" value="Female">
+                    <IonLabel>Female</IonLabel>
+                  </IonSegmentButton>
+                </IonSegment>
+              )}
             </IonCol>
             <IonCol className="ion-text-center" size="12">
               <IonLabel position="stacked">
@@ -161,14 +177,15 @@ const EditProfile: React.FC = () => {
                   value={selectedDate}
                   onIonChange={(e) => setSelectedDate(e.detail.value!)}
                   presentation="date"
+                  className="dt"
                 ></IonDatetime>
               {/* </IonItem> */}
             </IonCol>
           </IonRow>
           <IonFooter style={{ position: "sticky" }}>
             <IonToolbar>
-              <IonRow class="ion-margin-top">
-                <IonCol class="ion-margin-top ion-text-center">
+              <IonRow className="ion-margin">
+                <IonCol class="ion-text-center">
                   <IonButton expand="full" shape="round" onClick={saveUpdate}>
                     Save
                   </IonButton>

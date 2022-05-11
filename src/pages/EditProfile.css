@@ -31,3 +31,17 @@
 .inner-border-none{
     --inner-border-width: 0px;
 }
+
+.dt {
+    display: inline-block;
+    width: 100%;
+}
+
+.pencil {
+    position: relative;
+    top: 35px;
+    left: 38px;
+    border: 1px solid black;
+    border-radius: 50px;
+    padding: 5px;
+}

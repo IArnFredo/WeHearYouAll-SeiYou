@@ -219,6 +219,8 @@ const Register: React.FC = () => {
       >
         <IonGrid>
           <IonRow>
+            <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+            <IonRow>
             <IonCol>
               <p id="label">Account Information</p>
             </IonCol>
@@ -333,6 +335,9 @@ const Register: React.FC = () => {
               </IonButton>
             </IonCol>
           </IonRow>
+            </IonCol>
+          </IonRow>
+          
         </IonGrid>
       </IonContent>
     </IonPage>

@@ -46,7 +46,9 @@ const Search: React.FC = () => {
   return (
     <IonPage>
       <IonContent className="bg-app" id="ion-content-search">
-        <IonRow className="search-title">
+        <IonRow>
+          <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+          <IonRow className="search-title">
           <IonLabel className="ion-margin">
             <b>Search</b>
           </IonLabel>
@@ -109,6 +111,10 @@ const Search: React.FC = () => {
             </IonList>
           </IonCol>
         </IonRow>
+          </IonCol>
+        </IonRow>
+        
+        
       </IonContent>
     </IonPage>
   );
