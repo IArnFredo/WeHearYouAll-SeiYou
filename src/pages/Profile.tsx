@@ -19,7 +19,6 @@ import {
   where,
   getDocs,
   getFirestore,
-  onSnapshot,
 } from "firebase/firestore";
 import {
   arrowUpOutline,
@@ -131,7 +130,7 @@ const Profile: React.FC = () => {
               <img className="avatar-profile" src={user?.photoURL!} />
               {readData.map((data) => (
                 <IonCardHeader key={data.UserID} class="text-profile">
-                  <IonCardTitle>{user?.displayName}</IonCardTitle>
+                  <IonCardTitle>{data.name}</IonCardTitle>
                   <IonCardSubtitle>
                     {user?.emailVerified ? "Verified" : "Not Verified"} <br />
                     {data.gender}, {userAge}

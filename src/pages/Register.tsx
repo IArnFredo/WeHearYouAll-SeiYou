@@ -1,41 +1,29 @@
 import {
-  IonToast,
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
   IonToolbar,
   IonRow,
   IonCol,
-  IonIcon,
   IonItem,
   IonLabel,
   IonInput,
   IonButton,
-  IonAlert,
   IonGrid,
   IonBackButton,
   IonButtons,
   IonText,
-  IonRadioGroup,
-  IonListHeader,
-  IonRadio,
   useIonAlert,
   IonSegment,
   IonSegmentButton,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
-import { arrowBack, backspace, logoGoogle, personCircle } from "ionicons/icons";
 import "./Account.css";
 import {
-  signInWithPopup,
   GoogleAuthProvider,
   getAuth,
   User,
-  onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  getRedirectResult,
   updateProfile,
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";

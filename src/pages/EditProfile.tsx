@@ -2,7 +2,6 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonChip,
   IonCol,
   IonContent,
   IonDatetime,
@@ -11,33 +10,24 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonListHeader,
-  IonModal,
   IonPage,
-  IonPopover,
-  IonRadio,
-  IonRadioGroup,
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonText,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { collection, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
-import { getDatabase, ref, set } from "firebase/database";
+import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
 import { pencilOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import "./EditProfile.css";
-
-
 
 const EditProfile: React.FC = () => {
 
   const auth = getAuth();
   const db = getFirestore();
-  const db2 = getDatabase();
+  const [userId, setUserId] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [profileData, setProfileD] = useState<Array<any>>([]);
   const [name, setName] = useState('');
@@ -58,7 +48,7 @@ const EditProfile: React.FC = () => {
           where("UserID", "==", auth?.currentUser?.uid)
         );
         const querySnapshot = await getDocs(q);
-        console.log(querySnapshot.docs[0].id);
+        setUserId(querySnapshot.docs[0].id);
         const data = querySnapshot.docs.map((doc) => doc.data());
         setProfileD(data);
         data.map((item) => {
@@ -85,8 +75,17 @@ const EditProfile: React.FC = () => {
     //   dob: selectedDate,
     //   // photoUrl: 
     // })
-    // const docRef = doc()
-    // await setDoc()
+    const docRef = doc(db, 'users', userId);
+    try {
+      await setDoc(docRef, {
+        ...profileData[0],
+        gender,
+        name,
+        dob: selectedDate,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -99,7 +98,7 @@ const EditProfile: React.FC = () => {
         <IonTitle>Edit Profile</IonTitle>
       </IonToolbar>
       {profileData.map((data) => (
-        <IonContent className="bg-app" key={data.id}>
+        <IonContent className="bg-app" key={data.UserID}>
           {/* <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
 

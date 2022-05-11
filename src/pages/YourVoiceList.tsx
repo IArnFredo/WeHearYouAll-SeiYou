@@ -1,6 +1,6 @@
 import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol } from '@ionic/react';
 import { trashSharp, createSharp } from 'ionicons/icons';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import './YourVoiceList.css';
 

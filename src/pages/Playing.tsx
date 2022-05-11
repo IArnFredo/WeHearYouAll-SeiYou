@@ -8,20 +8,12 @@ import {
   IonRow,
   IonCol,
   IonIcon,
-  IonText,
   IonFooter,
-  IonButton,
-  IonRange,
 } from "@ionic/react";
 import {
   alertCircleOutline,
-  pauseCircleSharp,
-  playCircleSharp,
-  playSkipBack,
-  playSkipForward,
-  shareSocial,
 } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Playing.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';

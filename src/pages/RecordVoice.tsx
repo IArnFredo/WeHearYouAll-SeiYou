@@ -1,4 +1,4 @@
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonPage, IonRow, IonText, IonToolbar } from '@ionic/react'
+import { IonBackButton, IonButton, IonButtons, IonContent, IonPage, IonRow, IonText, IonToolbar } from '@ionic/react'
 import React from 'react'
 import './RecordVoice.css';
 

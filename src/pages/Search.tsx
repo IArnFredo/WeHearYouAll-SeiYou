@@ -9,7 +9,6 @@ import {
   IonSearchbar,
   IonSegment,
   IonSegmentButton,
-  IonTitle,
   IonCol,
 } from "@ionic/react";
 import React, { useState } from "react";

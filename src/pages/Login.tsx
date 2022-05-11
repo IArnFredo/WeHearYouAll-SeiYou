@@ -13,21 +13,18 @@ import {
   IonBackButton,
   IonButtons,
   IonText,
-  IonAvatar,
-  IonRedirect,
 } from "@ionic/react";
 import React, { useEffect, useRef, useState } from "react";
 import {
   signInWithEmailAndPassword,
   getAuth,
   User,
-  signOut,
   onAuthStateChanged,
 } from "firebase/auth";
 import "./Account.css";
 import "../firebaseConfig";
 import app from "../firebaseConfig";
-import { Redirect, useHistory, withRouter } from "react-router";
+import { Redirect, withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import CryptoJS from "crypto-js";
 const auth = getAuth(app);

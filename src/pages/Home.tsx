@@ -1,9 +1,6 @@
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonCol,
@@ -11,14 +8,7 @@ import {
   IonList,
   IonItem,
   IonAvatar,
-  IonText,
-  IonFab,
-  IonFabButton,
-  IonFabList,
-  IonIcon,
-  IonButton
-} from "@ionic/react";
-import { settings, logoVimeo, playOutline } from "ionicons/icons";
+  IonFab} from "@ionic/react";
 import "./Home.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';

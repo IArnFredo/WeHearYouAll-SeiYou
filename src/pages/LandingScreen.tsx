@@ -1,4 +1,4 @@
-import { IonContent, IonPage, IonButton, IonGrid, IonRow, IonLabel, IonText } from '@ionic/react';
+import { IonContent, IonPage, IonButton, IonGrid, IonRow, IonLabel } from '@ionic/react';
 import './LandingScreen.css';
 
 const LandingScreen: React.FC = () => {
