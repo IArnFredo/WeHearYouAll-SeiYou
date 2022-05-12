@@ -18,7 +18,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore";
+import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { pencilOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import "./EditProfile.css";
@@ -27,12 +27,11 @@ const EditProfile: React.FC = () => {
 
   const auth = getAuth();
   const db = getFirestore();
-  const [userId, setUserId] = useState('');
   const [user, setUser] = useState<User | null>(null);
-  const [profileData, setProfileD] = useState<Array<any>>([]);
+  const [userData, setUserData] = useState<DocumentData>();
   const [name, setName] = useState('');
   const [gender, setGender] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState("2001-12-15");
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     onAuthStateChanged(auth, (auser) => {
@@ -42,43 +41,28 @@ const EditProfile: React.FC = () => {
         setUser(null);
       }
     });
-      async function fetchData() {
-        const q = query(
-          collection(db, "users"),
-          where("UserID", "==", auth?.currentUser?.uid)
-        );
-        const querySnapshot = await getDocs(q);
-        setUserId(querySnapshot.docs[0].id);
-        const data = querySnapshot.docs.map((doc) => doc.data());
-        setProfileD(data);
-        data.map((item) => {
-          setGender(item.gender);
-          setName(item.name);
-          setSelectedDate(item.dob);
-        })
+    async function fetchData() {
+      if (user) {
+        const userRef = doc(db, 'users', user!.uid);
+        const userSnapshot = await getDoc(userRef);
+        const userData = userSnapshot.data();
+        if (userData) {
+          setUserData(userData);
+          setGender(userData.gender);
+          setName(userData.name);
+          setSelectedDate(userData.dob);
+          console.log(userData.dob)
+        }
       }
-      fetchData();
-  }, [user]);
-  
-  useEffect(() =>{
-    console.log(selectedDate);
-  },[selectedDate])
-  
-  useEffect(() =>{
-    console.log(gender);
-  },[gender])
+    }
+    fetchData();
+  }, [auth, db, user]);
 
   const saveUpdate = async () => {
-    // set(ref(db2, 'users/' + auth?.currentUser?.uid), {
-    //   name: name,
-    //   gender: gender,
-    //   dob: selectedDate,
-    //   // photoUrl: 
-    // })
-    const docRef = doc(db, 'users', userId);
+    const docRef = doc(db, 'users', user!.uid);
     try {
       await setDoc(docRef, {
-        ...profileData[0],
+        ...userData,
         gender,
         name,
         dob: selectedDate,
@@ -97,19 +81,16 @@ const EditProfile: React.FC = () => {
         </IonButtons>
         <IonTitle>Edit Profile</IonTitle>
       </IonToolbar>
-      {profileData.map((data) => (
-        <IonContent className="bg-app" key={data.UserID}>
-          {/* <IonRow>
-            <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-
-            </IonCol>
-          </IonRow> */}
+        <IonContent className="bg-app">
           <IonRow>
             <IonCol size="12" className="ion-text-center edit-image-profile">
-              <img
-                src={data.photoUrl}
-                className="radius-pic-edit-profile"
-                alt=""></img>
+              {userData && (
+                <img
+                  src={userData.photoUrl}
+                  className="radius-pic-edit-profile"
+                  alt="profile"
+                />
+              )}
               <div className="centered-title-edit">
                 <IonIcon
                   className="pencil"
@@ -171,29 +152,30 @@ const EditProfile: React.FC = () => {
                 {" "}
                 <p id="label">Date of Birth</p>
               </IonLabel>
-              {/* <IonItem> */}
+              {selectedDate !== '' && (
                 <IonDatetime
                   value={selectedDate}
                   onIonChange={(e) => setSelectedDate(e.detail.value!)}
                   presentation="date"
                   className="dt"
                 ></IonDatetime>
-              {/* </IonItem> */}
+              )}
             </IonCol>
           </IonRow>
           <IonFooter style={{ position: "sticky" }}>
             <IonToolbar>
               <IonRow className="ion-margin">
                 <IonCol class="ion-text-center">
-                  <IonButton expand="full" shape="round" onClick={saveUpdate}>
-                    Save
-                  </IonButton>
+                  {user && (
+                    <IonButton expand="full" shape="round" onClick={saveUpdate}>
+                      Save
+                    </IonButton>
+                  )}
                 </IonCol>
               </IonRow>
             </IonToolbar>
           </IonFooter>
         </IonContent>
-      ))}
     </IonPage>
   );
 };

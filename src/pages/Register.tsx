@@ -19,19 +19,18 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import "./Account.css";
 import {
-  GoogleAuthProvider,
   getAuth,
   User,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 import { Redirect } from "react-router";
 
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
+// const provider = new GoogleAuthProvider();
 
 const Register: React.FC = () => {
   const db = getFirestore();
@@ -48,16 +47,16 @@ const Register: React.FC = () => {
     localStorage.getItem("user") &&
       setUser(JSON.parse(localStorage.getItem("user") as string));
     console.log(user);
-  }, []);
+  }, [user]);
   // console.log(gender);
   console.log(user);
 
-  const addData = async (pathReference: string, userId: string, hash: string) => {
+  const addData = async (pathReference: string, userId: string) => {
     try {
-      const docRef = await addDoc(collection(db, "users"), {
+      const userRef = doc(db, 'users', userId);
+      await setDoc(userRef, {
         UserID: userId!,
         email: email.current!.value,
-        password: hash,
         name: name.current!.value,
         dob: dob.current!.value,
         gender: gender,
@@ -86,7 +85,7 @@ const Register: React.FC = () => {
         buttons: [{ text: "OK" }],
       });
       return;
-    } else if (result == !true) {
+    } else if (result === !true) {
       present({
         message: "Email not valid.",
         header: "Warning",
@@ -157,10 +156,9 @@ const Register: React.FC = () => {
           localStorage.setItem("user", JSON.stringify(auth.currentUser!));
           console.log(auth.currentUser!);
         }).catch((error) => {
-          // An error occurred
-          // ...
+          console.error("Error updating profile: ", error);
         });
-      addData(pathReference, user.uid, hash);
+      addData(pathReference, user.uid);
       sendEmailVerification(auth.currentUser!).then(() => {
         present({
           message: "Verify your email to finish signing up for SeiYou!",
