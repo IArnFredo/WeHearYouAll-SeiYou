@@ -39,7 +39,7 @@ const Search: React.FC = () => {
 
   const openVoiceHandler = () => {
     console.log("Edit voice");
-    history.push("/@playing");
+    history.push("/playing");
   };
 
   return (
@@ -47,76 +47,75 @@ const Search: React.FC = () => {
       <IonContent className="bg-app" id="ion-content-search">
         <IonRow>
           <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-          <IonRow className="search-title">
-          <IonLabel className="ion-margin">
-            <b>Search</b>
-          </IonLabel>
-        </IonRow>
-        <IonSearchbar
-          className="searchBar"
-          value={searchText}
-          onIonChange={(e) => setSearchText(e.detail.value!)}
-          placeholder="Artist, Voices"
-        ></IonSearchbar>
-        <IonSegment className="segment" value="all">
-          <IonSegmentButton className="segment-btn" value="all">
-            <IonLabel className="segment-label">All</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton className="segment-btn" value="male">
-            <IonLabel className="segment-label">Male</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton className="segment-btn" value="female">
-            <IonLabel className="segment-label">Female</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-        <h3 className="ion-margin ion-text-center">Voices</h3>
-        <IonRow>
-          <IonCol>
-            <IonList className="ion-margin-start ion-margin-end">
-              {VOICE_DATA.map((voice) => (
-                <IonItem
-                  className="vList item-list-color-search"
-                  lines="full"
-                  button
-                  onClick={openVoiceHandler}
-                >
-                  <IonAvatar className="avatar" slot="start">
-                    <img src={voice.image} alt="" />
-                  </IonAvatar>
-                  <IonLabel className="label">{voice.name}</IonLabel>
-                </IonItem>
-              ))}
-            </IonList>
-          </IonCol>
-        </IonRow>
+            <IonRow className="search-title">
+              <IonLabel className="ion-margin">
+                <b>Search</b>
+              </IonLabel>
+            </IonRow>
+            <IonSearchbar
+              className="searchBar"
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value!)}
+              placeholder="Artist, Voices"
+            ></IonSearchbar>
+            <IonSegment className="segment" value="all">
+              <IonSegmentButton className="segment-btn" value="all">
+                <IonLabel className="segment-label">All</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton className="segment-btn" value="male">
+                <IonLabel className="segment-label">Male</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton className="segment-btn" value="female">
+                <IonLabel className="segment-label">Female</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+            <h3 className="ion-margin ion-text-center">Voices</h3>
+            <IonRow>
+              <IonCol>
+                <IonList className="ion-margin-start ion-margin-end">
+                  {VOICE_DATA.map((voice) => (
+                    <IonItem
+                      key={voice.id}
+                      className="vList item-list-color-search"
+                      lines="full"
+                      button
+                      onClick={openVoiceHandler}
+                    >
+                      <IonAvatar className="avatar" slot="start">
+                        <img src={voice.image} alt="" />
+                      </IonAvatar>
+                      <IonLabel className="label">{voice.name}</IonLabel>
+                    </IonItem>
+                  ))}
+                </IonList>
+              </IonCol>
+            </IonRow>
 
-        <h3 className="ion-margin ion-text-center">Artists</h3>
-        <IonRow>
-          <IonCol>
-            <IonList className="ion-margin-start ion-margin-end">
-              {VOICE_DATA.map((voice) => (
-                <IonItem
-                  className="vList item-list-color-search"
-                  lines="full"
-                  button
-                  onClick={openVoiceHandler}
-                >
-                  <IonAvatar className="avatar" slot="start">
-                    <img src={voice.image} alt="" />
-                  </IonAvatar>
-                  <IonLabel className="label">{voice.name}</IonLabel>
-                </IonItem>
-              ))}
-            </IonList>
+            <h3 className="ion-margin ion-text-center">Artists</h3>
+            <IonRow>
+              <IonCol>
+                <IonList className="ion-margin-start ion-margin-end">
+                  {VOICE_DATA.map((voice) => (
+                    <IonItem
+                      className="vList item-list-color-search"
+                      lines="full"
+                      button
+                      onClick={openVoiceHandler}
+                    >
+                      <IonAvatar className="avatar" slot="start">
+                        <img src={voice.image} alt="" />
+                      </IonAvatar>
+                      <IonLabel className="label">{voice.name}</IonLabel>
+                    </IonItem>
+                  ))}
+                </IonList>
+              </IonCol>
+            </IonRow>
           </IonCol>
         </IonRow>
-          </IonCol>
-        </IonRow>
-        
-        
       </IonContent>
     </IonPage>
   );
 };
 
-export default Search;
+export default React.memo(Search);

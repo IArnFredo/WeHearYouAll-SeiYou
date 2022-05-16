@@ -34,10 +34,11 @@
     margin: 5px;
     height: 45px;
     --background: #C4C4C4;
+    box-shadow: 2px 4px #888888;
 }
 
 .title-text {
-    font-size: 12px;
+    font-size: 11px;
     padding: 0;
     margin: 4px;
 }
@@ -53,4 +54,8 @@
     margin-bottom: 3px;
     border-radius: 10px;
     --background: #f8c051;
+}
+
+#margin-for-float-btn{
+    margin-bottom: 70px;
 }

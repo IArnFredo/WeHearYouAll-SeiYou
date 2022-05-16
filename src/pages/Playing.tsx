@@ -23,54 +23,13 @@ import 'react-h5-audio-player/lib/styles.css';
 // const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
 // fileMusic.seekTo(1);
 const Playing: React.FC = () => {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [duration, setDuration] = useState(0);
   let gender = "male";
 
-
-  // const status = fileMusic.onStatusUpdate.subscribe(status =>{
-  //   if (status.toString() === "1") {
-  //     setInterval(() => {
-  //       console.log(status);
-  //       const dur = fileMusic.getDuration();
-  //       console.log(dur);
-  //       setDuration(dur);
-  //     }, 500)
-  //   }});
-
-  // fileMusic.onSuccess.subscribe(() => {
-  //   console.log("Success");
-  // });
-
-  // fileMusic.onError.subscribe(error => {
-  //   console.log("Error: " + error);
-  // });
-
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     fileMusic.getCurrentPosition().then((position) => {
-  //       setCurrentTime(position);
-  //     });
-  //   }, 1000);
-  // }, []);
-
-  const PlayVoice = () => {
-    // fileMusic.play();
-    setPlaying(true);
-    console.log("play");
-  }
-
-  const PauseVoice = () => {
-    // fileMusic.pause();
-    setPlaying(false);
-    console.log("pause");
-  }
   return (
     <IonPage className={gender === "female" ? "" : "playing-app"}>
       <IonToolbar class="ion-notoolbar-playing">
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/@home" />
+          <IonBackButton defaultHref="/home" />
         </IonButtons>
         <IonTitle>Now Playing</IonTitle>
       </IonToolbar>
@@ -150,4 +109,4 @@ const Playing: React.FC = () => {
   );
 };
 
-export default Playing;
+export default React.memo(Playing);

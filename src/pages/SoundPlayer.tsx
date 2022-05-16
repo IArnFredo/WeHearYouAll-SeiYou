@@ -33,4 +33,4 @@ const SoundPlayer: React.FC = () => {
   );
 };
 
-export default SoundPlayer;
+export default React.memo(SoundPlayer);

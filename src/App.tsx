@@ -41,72 +41,73 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "./firebaseConfig";
 import MenuTabs from "./tabsmenu/MenuTabs";
-import React from "react";
+import React, { useContext } from "react";
 import { homeOutline, searchOutline, ellipsisVerticalCircleOutline } from "ionicons/icons";
 import SoundPlayer from "./pages/SoundPlayer";
+import UserContextProvider from "./provider/UserContextProvider";
+import { userContext } from "./provider/User";
+import UrlChanger from "./pages/UrlChanger";
+import SoundsContext from "./provider/SoundsContext";
 setupIonicReact({
-  hardwareBackButton: false
+  hardwareBackButton: true,
+  // animated: false,
 });
+
 
 const App: React.FC = () => {
 
   return (
-    <IonApp>
-      <IonPage>
-        {/* <SoundPlayer/> */}
-        <IonReactRouter>
-          <IonRouterOutlet>
-            <IonTabs>
-              <IonRouterOutlet>
-                <Switch>
-                  <Route exact path="/@another-profile">
-                    <AnotherProfile />
-                  </Route>
-                  <Route exact path="/@search">
-                    <Search />
-                  </Route>
-                  <Route exact path="/@home">
-                    <Home />
-                  </Route>
-                  <Route path="/@profile" component={Profile} />
-                </Switch>
-              </IonRouterOutlet>
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="tab1" href="/@home">
-                  <IonIcon icon={homeOutline} />
-                  <IonLabel>Home</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="tab2" href="/@search">
-                  <IonIcon icon={searchOutline} />
-                  <IonLabel>Search</IonLabel>
-                </IonTabButton>
-                <IonTabButton tab="tab3" href="/@profile">
-                  <IonIcon icon={ellipsisVerticalCircleOutline} />
-                  <IonLabel>Profile</IonLabel>
-                </IonTabButton>
-              </IonTabBar>
-            </IonTabs>
+    <UserContextProvider>
+      <SoundsContext>
+        <IonApp>
+          {/* <SoundPlayer/> */}
 
-            <Route exact path="/">
-              <Redirect to="/@welcome" />
-            </Route>
+          <IonReactRouter>
+            <IonRouterOutlet ionPage>
 
-            {/* without tabs */}
-            <Route path="/@edit-profile" component={EditProfile} />
-            <Route path="/@edit-voice" component={EditVoice} />
-            <Route path="/@welcome" component={LandingScreen} />
-            <Route path="/@login" component={Login} />
-            <Route path="/@playing" component={withRouter(Playing)} exact={true} />
-            <Route path="/@record-voice" component={RecordVoice} />
-            <Route path="/@register" component={Register} />
-            <Route path="/@upload-voice" component={UploadVoice} />
-            <Route path="/@your-voice-list" component={YourVoiceList} />
-            {/* </Switch> */}
-
-          </IonRouterOutlet>
-        </IonReactRouter>
-      </IonPage>
-    </IonApp>
+              <Route exact path="/">
+                <Redirect to="/default" />
+              </Route>
+              <Route path="/default" component={UrlChanger} />
+              <Route path="/welcome" exact={true}>
+                <LandingScreen />
+              </Route>
+              {/* without tabs */}
+              <Route path="/edit-profile" exact>
+                <EditProfile />
+              </Route>
+              <Route path="/edit-voice" exact={true}>
+                <EditVoice />
+              </Route>
+              <Route path="/login" exact={true}>
+                <Login />
+              </Route>
+              <Route path="/playing" component={Playing}>
+                <Playing />
+              </Route>
+              <Route path="/record-voice" exact={true} >
+                <RecordVoice />
+              </Route>
+              <Route path="/register" exact={true}>
+                <Register />
+              </Route>
+              <Route path="/upload-voice" exact={true}>
+                <UploadVoice />
+              </Route>
+              <Route path="/your-voice-list" exact={true} >
+                <YourVoiceList />
+              </Route>
+              <Switch>
+                <Route exact path="/another-profile/:userID" component={AnotherProfile} />
+                <Route exact path="/:tab(search)" component={MenuTabs} />
+                <Route exact path="/:tab(home)" component={MenuTabs} />
+                <Route exact={true} path="/:tab(profile)" component={MenuTabs} />
+              </Switch>
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </IonApp>
+      </SoundsContext>
+    </UserContextProvider>
   );
 };
 export default App;

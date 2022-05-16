@@ -6,7 +6,6 @@ import {
   IonIcon,
   IonLabel,
 } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
 import {
   ellipsisVerticalCircleOutline,
   homeOutline,
@@ -15,38 +14,32 @@ import {
 import { Route, withRouter } from "react-router";
 import AnotherProfile from "../pages/AnotherProfile";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import Search from "../pages/Search";
 
 const MenuTabs: React.FC = () => {
   return (
     <IonTabs>
-      {/* <IonRouterOutlet> */}
-      <Route exact path="/@another-profile">
-        <AnotherProfile />
-      </Route>
-      <Route exact path="/@search">
-        <Search />
-      </Route>
-      <Route exact path="/@home">
-        <Home />
-      </Route>
-      <Route path="/@profile" component={Profile} />
-      <Route path="/@login">
-        <Login />
-      </Route>
-      {/* </IonRouterOutlet> */}
+      <IonRouterOutlet>
+        <Route exact path="/search">
+          <Search />
+        </Route>
+        <Route exact path="/home">
+          <Home />
+        </Route>
+        <Route exact path="/another-profile/:userID" component={AnotherProfile} />
+        <Route path="/profile" component={Profile} />
+      </IonRouterOutlet>
       <IonTabBar slot="bottom">
-        <IonTabButton tab="tab1" href="/@home">
+        <IonTabButton tab="tab1" href="/home">
           <IonIcon icon={homeOutline} />
           <IonLabel>Home</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab2" href="/@search">
+        <IonTabButton tab="tab2" href="/search">
           <IonIcon icon={searchOutline} />
           <IonLabel>Search</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="tab3" href="/@profile">
+        <IonTabButton tab="tab3" href="/profile">
           <IonIcon icon={ellipsisVerticalCircleOutline} />
           <IonLabel>Profile</IonLabel>
         </IonTabButton>

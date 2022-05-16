@@ -17,33 +17,28 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile, User } from "firebase/auth";
 import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { pencilOutline } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Redirect } from "react-router";
+import { userContext } from "../provider/User";
 import "./EditProfile.css";
 
 const EditProfile: React.FC = () => {
 
   const auth = getAuth();
   const db = getFirestore();
-  const [user, setUser] = useState<User | null>(null);
+  const user = useContext(userContext);
   const [userData, setUserData] = useState<DocumentData>();
   const [name, setName] = useState('');
   const [gender, setGender] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
-    onAuthStateChanged(auth, (auser) => {
-      if (auser) {
-        setUser(auser);
-      } else {
-        setUser(null);
-      }
-    });
     async function fetchData() {
       if (user) {
-        const userRef = doc(db, 'users', user!.uid);
+        const userRef = doc(db, 'users', user.userId!);
         const userSnapshot = await getDoc(userRef);
         const userData = userSnapshot.data();
         if (userData) {
@@ -56,10 +51,10 @@ const EditProfile: React.FC = () => {
       }
     }
     fetchData();
-  }, [auth, db, user]);
+  }, [user]);
 
   const saveUpdate = async () => {
-    const docRef = doc(db, 'users', user!.uid);
+    const docRef = doc(db, 'users', user.userId!);
     try {
       await setDoc(docRef, {
         ...userData,
@@ -67,20 +62,37 @@ const EditProfile: React.FC = () => {
         name,
         dob: selectedDate,
       });
+      updateProfile(auth.currentUser!, {
+        displayName: name,
+      }).then(() => {
+        console.log(auth.currentUser!);
+      }).catch((error) => {
+        console.error("Error updating profile: ", error);
+      });
     } catch (error) {
       console.error(error);
     }
   }
+
+  const changePage = () => {
+    if (user.loggedIn == false) {
+      return <Redirect to="/login" />;
+    }
+    else {
+      return <Redirect to="/profile" />;
+    }
+  };
 
   return (
     // bg-app is the class for the background
     <IonPage>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/@profile" />
+          <IonBackButton defaultHref="/profile" />
         </IonButtons>
         <IonTitle>Edit Profile</IonTitle>
       </IonToolbar>
+      {user.loggedIn !== false ? (
         <IonContent className="bg-app">
           <IonRow>
             <IonCol size="12" className="ion-text-center edit-image-profile">
@@ -134,7 +146,7 @@ const EditProfile: React.FC = () => {
               {gender !== '' && (
                 <IonSegment
                   value={gender}
-                  onIonChange={(e) => setGender(e.detail.value!)} 
+                  onIonChange={(e) => setGender(e.detail.value!)}
                   className="segment"
                 >
                   {""}
@@ -176,8 +188,11 @@ const EditProfile: React.FC = () => {
             </IonToolbar>
           </IonFooter>
         </IonContent>
+      ) :
+        changePage()
+      }
     </IonPage>
   );
 };
 
-export default EditProfile;
+export default React.memo(EditProfile);

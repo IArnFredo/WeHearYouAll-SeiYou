@@ -14,35 +14,23 @@ import {
   IonButtons,
   IonText,
 } from "@ionic/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   signInWithEmailAndPassword,
   getAuth,
-  User,
-  onAuthStateChanged,
 } from "firebase/auth";
 import "./Account.css";
 import "../firebaseConfig";
 import app from "../firebaseConfig";
-import { Redirect, withRouter } from "react-router";
+import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import CryptoJS from "crypto-js";
+import { userContext } from "../provider/User";
 const auth = getAuth(app);
 
 const Login: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (auser) => {
-      if (auser) {
-        setUser(auser);
-      } else {
-        setUser(null);
-      }
-    });
-  }, [user]);
-
+  const user = useContext(userContext);
   const loginFailed = () => {
     setToastMessage("Email or Password is incorrect!");
   };
@@ -59,7 +47,7 @@ const Login: React.FC = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        return <Redirect to="/@home" />;
+        return <Redirect to="/home" />;
         // ...
       })
       .catch((error) => {
@@ -71,15 +59,17 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonToolbar class="toolbar-transparent">
+      <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/@welcome" />
+          <IonBackButton defaultHref="/welcome" />
           <IonText>Sign In</IonText>
         </IonButtons>
       </IonToolbar>
-      {auth.currentUser !== null ? (
-        <Redirect exact to={"/@home"} />
-      ) : (
+      {user.loggedIn == true && (
+        <Redirect to={"/home"} />
+      )}
+
+      {user.loggedIn == false && (
         <IonContent
           fullscreen
           className="ion-padding ion-text-center ion-content-account"
@@ -121,18 +111,18 @@ const Login: React.FC = () => {
                 >
                   Sign In
                 </IonButton>
-                <Link className="link-to" to="/@forgot_password">
+                <Link className="link-to" to="/forgot_password">
                   <p id="label-2">Forgot Password?</p>
                 </Link>
-                <Link className="link-to" to="/@register">
+                <Link className="link-to" to="/register">
                   <p id="label-2">Create New Account!</p>
                 </Link>
               </IonCol>
             </IonRow>
           </IonGrid>
         </IonContent>
-
       )}
+
       <IonToast
         isOpen={!!toastMessage}
         message={toastMessage}
@@ -145,4 +135,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default withRouter(Login);
+export default React.memo(Login);

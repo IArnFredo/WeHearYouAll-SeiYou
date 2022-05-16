@@ -7,7 +7,7 @@ const RecordVoice: React.FC = () => {
     <IonPage>
       <IonToolbar className='tool'>
         <IonButtons slot='start'>
-          <IonBackButton defaultHref='/@profile'></IonBackButton>
+          <IonBackButton defaultHref='/profile'></IonBackButton>
           <IonText>Record Your Voice</IonText>
         </IonButtons>
       </IonToolbar>
@@ -29,4 +29,4 @@ const RecordVoice: React.FC = () => {
   )
 }
 
-export default RecordVoice
+export default React.memo(RecordVoice);

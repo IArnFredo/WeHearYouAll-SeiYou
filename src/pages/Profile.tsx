@@ -11,6 +11,7 @@ import {
   IonPage,
   IonRow,
   useIonAlert,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
 import {
@@ -19,6 +20,7 @@ import {
   where,
   getDocs,
   getFirestore,
+  onSnapshot,
 } from "firebase/firestore";
 import {
   arrowUpOutline,
@@ -28,14 +30,16 @@ import {
   pencilOutline,
   playOutline,
 } from "ionicons/icons";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router";
+import { userContext } from "../provider/User";
 import "./Profile.css";
-const auth = getAuth();
-const db = getFirestore();
+
 
 const Profile: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth();
+  const db = getFirestore();
+  const user = useContext(userContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [userAge, setAge] = useState<number>(0);
   const [readData, setReadData] = useState<Array<any>>([]);
@@ -44,17 +48,10 @@ const Profile: React.FC = () => {
   const [present] = useIonAlert();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (auser) => {
-      if (auser) {
-        setUser(auser);
-      } else {
-        setUser(null);
-      }
-    });
     async function fetchData() {
       const q = query(
         collection(db, "users"),
-        where("UserID", "==", auth?.currentUser?.uid)
+        where("UserID", "==", user.userId)
       );
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => doc.data());
@@ -67,8 +64,15 @@ const Profile: React.FC = () => {
     } else {
       setReadData([]);
     }
-    // return()=>data();
+    return;
   }, [user]);
+
+  const unsubscribe = onSnapshot(collection(db, "users"), () => {
+    // Respond to data
+    // ...
+  });
+
+  unsubscribe();
 
   const AgeCal = () => {
     var today = new Date();
@@ -91,8 +95,6 @@ const Profile: React.FC = () => {
           handler: () => {
             signOut(auth)
               .then(() => {
-                localStorage.clear();
-                setUser(null);
                 setSignOut("true");
               })
               .catch((error) => {
@@ -113,33 +115,35 @@ const Profile: React.FC = () => {
 
   const changePage = () => {
     if (signout == "true") {
-      return <Redirect to="/@home" />;
-    } else if (auth.currentUser == null) {
-      return <Redirect to="/@login" />;
-    } else {
-      return <Redirect to="/@profile" />;
+      return <Redirect to="/home" />;
+    }
+    if (user.loggedIn == false) {
+      return <Redirect to="/login" />;
+    }
+    else {
+      return <Redirect to="/profile" />;
     }
   };
 
   return (
     <IonPage>
-      {auth.currentUser !== null ? (
+      {user.loggedIn == true && (
         <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-              <img className="avatar-profile" src={user?.photoURL!} />
+              <img className="avatar-profile" src={user.userData.photoURL} />
               {readData.map((data) => (
                 <IonCardHeader key={data.UserID} class="text-profile">
                   <IonCardTitle>{data.name}</IonCardTitle>
                   <IonCardSubtitle>
-                    {user?.emailVerified ? "Verified" : "Not Verified"} <br />
+                    {user.userData?.emailVerified ? "Verified" : "Not Verified"} <br />
                     {data.gender}, {userAge}
                   </IonCardSubtitle>
                 </IonCardHeader>
               ))}
               <IonCardContent>
                 <IonButton
-                  routerLink="/@edit-profile"
+                  routerLink="/edit-profile"
                   expand="block"
                   shape="round"
                 >
@@ -147,7 +151,7 @@ const Profile: React.FC = () => {
                   Edit Profile
                 </IonButton>
                 <IonButton
-                  routerLink="/@your-voice-list"
+                  routerLink="/your-voice-list"
                   expand="block"
                   shape="round"
                 >
@@ -168,7 +172,7 @@ const Profile: React.FC = () => {
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonCardContent>
-              <IonButton
+                <IonButton
                   expand="block"
                   shape="round"
                   onClick={SignOut}
@@ -177,13 +181,17 @@ const Profile: React.FC = () => {
                   <IonIcon className="button-icon" icon={logOutOutline} />&nbsp;
                   Sign Out
                 </IonButton>
-              </IonCardContent>                
+              </IonCardContent>
             </IonCol>
           </IonRow>
         </IonContent>
-      ) : (
-        changePage()
       )}
+
+      {
+        user.loggedIn == false && (
+          changePage()
+        )
+      }
 
       <IonActionSheet
         isOpen={showActionSheet}
@@ -211,44 +219,6 @@ const Profile: React.FC = () => {
       ></IonActionSheet>
     </IonPage>
   );
-
-  //   <IonContent className="landingContent" fullscreen>
-  //   <div>
-  //     <IonButton
-  //       className="skipButton"
-  //       routerLink={"/@home"}
-  //       fill="clear"
-  //       color="light"
-  //     >
-  //       Skip
-  //     </IonButton>
-  //     <img
-  //       src="../assets/images/landing.png"
-  //       alt=""
-  //       className="landingImg"
-  //     />
-  //   </div>
-  //   <IonGrid className="ion-text-center ion-margin-top">
-  //     <IonLabel className="text1">Welcome to SeiYou</IonLabel>
-  //     <br />
-  //     <IonLabel className="text2">
-  //       Start your voice act here, it's free!
-  //     </IonLabel>
-  //     <IonRow className="ion-margin-top ion-justify-content-center">
-  //       <IonButton
-  //         fill="clear"
-  //         shape="round"
-  //         color="dark"
-  //         routerLink={"/@register"}
-  //       >
-  //         Sign Up
-  //       </IonButton>
-  //       <IonButton shape="round" routerLink={"/@login"}>
-  //         Sign In
-  //       </IonButton>
-  //     </IonRow>
-  //   </IonGrid>
-  // </IonContent>
 };
 
-export default Profile;
+export default React.memo(Profile);

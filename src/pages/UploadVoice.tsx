@@ -25,7 +25,7 @@ const UploadVoice: React.FC = () => {
     <IonPage className='bg-app'>
       <IonToolbar>
         <IonButtons slot='start'>
-          <IonBackButton defaultHref='/@profile' />
+          <IonBackButton defaultHref='/profile' />
         </IonButtons>
         <IonTitle>Upload New Voice</IonTitle>
       </IonToolbar>
@@ -69,4 +69,4 @@ const UploadVoice: React.FC = () => {
   );
 };
 
-export default UploadVoice;
+export default React.memo(UploadVoice);

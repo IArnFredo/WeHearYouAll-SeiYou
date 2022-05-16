@@ -16,11 +16,10 @@ import {
   IonSegment,
   IonSegmentButton,
 } from "@ionic/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Account.css";
 import {
   getAuth,
-  User,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
@@ -28,13 +27,14 @@ import {
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 import { Redirect } from "react-router";
+import { userContext } from "../provider/User";
 
 const auth = getAuth();
 // const provider = new GoogleAuthProvider();
 
 const Register: React.FC = () => {
   const db = getFirestore();
-  const [user, setUser] = useState<User | null>(null);
+  const user = useContext(userContext);
   const [present] = useIonAlert();
   const email = useRef<HTMLIonInputElement>(null);
   const password = useRef<HTMLIonInputElement>(null);
@@ -42,30 +42,6 @@ const Register: React.FC = () => {
   const name = useRef<HTMLIonInputElement>(null);
   const dob = useRef<HTMLIonInputElement>(null);
   const [gender, setGender] = useState("Male");
-
-  useEffect(() => {
-    localStorage.getItem("user") &&
-      setUser(JSON.parse(localStorage.getItem("user") as string));
-    console.log(user);
-  }, [user]);
-  // console.log(gender);
-  console.log(user);
-
-  const addData = async (pathReference: string, userId: string) => {
-    try {
-      const userRef = doc(db, 'users', userId);
-      await setDoc(userRef, {
-        UserID: userId!,
-        email: email.current!.value,
-        name: name.current!.value,
-        dob: dob.current!.value,
-        gender: gender,
-        photoUrl: pathReference,
-      });
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
 
   const signUp = async () => {
     // console.log(dob.current?.value as string);
@@ -145,37 +121,53 @@ const Register: React.FC = () => {
     const hash = CryptoJS.SHA1(pass).toString();
 
     createUserWithEmailAndPassword(auth, enteredEmail, hash)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      // Signed in
-      const pathReference =
-        "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // Signed in
+        const pathReference =
+          "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
         updateProfile(auth.currentUser!, {
           displayName: enteredName, photoURL: pathReference,
         }).then(() => {
-          localStorage.setItem("user", JSON.stringify(auth.currentUser!));
           console.log(auth.currentUser!);
         }).catch((error) => {
           console.error("Error updating profile: ", error);
         });
-      addData(pathReference, user.uid);
-      sendEmailVerification(auth.currentUser!).then(() => {
-        present({
-          message: "Verify your email to finish signing up for SeiYou!",
-          header: "Please Check Your Email",
-          buttons: [{ text: "OK", handler: () => {
-            return <Redirect to={"/@profile"}/>;
-          },}],
+        addData(pathReference, user.uid);
+        sendEmailVerification(auth.currentUser!).then(() => {
+          present({
+            message: "Verify your email to finish signing up for SeiYou!",
+            header: "Please Check Your Email",
+            buttons: [{
+              text: "OK", handler: () => {
+                return <Redirect to={"/profile"} />;
+              },
+            }],
+          });
         });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
       });
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode);
-      console.log(errorMessage);
-    });
 
+    const addData = async (pathReference: string, userId: string) => {
+      try {
+        const userRef = doc(db, 'users', userId);
+        await setDoc(userRef, {
+          UserID: userId!,
+          email: email.current!.value,
+          name: name.current!.value,
+          dob: dob.current!.value,
+          gender: gender,
+          photoUrl: pathReference,
+        });
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    };
     // addData();
   };
 
@@ -193,9 +185,9 @@ const Register: React.FC = () => {
   // };
   return (
     <IonPage>
-      <IonToolbar class="toolbar-transparent">
+      <IonToolbar className="register-toolbar">
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/@welcome" />
+          <IonBackButton defaultHref="/welcome" />
           <IonText>Create new Account</IonText>
         </IonButtons>
       </IonToolbar>
@@ -206,68 +198,68 @@ const Register: React.FC = () => {
         <IonGrid>
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-            <IonRow>
-            <IonCol>
-              <p id="label">Account Information</p>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  {" "}
-                  <p id="label">Email</p>
-                </IonLabel>
-                <IonInput ref={email} type="email"></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  {" "}
-                  <p id="label">Password</p>
-                </IonLabel>
-                <IonInput ref={password} type="password"></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  {" "}
-                  <p id="label">Confirm Password</p>
-                </IonLabel>
-                <IonInput ref={confirmPassword} type="password"></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <p id="label">Personal Information</p>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">
-                  {" "}
-                  <p id="label">Name</p>
-                </IonLabel>
-                <IonInput
-                  ref={name}
-                  id="input"
-                  type="text"
-                  placeholder="Name"
-                ></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              {/* <IonRadioGroup
+              <IonRow>
+                <IonCol>
+                  <p id="label">Account Information</p>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">
+                      {" "}
+                      <p id="label">Email</p>
+                    </IonLabel>
+                    <IonInput ref={email} type="email"></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">
+                      {" "}
+                      <p id="label">Password</p>
+                    </IonLabel>
+                    <IonInput ref={password} type="password"></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">
+                      {" "}
+                      <p id="label">Confirm Password</p>
+                    </IonLabel>
+                    <IonInput ref={confirmPassword} type="password"></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <p id="label">Personal Information</p>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="floating">
+                      {" "}
+                      <p id="label">Name</p>
+                    </IonLabel>
+                    <IonInput
+                      ref={name}
+                      id="input"
+                      type="text"
+                      placeholder="Name"
+                    ></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  {/* <IonRadioGroup
                 value={gender}
                 onIonChange={(e) => setGender(e.detail.value)}
               >
@@ -284,50 +276,49 @@ const Register: React.FC = () => {
                   <IonRadio value="Female"></IonRadio>
                 </IonItem>
               </IonRadioGroup> */}
-              <IonLabel position="stacked">
-                {" "}
-                <p id="label">Gender</p>
-              </IonLabel>
-              <IonSegment
-                onIonChange={(e) => setGender(e.detail.value!)}
-                value={gender}
-                className="segment"
-              >
-                {""}
-                <IonSegmentButton class="segment-btn" value="Male">
-                  <IonLabel>Male</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton class="segment-btn" value="Female">
-                  <IonLabel>Female</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
+                  <IonLabel position="stacked">
+                    {" "}
+                    <p id="label">Gender</p>
+                  </IonLabel>
+                  <IonSegment
+                    onIonChange={(e) => setGender(e.detail.value!)}
+                    value={gender}
+                    className="segment"
+                  >
+                    {""}
+                    <IonSegmentButton class="segment-btn" value="Male">
+                      <IonLabel>Male</IonLabel>
+                    </IonSegmentButton>
+                    <IonSegmentButton class="segment-btn" value="Female">
+                      <IonLabel>Female</IonLabel>
+                    </IonSegmentButton>
+                  </IonSegment>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel position="stacked">
+                      {" "}
+                      <p id="label">Date of Birth</p>
+                    </IonLabel>
+                    <IonInput ref={dob} id="input" type="date"></IonInput>
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonButton onClick={signUp} id="login-button" shape="round">
+                    Sign Up
+                  </IonButton>
+                </IonCol>
+              </IonRow>
             </IonCol>
           </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="stacked">
-                  {" "}
-                  <p id="label">Date of Birth</p>
-                </IonLabel>
-                <IonInput ref={dob} id="input" type="date"></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonButton onClick={signUp} id="login-button" shape="round">
-                Sign Up
-              </IonButton>
-            </IonCol>
-          </IonRow>
-            </IonCol>
-          </IonRow>
-          
         </IonGrid>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Register;
+export default React.memo(Register);

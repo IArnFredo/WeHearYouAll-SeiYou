@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import UserContextProvider from './provider/UserContextProvider';
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  //     </React.StrictMode>,
+    <UserContextProvider>
       <App />
-  </React.StrictMode>,
+    </UserContextProvider>,
+
   document.getElementById('root')
 );
 

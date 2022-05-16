@@ -24,7 +24,7 @@ const EditVoice: React.FC = () => {
     <IonPage className='bg-app'>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref='/@your-voice-list' />
+          <IonBackButton defaultHref='/your-voice-list' />
         </IonButtons>
         <IonTitle>Edit Voice</IonTitle>
       </IonToolbar>
@@ -58,4 +58,4 @@ const EditVoice: React.FC = () => {
   );
 };
 
-export default EditVoice;
+export default React.memo(EditVoice);
