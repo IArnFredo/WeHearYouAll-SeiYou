@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
     async function fetchData() {
       const q = query(
         collection(db, "users"),
-        where("UserID", "==", user.userId)
+        where("UserID", "==", user.userId!)
       );
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map((doc) => doc.data());
@@ -169,7 +169,7 @@ const Profile: React.FC = () => {
               </IonCardContent>
             </IonCol>
           </IonRow>
-          <IonRow>
+          <IonRow id="margin-for-float-btn">
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonCardContent>
                 <IonButton
