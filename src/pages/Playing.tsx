@@ -59,47 +59,11 @@ const Playing: React.FC = () => {
         <IonToolbar class='ion-notoolbar-playing'>
           <IonRow>
             <IonCol size="12" className="ion-text-justify">
-              {/* <IonRange
-                max={100}
-                color="dark"
-                style={{ padding: "0px 14px" }}
-              ></IonRange>
-            </IonCol>
-            <IonCol size="6">
-              <IonText className="ion-margin-start">{currentTime}</IonText>
-            </IonCol>
-            <IonCol className="ion-text-right" size="6">
-              <IonText className="ion-margin-end">{duration}</IonText>
-            </IonCol>
-
-            <IonCol className="ion-text-center" size="12">
-              <IonButton fill="clear" color="dark">
-                <IonIcon size="small" icon={shareSocial}></IonIcon>
-              </IonButton>
-              <IonButton fill="clear" color="dark">
-                <IonIcon size="small" icon={playSkipBack}></IonIcon>
-              </IonButton>
-              {playing == false ?
-                (
-                  <IonButton fill="clear" color="secondary" onClick={PlayVoice}>
-                    <IonIcon size="large" icon={playCircleSharp}></IonIcon>
-                  </IonButton>
-                ) :
-                (
-                  <IonButton fill="clear" color="secondary" onClick={PauseVoice}>
-                    <IonIcon size="large" icon={pauseCircleSharp}></IonIcon>
-                  </IonButton>
-                )}
-              <IonButton fill="clear" color="dark">
-                <IonIcon size="small" icon={playSkipForward}></IonIcon>
-              </IonButton>
-              <IonButton fill="clear" color="dark"></IonButton> */}
               <AudioPlayer
                 autoPlay={false}
                 layout="stacked"
                 src="https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a"
                 onPlay={e => console.log("onPlay")}
-              // other props here
               />
             </IonCol>
           </IonRow>

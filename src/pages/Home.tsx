@@ -13,41 +13,43 @@ import {
 import "./Home.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import React from "react";
-import { useSoundsContext } from "../provider/Sounds";
+import React, { useRef } from "react";
+import { getTracks, useSoundsContext } from "../provider/Sounds";
 
-const Home: React.FC = () => {
-  console.log('tab1 render');
-  const sounds = useSoundsContext();
+const Home: React.FC = (props) => {
+  console.log(props);
+  
+  const { state, dispatch } = useSoundsContext();
 
+  const trackSounds = getTracks(state);
   return (
     <IonPage className="bg-app-home">
       <IonContent className="home-content">
         <IonRow id="margin-for-float-btn">
           <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
             <IonRow className="home-title">
-              <IonLabel className="ion-margin"><b>Welcome!</b></IonLabel>
+              <IonLabel className="ion-margin-top"><b>Welcome!</b></IonLabel>
             </IonRow>
             <IonGrid>
               {/* Recently Upload */}
               <IonRow className="home-subtitle">
-                <IonLabel className="ion-margin">Recently Upload</IonLabel>
+                <IonLabel className="ion-margin-top">Recently Upload</IonLabel>
               </IonRow>
               <IonList className="home-recently-list">
                 <IonRow>
-                  {sounds && sounds.map((sound:any, index:any) => (
+                  {trackSounds && trackSounds.map((sound: any, index: any) => (
                     <IonCol size="6" key={index}>
-                      <IonItem className="home-vList" button routerLink={`/another-profile/${sound.UserID}`}>
-                        <IonAvatar className="avatar" slot="start">
+                      <IonItem className="home-vList" button>
+                        <IonAvatar slot="start">
                           <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                         </IonAvatar>
                         <div>
-                          <p className="title-text"><b>Voice title</b></p>
+                          <p className="title-text"><b>{sound.name}</b></p>
                           <p className="title-text">Name</p>
                         </div>
                       </IonItem>
                     </IonCol>
-                    ))}
+                  ))}
 
                   {/* <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
@@ -77,13 +79,13 @@ const Home: React.FC = () => {
 
               {/* Most Popular */}
               <IonRow className="home-subtitle">
-                <IonLabel className="ion-margin">Most Popular</IonLabel>
+                <IonLabel className="ion-margin-top">Most Popular</IonLabel>
               </IonRow>
               <IonList className="home-recently-list">
                 <IonRow>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -94,7 +96,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -105,7 +107,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -116,7 +118,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -127,7 +129,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -138,7 +140,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -149,7 +151,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -160,7 +162,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -171,7 +173,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -182,7 +184,7 @@ const Home: React.FC = () => {
                   </IonCol>
                   <IonCol size="6">
                     <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar className="avatar" slot="start">
+                      <IonAvatar slot="start">
                         <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                       </IonAvatar>
                       <div>
@@ -197,48 +199,11 @@ const Home: React.FC = () => {
             </IonGrid>
           </IonCol>
         </IonRow>
-
-
-        {/* Floating Play Button */}
-        <IonFab className="float-btn" vertical="bottom" slot="fixed">
-          <IonItem className="home-float-btn ion-margin-horizontal" button detail={false}>
-            {/* routerLink="/playing" */}
-            {/* <IonAvatar className="avatar" slot="start">
-              <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-            </IonAvatar>
-            <div>
-              <p className="title-text"><b>Voice title</b></p>
-              <p className="title-text">Name</p>
-            </div>
-            <IonButton
-              slot="end"
-              fill="clear"
-              routerLink="/@your-voice-list"
-              expand="block"
-              shape="round"
-            >
-              <IonIcon className="button-icon" icon={playOutline} />
-            </IonButton> */}
-            <AudioPlayer
-              autoPlay={false}
-              header="Your Voice"
-              layout="horizontal"
-              showDownloadProgress={false}
-              showFilledProgress={false}
-              showJumpControls={false}
-              showFilledVolume={false}
-              src="https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a"
-              onPlay={e => console.log("onPlay")}
-              className="audioPlayer"
-            // other props here
-            />
-          </IonItem>
-        </IonFab>
-        {/* End Floating Play Button */}
       </IonContent>
     </IonPage>
   );
 };
 
 export default React.memo(Home);
+
 

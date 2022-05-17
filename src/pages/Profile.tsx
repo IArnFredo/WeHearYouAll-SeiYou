@@ -35,7 +35,6 @@ import { Redirect } from "react-router";
 import { userContext } from "../provider/User";
 import "./Profile.css";
 
-
 const Profile: React.FC = () => {
   const auth = getAuth();
   const db = getFirestore();
@@ -44,7 +43,6 @@ const Profile: React.FC = () => {
   const [userAge, setAge] = useState<number>(0);
   const [readData, setReadData] = useState<Array<any>>([]);
   const [signout, setSignOut] = useState<string>("false");
-
   const [present] = useIonAlert();
 
   useEffect(() => {
@@ -130,17 +128,17 @@ const Profile: React.FC = () => {
       {user.loggedIn == true && (
         <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
-            <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-              <img className="avatar-profile" src={user.userData.photoURL} />
-              {readData.map((data) => (
-                <IonCardHeader key={data.UserID} class="text-profile">
+          {readData.map((data) => (
+            <IonCol key={data.UserID} size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+              <img className="avatar-profile" src={data.photoUrl} />
+                <IonCardHeader  class="text-profile">
                   <IonCardTitle>{data.name}</IonCardTitle>
                   <IonCardSubtitle>
                     {user.userData?.emailVerified ? "Verified" : "Not Verified"} <br />
                     {data.gender}, {userAge}
                   </IonCardSubtitle>
                 </IonCardHeader>
-              ))}
+              
               <IonCardContent>
                 <IonButton
                   routerLink="/edit-profile"
@@ -168,6 +166,7 @@ const Profile: React.FC = () => {
                 </IonButton>
               </IonCardContent>
             </IonCol>
+            ))}
           </IonRow>
           <IonRow id="margin-for-float-btn">
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
@@ -185,7 +184,7 @@ const Profile: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonContent>
-      )}
+      )} 
 
       {
         user.loggedIn == false && (

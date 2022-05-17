@@ -23,6 +23,7 @@ import { pencilOutline } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { userContext } from "../provider/User";
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import "./EditProfile.css";
 
 const EditProfile: React.FC = () => {
@@ -34,6 +35,11 @@ const EditProfile: React.FC = () => {
   const [name, setName] = useState('');
   const [gender, setGender] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File>();
+  const [takenPhoto, setTakenPhoto] = useState<{
+    path: string | undefined,
+    preview: string,
+  }>();
 
   useEffect(() => {
     async function fetchData() {
@@ -83,6 +89,29 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  const choosePicture = async () => {
+    const photo = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Prompt,
+      quality: 80,
+      width: 500
+    });
+    console.log(photo);
+
+    const response = await fetch(photo.webPath!);
+    const bin = await response.blob();
+    setSelectedFile(bin as File);
+
+    if (!photo || !photo.webPath) {
+      return;
+    }
+
+    setTakenPhoto({
+      path: photo.path,
+      preview: photo.webPath,
+    });
+  };
+
   return (
     // bg-app is the class for the background
     <IonPage>
@@ -95,24 +124,34 @@ const EditProfile: React.FC = () => {
       {user.loggedIn !== false ? (
         <IonContent className="bg-app">
           <IonRow>
-            <IonCol size="12" className="ion-text-center edit-image-profile">
-              {userData && (
-                <img
-                  src={userData.photoUrl}
-                  className="radius-pic-edit-profile"
-                  alt="profile"
-                />
-              )}
-              <div className="centered-title-edit">
-                <IonIcon
-                  className="pencil"
-                  size="small"
-                  color="dark"
-                  icon={pencilOutline}
-                ></IonIcon>
-                {/* <p style={{ color: "black" }}>Change</p> */}
-              </div>
-            </IonCol>
+            {userData && (
+              <IonCol size="12" className="ion-text-center edit-image-profile">
+                {takenPhoto ? (
+                  <img
+                    src={takenPhoto.preview}
+                    className="radius-pic-edit-profile"
+                    alt="profile"
+                    onClick={choosePicture}
+                  />
+                ) : (
+                  <img
+                    src={userData.photoUrl}
+                    className="radius-pic-edit-profile"
+                    alt="profile"
+                    onClick={choosePicture}
+                  />
+                )}
+                <div className="centered-title-edit" onClick={choosePicture}>
+                  <IonIcon
+                    className="pencil"
+                    size="small"
+                    color="dark"
+                    icon={pencilOutline}
+                  ></IonIcon>
+                  {/* <p style={{ color: "black" }}>Change</p> */}
+                </div>
+              </IonCol>
+            )}
             <IonCol className="ion-text-center" size="12">
               <IonItem className="ion-margin ion-item-bg">
                 <IonLabel position="stacked" color="medium">
@@ -179,7 +218,7 @@ const EditProfile: React.FC = () => {
               <IonRow className="ion-margin">
                 <IonCol class="ion-text-center">
                   {user && (
-                    <IonButton expand="full" shape="round" onClick={saveUpdate}>
+                    <IonButton expand="full" shape="round" onClick={saveUpdate} routerLink='/profile'>
                       Save
                     </IonButton>
                   )}

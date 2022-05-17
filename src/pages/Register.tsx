@@ -125,7 +125,7 @@ const Register: React.FC = () => {
         const user = userCredential.user;
         // Signed in
         const pathReference =
-          "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/default_picture.jpg?alt=media&token=2fc9fdb1-a8d6-409d-b64e-eb6c391e8259" as string;
+          "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/images%2Fdefault_picture.jpg?alt=media&token=9a22a104-60bb-4d72-b8a4-96fad2251f62" as string;
         updateProfile(auth.currentUser!, {
           displayName: enteredName, photoURL: pathReference,
         }).then(() => {

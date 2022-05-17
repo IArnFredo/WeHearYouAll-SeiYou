@@ -48,7 +48,7 @@ const Search: React.FC = () => {
         <IonRow>
           <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
             <IonRow className="search-title">
-              <IonLabel className="ion-margin">
+              <IonLabel className="ion-margin-vertical">
                 <b>Search</b>
               </IonLabel>
             </IonRow>
@@ -92,7 +92,7 @@ const Search: React.FC = () => {
             </IonRow>
 
             <h3 className="ion-margin ion-text-center">Artists</h3>
-            <IonRow>
+            <IonRow id="margin-for-float-btn">
               <IonCol>
                 <IonList className="ion-margin-start ion-margin-end">
                   {VOICE_DATA.map((voice) => (

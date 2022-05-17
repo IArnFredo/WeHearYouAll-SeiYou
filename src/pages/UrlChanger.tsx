@@ -5,7 +5,6 @@ import { userContext } from "../provider/User"
 
 const UrlChanger:React.FC = () => {
     const user = useContext(userContext);
-    console.log(user);
     if (user) {
         return <Redirect to="/welcome" />;
     }

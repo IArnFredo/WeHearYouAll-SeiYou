@@ -4,13 +4,20 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import UserContextProvider from './provider/UserContextProvider';
-
+import { BrowserRouter as Route } from 'react-router-dom';
+import { IonReactRouter } from '@ionic/react-router';
+import SoundsContext from './provider/SoundsContext';
+import { defineCustomElements } from "@ionic/pwa-elements/loader";
 ReactDOM.render(
   // <React.StrictMode>
   //     </React.StrictMode>,
-    <UserContextProvider>
-      <App />
-    </UserContextProvider>,
+  <UserContextProvider>
+    <SoundsContext>
+      <IonReactRouter>
+        <App />
+      </IonReactRouter>
+    </SoundsContext>
+  </UserContextProvider>,
 
   document.getElementById('root')
 );
@@ -24,3 +31,4 @@ serviceWorkerRegistration.unregister();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+defineCustomElements(window);

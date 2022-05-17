@@ -32,9 +32,19 @@
 .home-vList {
     border-radius: 10px;
     margin: 5px;
-    height: 45px;
-    --background: #C4C4C4;
-    box-shadow: 2px 4px #888888;
+    height: 55px;
+    /* --background: #C4C4C4; */
+    /* --background: rgb(138,138,138);
+    --background: linear-gradient(45deg, rgba(138,138,138,1) 0%, rgba(237,181,255,1) 0%, rgba(255,175,175,1) 100%); */
+    --background: rgb(135, 188, 218);
+    --background: linear-gradient(294deg, rgba(135, 188, 218,1) 0%, rgba(196, 196, 196,1) 100%, rgba(138,138,138,1) 0%);
+    box-shadow: 4px 4px 0px #505b74;
+    transition: transform 200ms, box-shadow 200ms;
+}
+
+.home-vList:active {
+    transform: translate(4px) translateX(4px);
+    box-shadow: #505b74 0px 0px 0px;
 }
 
 .title-text {
