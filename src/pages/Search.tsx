@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   IonRow,
   IonAvatar,
@@ -11,35 +12,51 @@ import {
   IonSegmentButton,
   IonCol,
 } from '@ionic/react';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, DocumentData, getDocs, getFirestore } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useSoundsContext } from '../provider/Sounds';
 import './Search.css';
 
-export const VOICE_DATA = [
-  {
-    id: 'v1',
-    name: 'Voice1',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-  {
-    id: 'v2',
-    name: 'Voice2',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-  {
-    id: 'v3',
-    name: 'Voice3',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-];
+interface TrackTypes {
+  id: string;
+  UserID: string;
+  images: string;
+  name: string;
+  play: number;
+  soundsURL: string;
+  uploadTime: string;
+  userName?: string;
+  gender?: string;
+};
+
+// export const VOICE_DATA = [
+//   {
+//     id: 'v1',
+//     name: 'Voice1',
+//     image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
+//   },
+//   {
+//     id: 'v2',
+//     name: 'Voice2',
+//     image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
+//   },
+//   {
+//     id: 'v3',
+//     name: 'Voice3',
+//     image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
+//   },
+// ];
+
+const VOICE_IMAGE = 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg';
 
 const Search: React.FC = () => {
   const db = getFirestore();
-  const { state, dispatch } = useSoundsContext();
-  const [tracks, setTracks] = useState<any[]>([]);
+  const { state } = useSoundsContext();
+  const [tracks, setTracks] = useState<TrackTypes[]>([]);
+  const [usersData, setUsersData] = useState<DocumentData[]>([]);
   const [searchText, setSearchText] = useState('');
+  const [searchGender, setSearchGender] = useState('');
   const history = useHistory();
 
   const openVoiceHandler = () => {
@@ -47,52 +64,43 @@ const Search: React.FC = () => {
     history.push('/playing');
   };
 
-  const fetchUserData = useCallback(async () => {
+  const fetchUsersData = useCallback(async () => {
     const userCollectionRef = collection(db, 'users');
     const querySnapshot = await getDocs(userCollectionRef);
-    const userData: any = querySnapshot.docs.map((doc) => {
+
+    // set state
+    setUsersData(querySnapshot.docs.map((doc) => {
       return { id: doc.id, ...doc.data() };
-    });
-    console.log('user data:', userData);
-    const musicTracks = state.music.tracks;
-    
-    console.log('msuic tracks', musicTracks);
-    musicTracks.forEach((track: any, trackIdx: number) => {
-      const user = userData.find((user: any) => user.id === track.UserID);
-      const updatedTrack: any = {
-        ...track,
-        gender: user?.gender,
-        userName: user?.name,
-      };
+    }));
+    setTracks(state.music.tracks);
+
+    // append necessary user data to track
+    tracks.forEach((track: TrackTypes, trackIdx: number) => {
+      const userData = usersData.find((user: DocumentData) => user.id === track.UserID);
+      const updatedTrack: TrackTypes = { ...track, gender: userData!.gender, userName: userData!.name };
       setTracks(currTracks => {
         currTracks[trackIdx] = updatedTrack;
         return currTracks;
-      })
-      // setTracks((tracks) => [...tracks, { ...track, gender: user?.gender, userName: user?.name }]);
-      console.log('curr user:', user);
-      // querySnapshot.forEach((doc) => {
-        // if (track.UserID === doc.id) {
-          // const trackIdx = musicTracks.findIndex((t: any) => t.UserID === doc.id);
-          // console.log('track:', track);
-          // setTracks((currTrack) => {
-          //   currTrack[trackIdx] = { ...track, gender: doc.data().gender };
-          //   return currTrack;
-          // });
-          // console.log("TEST", track);
-          // console.log(doc.id, ' => ', doc.data());
-        // }
-      // });
+      });
     });
-    console.log('state tracks:', tracks);
-    // console.log('state tracks:', tracks);
-
-    // setTracks(state.music.tracks);
-    // console.log(tracks);
+    console.log(tracks);
   }, [db, state.music.tracks, tracks]);
 
+  const searchVoiceHandler = () => {
+    return tracks.filter((track: TrackTypes) => (
+      track.name.toLowerCase().includes(searchText.toLowerCase())
+    ));
+  };
+
+  const searchUserHandler = () => {
+    return usersData.filter((user: DocumentData) => (
+      user.name.toLowerCase().includes(searchText.toLowerCase())
+    ));
+  };
+
   useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData]);
+    fetchUsersData();
+  }, [fetchUsersData]);
 
   return (
     <IonPage>
@@ -110,8 +118,8 @@ const Search: React.FC = () => {
               onIonChange={(e) => setSearchText(e.detail.value!)}
               placeholder='Artist, Voices'
             ></IonSearchbar>
-            <IonSegment className='segment' value='all'>
-              <IonSegmentButton className='segment-btn' value='all'>
+            <IonSegment className='segment' value={searchGender} onIonChange={(e) => setSearchGender(e.detail.value!)}>
+              <IonSegmentButton className='segment-btn' value=''>
                 <IonLabel className='segment-label'>All</IonLabel>
               </IonSegmentButton>
               <IonSegmentButton className='segment-btn' value='male'>
@@ -125,7 +133,7 @@ const Search: React.FC = () => {
             <IonRow>
               <IonCol>
                 <IonList className='ion-margin-start ion-margin-end'>
-                  {VOICE_DATA.map((voice) => (
+                  {searchVoiceHandler().map((voice) => (
                     <IonItem
                       key={voice.id}
                       className='vList item-list-color-search'
@@ -134,7 +142,7 @@ const Search: React.FC = () => {
                       onClick={openVoiceHandler}
                     >
                       <IonAvatar className='avatar' slot='start'>
-                        <img src={voice.image} alt='' />
+                        <img src={VOICE_IMAGE} alt={voice.name} />
                       </IonAvatar>
                       <IonLabel className='label'>{voice.name}</IonLabel>
                     </IonItem>
@@ -147,17 +155,18 @@ const Search: React.FC = () => {
             <IonRow id='margin-for-float-btn'>
               <IonCol>
                 <IonList className='ion-margin-start ion-margin-end'>
-                  {VOICE_DATA.map((voice) => (
+                  {searchUserHandler().map((user) => (
                     <IonItem
+                      key={user.id}
                       className='vList item-list-color-search'
                       lines='full'
                       button
                       onClick={openVoiceHandler}
                     >
                       <IonAvatar className='avatar' slot='start'>
-                        <img src={voice.image} alt='' />
+                        <img src={user.photoUrl} alt='' />
                       </IonAvatar>
-                      <IonLabel className='label'>{voice.name}</IonLabel>
+                      <IonLabel className='label'>{user.name}</IonLabel>
                     </IonItem>
                   ))}
                 </IonList>
