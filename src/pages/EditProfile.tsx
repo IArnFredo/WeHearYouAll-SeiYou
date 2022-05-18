@@ -145,6 +145,10 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  if (!user) {
+    return null;
+  }
+
   return (
     // bg-app is the class for the background
     <IonPage>
