@@ -13,15 +13,18 @@ import {
 import "./Home.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import React, { useRef } from "react";
-import { getTracks, useSoundsContext } from "../provider/Sounds";
+import React, { useCallback, useRef } from "react";
+import { getTracks, playTrack, useSoundsContext } from "../provider/Sounds";
 
-const Home: React.FC = (props) => {
-  console.log(props);
-  
+const Home: React.FC = () => {
   const { state, dispatch } = useSoundsContext();
-
+  
   const trackSounds = getTracks(state);
+  const doPlay = useCallback(sound => {
+    dispatch(playTrack(sound));
+    console.log(sound);
+    
+  },[]);
   return (
     <IonPage className="bg-app-home">
       <IonContent className="home-content">
@@ -39,7 +42,7 @@ const Home: React.FC = (props) => {
                 <IonRow>
                   {trackSounds && trackSounds.map((sound: any, index: any) => (
                     <IonCol size="6" key={index}>
-                      <IonItem className="home-vList" button>
+                      <IonItem className="home-vList" button onClick={() => doPlay(sound)}>
                         <IonAvatar slot="start">
                           <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
                         </IonAvatar>

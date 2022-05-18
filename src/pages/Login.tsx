@@ -56,6 +56,8 @@ const Login: React.FC = () => {
         loginFailed();
       });
   };
+  
+  if (!user) return null;
 
   return (
     <IonPage>

@@ -15,6 +15,7 @@ const LandingScreen: React.FC = () => {
       return <Redirect to="/welcome" />;
     }
   };
+  if (!user) return null;
   return (
     <IonPage>
       {user.loggedIn == false && (

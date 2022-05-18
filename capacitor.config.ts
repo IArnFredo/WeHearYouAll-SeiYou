@@ -12,8 +12,8 @@ const config: CapacitorConfig = {
     "url": "http://192.168.100.32:8100",
     "cleartext": true
   },
-  appId: 'io.ionic.starter',
-  appName: 'WeHearYouAll-SeiYou',
+  appId: 'com.seiyou.app',
+  appName: 'SeiYou',
   webDir: 'build',
   bundledWebRuntime: false
 };

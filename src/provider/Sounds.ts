@@ -24,7 +24,7 @@ export const pauseTrack = () => ({
   type: "PAUSE",
 });
 
-export const playTrack = (track:any) => ({
+export const playTrack = (track: any) => ({
   type: "PLAY",
   track,
 });
@@ -37,11 +37,10 @@ export const prevTrack = () => ({
   type: "PREV",
 });
 
-export const favTrack = (track:any) => ({
+export const favTrack = (track: any) => ({
   type: "FAV",
   track,
 });
-
 
 const logger = (reducer: any) => {
   const reducerWithLogger = (state: any, action: any) => {
@@ -62,17 +61,25 @@ const logger = (reducer: any) => {
   return reducerWithLogger;
 };
 
+export const isPlayerOpen = (state: any) => state.ui.playerOpen;
+
+// Get all tracks in database
 export const getTracks = (state: any) => state.music.tracks;
-export const getRecentTracks = (state: any) => state.user.recentTracks;
 export const getPlaying = (state: any) => state.playing;
+
 export const getCurrentTrack = (state: any, index: any) =>
   state.music.tracks[state.playing ? state.playing.index : -1];
+export const getRecentTracks = (state: any) => state.user.recentTracks;
+export const getTrack = (state: any, id: any) =>
+  state.music.tracks.find((t: { id: any }) => t.id === id);
 export const getTrackIndex = (state: any, id: any) =>
   state.music.tracks.findIndex((t: { id: any }) => t.id === id);
+export const getUser = (state: any) => state.user;
 
 export const reducer = (state: any, action: any) => {
   const playing = getPlaying(state);
   const ct = getCurrentTrack(state, playing.index);
+  const user = getUser(state);
 
   switch (action.type) {
     case "SET_PLAYER_OPEN": {
@@ -99,10 +106,16 @@ export const reducer = (state: any, action: any) => {
           (t: { id: any }) => t.id !== action.track.id
         );
         const index = getTrackIndex(state, action.track.id);
+        console.log(index);
+
         return {
           ...state,
           ui: {
             playerOpen: true,
+          },
+          user: {
+            ...user,
+            recentTracks: [action.track, ...newRecentTracks],
           },
           playing: {
             ...playing,
@@ -133,7 +146,7 @@ export const reducer = (state: any, action: any) => {
       return {
         ...state,
         playing: {
-          index: Math.max(0, state.playing.index - 1),
+          index: (playing.index + 1) % getTracks(state).length,
           progress: 0,
         },
       };

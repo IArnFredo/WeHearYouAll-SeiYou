@@ -7,6 +7,9 @@ const initialState = {
         progress: 27000,
         paused: false,
     },
+    user: {
+        recentTracks: [],
+      },
     ui: {
         playerOpen: false,
     },

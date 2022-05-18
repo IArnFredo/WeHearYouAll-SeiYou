@@ -127,44 +127,46 @@ const Profile: React.FC = () => {
       {user.loggedIn == true && (
         <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
-          {readData.map((data) => (
-            <IonCol key={data.UserID} size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-              <img className="avatar-profile" src={data.photoUrl} />
-                <IonCardHeader  class="text-profile">
+            {readData.map((data) => (
+              <IonCol key={data.UserID} size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+                <div className="avatar-profile-cont">
+                  <img className="avatar-profile" src={data.photoUrl} />
+                </div>
+                <IonCardHeader class="text-profile">
                   <IonCardTitle>{data.name}</IonCardTitle>
                   <IonCardSubtitle>
                     {user.userData?.emailVerified ? "Verified" : "Not Verified"} <br />
                     {data.gender}, {userAge}
                   </IonCardSubtitle>
                 </IonCardHeader>
-              
-              <IonCardContent>
-                <IonButton
-                  routerLink="/edit-profile"
-                  expand="block"
-                  shape="round"
-                >
-                  <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
-                  Edit Profile
-                </IonButton>
-                <IonButton
-                  routerLink="/your-voice-list"
-                  expand="block"
-                  shape="round"
-                >
-                  <IonIcon className="button-icon" icon={playOutline} />&nbsp;
-                  Your Voices
-                </IonButton>
-                <IonButton
-                  onClick={() => setShowActionSheet(true)}
-                  expand="block"
-                  shape="round"
-                >
-                  <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
-                  Upload New Voices
-                </IonButton>
-              </IonCardContent>
-            </IonCol>
+
+                <IonCardContent>
+                  <IonButton
+                    routerLink="/edit-profile"
+                    expand="block"
+                    shape="round"
+                  >
+                    <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
+                    Edit Profile
+                  </IonButton>
+                  <IonButton
+                    routerLink="/your-voice-list"
+                    expand="block"
+                    shape="round"
+                  >
+                    <IonIcon className="button-icon" icon={playOutline} />&nbsp;
+                    Your Voices
+                  </IonButton>
+                  <IonButton
+                    onClick={() => setShowActionSheet(true)}
+                    expand="block"
+                    shape="round"
+                  >
+                    <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
+                    Upload New Voices
+                  </IonButton>
+                </IonCardContent>
+              </IonCol>
             ))}
           </IonRow>
           <IonRow id="margin-for-float-btn">
@@ -183,7 +185,7 @@ const Profile: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonContent>
-      )} 
+      )}
 
       {
         user.loggedIn == false && (
