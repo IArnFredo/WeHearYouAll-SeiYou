@@ -21,6 +21,7 @@ import {
   getFirestore,
   onSnapshot,
 } from "firebase/firestore";
+import { link } from "fs";
 import {
   arrowUpOutline,
   cloudUploadOutline,
@@ -30,7 +31,7 @@ import {
   playOutline,
 } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect, Router, useHistory } from "react-router";
 import { userContext } from "../provider/User";
 import "./Profile.css";
 
@@ -43,6 +44,7 @@ const Profile: React.FC = () => {
   const [readData, setReadData] = useState<Array<any>>([]);
   const [signout, setSignOut] = useState<string>("false");
   const [present] = useIonAlert();
+  const history = useHistory();
 
   useEffect(() => {
     async function fetchData() {
@@ -121,6 +123,14 @@ const Profile: React.FC = () => {
       return <Redirect to="/profile" />;
     }
   };
+
+  const recordBtn = () => {
+    history.push('/record-voice')
+  }
+
+  const uploadBtn = () => {
+    history.push('/record-voice')
+  }
 
   return (
     <IonPage>
@@ -203,17 +213,13 @@ const Profile: React.FC = () => {
             text: "Record Your Voice",
             icon: mic,
             data: 10,
-            handler: () => {
-              console.log("Share clicked");
-            },
+            handler: () => recordBtn()
           },
           {
             text: "Upload Your Voice",
             icon: cloudUploadOutline,
             data: "Data value",
-            handler: () => {
-              console.log("Play clicked");
-            },
+            handler: () => uploadBtn()
           },
         ]}
       ></IonActionSheet>
