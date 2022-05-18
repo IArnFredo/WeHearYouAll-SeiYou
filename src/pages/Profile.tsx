@@ -11,9 +11,8 @@ import {
   IonPage,
   IonRow,
   useIonAlert,
-  useIonViewWillEnter,
 } from "@ionic/react";
-import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import {
   query,
   collection,
@@ -63,7 +62,7 @@ const Profile: React.FC = () => {
       setReadData([]);
     }
     return;
-  }, [user]);
+  }, [db, user]);
 
   const unsubscribe = onSnapshot(collection(db, "users"), () => {
     // Respond to data

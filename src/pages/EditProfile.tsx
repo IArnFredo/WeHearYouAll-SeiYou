@@ -17,25 +17,28 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { getAuth, onAuthStateChanged, updateProfile, User } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { pencilOutline } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { userContext } from "../provider/User";
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import "./EditProfile.css";
 
 const EditProfile: React.FC = () => {
-
+  const history = useHistory();
   const auth = getAuth();
   const db = getFirestore();
+  const storage = getStorage();
   const user = useContext(userContext);
+  const [disabledSubmitBtn, setDisabledSubmitBtn] = useState(false);
   const [userData, setUserData] = useState<DocumentData>();
   const [name, setName] = useState('');
   const [gender, setGender] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File>();
+  const [, setSelectedFile] = useState<File>();
   const [takenPhoto, setTakenPhoto] = useState<{
     path: string | undefined,
     preview: string,
@@ -57,9 +60,9 @@ const EditProfile: React.FC = () => {
       }
     }
     fetchData();
-  }, [user]);
+  }, [db, user]);
 
-  const saveUpdate = async () => {
+  const saveUpdate = async (photoUrl: string) => {
     const docRef = doc(db, 'users', user.userId!);
     try {
       await setDoc(docRef, {
@@ -67,21 +70,24 @@ const EditProfile: React.FC = () => {
         gender,
         name,
         dob: selectedDate,
+        photoUrl: photoUrl !== '' ? photoUrl : userData!.photoUrl,
       });
       updateProfile(auth.currentUser!, {
         displayName: name,
+        photoURL: photoUrl !== '' ? photoUrl : userData!.photoUrl,
       }).then(() => {
         console.log(auth.currentUser!);
       }).catch((error) => {
         console.error("Error updating profile: ", error);
       });
+      history.push('/profile');
     } catch (error) {
       console.error(error);
     }
   }
 
   const changePage = () => {
-    if (user.loggedIn == false) {
+    if (!user.loggedIn) {
       return <Redirect to="/login" />;
     }
     else {
@@ -110,6 +116,33 @@ const EditProfile: React.FC = () => {
       path: photo.path,
       preview: photo.webPath,
     });
+  };
+
+  const updateHandler = async () => {
+    setDisabledSubmitBtn(true);
+    if (!name || name.toString().trim().length === 0 || !gender || !selectedDate) {
+      console.log(takenPhoto);
+      setDisabledSubmitBtn(false);
+      return;
+    }
+
+    if (takenPhoto) {
+      const photoName = user.userId + '.jpeg';
+      const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
+
+      // store image in firebase storage
+      const storageRef = ref(storage, `images/${photoName}`);
+      uploadBytes(storageRef, photoBlob).then((snapshot) => {
+        console.log('photo uploaded', snapshot);
+        getDownloadURL(ref(storage, `images/${photoName}`)).then((photoUrl) => {
+          // add memory to firestore
+          saveUpdate(photoUrl);
+          console.log('photo url:', photoUrl);
+        }).catch((err) => console.error(err));
+      });
+    } else {
+      saveUpdate('');
+    }
   };
 
   return (
@@ -218,7 +251,12 @@ const EditProfile: React.FC = () => {
               <IonRow className="ion-margin">
                 <IonCol class="ion-text-center">
                   {user && (
-                    <IonButton expand="full" shape="round" onClick={saveUpdate} routerLink='/profile'>
+                    <IonButton
+                      expand="full"
+                      shape="round"
+                      onClick={updateHandler}
+                      disabled={disabledSubmitBtn}
+                    >
                       Save
                     </IonButton>
                   )}
