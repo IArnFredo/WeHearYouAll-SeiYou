@@ -49,8 +49,6 @@ const SoundsContext: React.FC = (props) => {
             most.sort((a:any, b:any) => (a.play <= b.play) ? 1 : -1);
             setMostData(most);
             setAllData(data);    
-            console.log(most);
-            console.log(data);
         }
         fetchData();
         return;
