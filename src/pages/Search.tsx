@@ -30,26 +30,6 @@ interface TrackTypes {
   gender?: string;
 };
 
-export const VOICE_DATA = [
-  {
-    id: 'v1',
-    name: 'Voice1',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-  {
-    id: 'v2',
-    name: 'Voice2',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-  {
-    id: 'v3',
-    name: 'Voice3',
-    image: 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg',
-  },
-];
-
-const VOICE_IMAGE = 'https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg';
-
 const Search: React.FC = () => {
   const db = getFirestore();
   const { state } = useSoundsContext();
