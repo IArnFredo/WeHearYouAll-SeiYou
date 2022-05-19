@@ -173,7 +173,6 @@ const SoundPlayer: React.FC = () => {
       setDisable(true);
     }
     if (location === "/home") {
-      Changer.style.bottom = "57px";
       setDisable(false);
     }
     if (location === "/edit-profile") {
