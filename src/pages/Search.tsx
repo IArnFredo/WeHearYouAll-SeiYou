@@ -160,7 +160,7 @@ const Search: React.FC = () => {
                       className='vList item-list-color-search'
                       lines='full'
                       button
-                      onClick={openVoiceHandler}
+                      routerLink={`/another-profile/${user.id}`}
                     >
                       <IonAvatar className='avatar' slot='start'>
                         <img src={user.photoUrl} alt='' />
