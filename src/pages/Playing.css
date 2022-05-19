@@ -34,12 +34,12 @@ ion-title {
     line-height: 1;
     font-family: inherit;
     width: 100%;
-    padding: 5px 5px !important;
+    padding: 15px 15px !important;
     background-color: transparent !important;
     box-shadow: 0 0 0px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
-.rhap_progress-bar {
+/* .rhap_progress-bar {
     box-sizing: border-box;
     position: relative;
     z-index: 0;
@@ -47,23 +47,15 @@ ion-title {
     height: 5px;
     background-color: #F76E11 !important;
     border-radius: 100px !important;
-}
+} */
 
-.rhap_download-progress {
-    height: 100%;
-    position: absolute;
-    z-index: 1;
-    background-color: transparent !important;
-    border-radius: 2px;
-}
-
-.rhap_volume-container {
+/* .rhap_volume-container {
     display: none !important;
     align-items: center;
     flex: 0 1 100px;
     user-select: none;
     -webkit-user-select: none;
-}
+} */
 
 .rhap_repeat-button {
     font-size: 26px;
@@ -74,13 +66,13 @@ ion-title {
     display: none;
 }
 
-.rhap_main-controls-button {
+/* .rhap_main-controls-button {
     margin: 0 3px;
     color: #868686;
     font-size: 35px;
     width: 35px;
     height: 35px;
-}
+} */
 
 .rhap_main-controls-button {
     margin: 0 3px;

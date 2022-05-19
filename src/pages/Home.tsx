@@ -14,17 +14,22 @@ import "./Home.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import React, { useCallback, useRef } from "react";
-import { getTracks, playTrack, useSoundsContext } from "../provider/Sounds";
+import { getMostpopular, getTracks, isPlayerOpen, playTrack, useSoundsContext } from "../provider/Sounds";
+import { Redirect } from "react-router";
 
 const Home: React.FC = () => {
   const { state, dispatch } = useSoundsContext();
   
   const trackSounds = getTracks(state);
+  const mostPopular = getMostpopular(state);
+  const open = isPlayerOpen(state);
+
   const doPlay = useCallback(sound => {
     dispatch(playTrack(sound));
-    console.log(sound);
-    
-  },[]);
+  }, []);
+  if (open == true) {
+    return <Redirect to={'/playing'}/>
+  }
   return (
     <IonPage className="bg-app-home">
       <IonContent className="home-content">
@@ -44,11 +49,11 @@ const Home: React.FC = () => {
                     <IonCol size="6" key={index}>
                       <IonItem className="home-vList" button onClick={() => doPlay(sound)}>
                         <IonAvatar slot="start">
-                          <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
+                          <img src={sound.images} alt="" />
                         </IonAvatar>
                         <div>
                           <p className="title-text"><b>{sound.name}</b></p>
-                          <p className="title-text">Name</p>
+                          <p className="title-text">by {sound.userName}</p>
                         </div>
                       </IonItem>
                     </IonCol>
@@ -86,116 +91,19 @@ const Home: React.FC = () => {
               </IonRow>
               <IonList className="home-recently-list">
                 <IonRow>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol size="6">
-                    <IonItem className="home-vList" button routerLink="/playing">
-                      <IonAvatar slot="start">
-                        <img src="https://ilogo.co.id/wp-content/uploads/2021/07/dummy-image-square.jpg" alt="" />
-                      </IonAvatar>
-                      <div>
-                        <p className="title-text"><b>Voice title</b></p>
-                        <p className="title-text">Name</p>
-                      </div>
-                    </IonItem>
-                  </IonCol>
+                  {mostPopular && mostPopular.map((sounds: any, index: any) => (
+                    <IonCol key={index} size="6">
+                      <IonItem className="home-vList" button onClick={() => doPlay(sounds)}>
+                        <IonAvatar slot="start">
+                          <img src={sounds.images} alt="" />
+                        </IonAvatar>
+                        <div>
+                          <p className="title-text"><b>{sounds.name}</b></p>
+                          <p className="title-text">by {sounds.userName}</p>
+                        </div>
+                      </IonItem>
+                    </IonCol>
+                  ))}
                 </IonRow>
               </IonList>
               {/* End Most Popular */}

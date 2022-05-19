@@ -9,12 +9,17 @@ const initialState = {
     },
     user: {
         recentTracks: [],
-      },
+    },
     ui: {
         playerOpen: false,
     },
     music: {
         tracks: [
+            {
+
+            }
+        ],
+        mostPopular: [
             {
 
             }
@@ -27,10 +32,11 @@ export const instigate = initialState;
 const SoundsContext: React.FC = (props) => {
     const initiate = initialState;
     const db = getFirestore();
-    let [state, dispatch] = useReducer(reducer, initialState);
+    let [state, dispatch] = useReducer(reducer, initiate);
+
     let value = { state, dispatch };
-    const [readData, setReadData] = useState<Array<any>>([]);
-   
+    const [allData, setAllData] = useState<Array<any>>([]);
+    const [mostData, setMostData] = useState<Array<any>>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -39,13 +45,20 @@ const SoundsContext: React.FC = (props) => {
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            setReadData(data);
+            let most = JSON.parse(JSON.stringify(data));
+            most.sort((a:any, b:any) => (a.play <= b.play) ? 1 : -1);
+            setMostData(most);
+            setAllData(data);    
+            console.log(most);
+            console.log(data);
         }
         fetchData();
-        
         return;
-    },[10]);
-    initiate.music.tracks = readData;
+    }, []);
+  
+    state.music.tracks = allData;
+    state.music.mostPopular = mostData;
+
     return (
         <soundsContext.Provider value={value}>
             {props.children}

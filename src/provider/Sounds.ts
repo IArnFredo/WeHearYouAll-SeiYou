@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Redirect } from "react-router";
 
 // export interface Sounds {
 //   [key: string]: any;
@@ -72,6 +73,7 @@ export const getCurrentTrack = (state: any, index: any) =>
 export const getRecentTracks = (state: any) => state.user.recentTracks;
 export const getTrack = (state: any, id: any) =>
   state.music.tracks.find((t: { id: any }) => t.id === id);
+export const getMostpopular = (state: any) => state.music.mostPopular;
 export const getTrackIndex = (state: any, id: any) =>
   state.music.tracks.findIndex((t: { id: any }) => t.id === id);
 export const getUser = (state: any) => state.user;
@@ -106,8 +108,6 @@ export const reducer = (state: any, action: any) => {
           (t: { id: any }) => t.id !== action.track.id
         );
         const index = getTrackIndex(state, action.track.id);
-        console.log(index);
-
         return {
           ...state,
           ui: {

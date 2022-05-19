@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./Playing.css";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { IonButton, IonCol, IonContent, IonFab, IonFooter, IonItem, IonPage, IonRow, IonToolbar } from "@ionic/react";
-import { useLocation, useParams } from "react-router";
+import { IonButton, IonButtons, IonCol, IonContent, IonFab, IonFooter, IonHeader, IonIcon, IonItem, IonModal, IonPage, IonRow, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
+import { Redirect, useHistory, useLocation, useParams, withRouter } from "react-router";
 import "./SoundPlayer.css";
-import { useSoundsContext, getTracks, nextTrack, prevTrack, playTrack, pauseTrack } from "../provider/Sounds";
+import { useSoundsContext, getTracks, nextTrack, prevTrack, playTrack, pauseTrack, closePlayer, favTrack, getCurrentTrack, getPlaying, isPlayerOpen, openPlayer } from "../provider/Sounds";
 import Home from "./Home";
 import { MusicControls } from '@awesome-cordova-plugins/music-controls/';
 import H5AudioPlayer from "react-h5-audio-player";
+import { arrowDown } from "ionicons/icons";
+import { Link } from "react-router-dom";
 
 // const media = Media;
 // const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
@@ -24,15 +26,22 @@ const waitForElement = (sel: any, cb: any) => {
   }
 }
 
+
 const SoundPlayer: React.FC = () => {
   const [top, setTop] = useState(0);
   const [disable, setDisable] = useState(false);
   const Changer = document.getElementById("classChanger")!;
+  const ToolbarPlaying = document.getElementById("toolbar-playing")!;
+
   const { state, dispatch } = useSoundsContext();
   const trackSounds = getTracks(state);
   const track = trackSounds[state.playing.index];
+  const playing = getPlaying(state);
+  const open = isPlayerOpen(state);
+  console.log(open);
 
   const mediaplayer = useRef<H5AudioPlayer>(null);
+  console.log(mediaplayer);
 
   const musicControls = MusicControls;
 
@@ -54,13 +63,13 @@ const SoundPlayer: React.FC = () => {
 
         // iOS only, optional
         album: 'Absolution',     // optional, default: ''
-        duration: 60, // optional, default: 0
+        // optional, default: 0
         elapsed: 10, // optional, default: 0
-        hasSkipForward: true,  // show skip forward button, optional, default: false
-        hasSkipBackward: true, // show skip backward button, optional, default: false
+        hasSkipForward: false,  // show skip forward button, optional, default: false
+        hasSkipBackward: false, // show skip backward button, optional, default: false
         skipForwardInterval: 15, // display number for skip forward, optional, default: 0
         skipBackwardInterval: 15, // display number for skip backward, optional, default: 0
-        hasScrubbing: false, // enable scrubbing from control center and lockscreen progress bar, optional
+        hasScrubbing: true, // enable scrubbing from control center and lockscreen progress bar, optional
 
         // Android only, optional
         // text displayed in the status bar when the notification (and the ticker) are updated, optional
@@ -141,18 +150,7 @@ const SoundPlayer: React.FC = () => {
   }
 
 
-
-  // let file : MediaObject = Media.create("https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/sounds%2Fowari.mp3?alt=media&token=b90b0880-677f-4271-9e90-b2dc550ddcdb");
-  // console.log(track);
-  // if (track) {
-  //   file = Media.create(track.soundsURL);
-  //   file.onSuccess.subscribe(() => console.log('Action is successful'));
-  //   file.onError.subscribe((error: any) => console.log('Error!', error));
-  //   console.log(file);
-  // }
-
   const location = useLocation().pathname;
-
 
 
   useEffect(() => {
@@ -175,16 +173,38 @@ const SoundPlayer: React.FC = () => {
       setDisable(true);
     }
     if (location === "/home") {
+      Changer.style.bottom = "57px";
       setDisable(false);
-    }  if (location === "/edit-profile") {
+    }
+    if (location === "/edit-profile") {
       Changer.style.left = "-999px"
-    } else if (location === "/profile" && disable === false) {
-      Changer.style.left = "0px"
-    } else{
-      return
+    }
+    if (location === "/profile" && disable === false) {
+      if (Changer != null) {
+        Changer.style.left = "0px"
+      }
+    } if (location === "/playing" && disable === false) {
+      if (ToolbarPlaying != null) {
+        Changer.style.left = "0px"
+        Changer.style.bottom = "107px"
+        ToolbarPlaying.classList.add("ion-notoolbar-playing");
+      }
+    }
+    else {
+      if (ToolbarPlaying != null) {
+        Changer.style.bottom = "57px";
+        ToolbarPlaying.classList.remove("ion-notoolbar-playing");
+      }
+      return;
     }
     return
   }, [location]);
+
+  console.log(top);
+
+  if (!playing) {
+    return null;
+  }
   if (!track) return null;
 
   return (
@@ -199,32 +219,33 @@ const SoundPlayer: React.FC = () => {
           zIndex: '1000',
           bottom: `${top}px`,
         }} className="false">
-          <IonFooter>
-            <IonToolbar>
-              <IonRow>
-                <IonCol size="12" className="ion-text-justify">
-                  <AudioPlayer
-                    ref={mediaplayer}
-                    showSkipControls={true}
-                    autoPlayAfterSrcChange={true}
-                    showJumpControls={false}
-                    autoPlay={false}
-                    layout="horizontal"
-                    src={track.soundsURL}
-                    onPlay={() => { mediamusicControls() }}
-                    onPlaying={() => { musicControls.updateIsPlaying(true) }}
-                    onEnded={() => dispatch(nextTrack())}
-                    onClickPrevious={() => dispatch(prevTrack())}
-                    onClickNext={() => dispatch(nextTrack())}
-                  />
-                </IonCol>
-              </IonRow>
-            </IonToolbar>
-          </IonFooter>
+          <IonToolbar id="toolbar-playing" onClick={() => dispatch(openPlayer())}>
+            <IonRow>
+              <IonCol size="12" className="ion-text-justify">
+                <AudioPlayer
+                  ref={mediaplayer}
+                  customVolumeControls={[]}
+                  showSkipControls={true}
+                  autoPlayAfterSrcChange={true}
+                  showJumpControls={false}
+                  autoPlay={false}
+                  layout="horizontal"
+                  src={track.soundsURL}
+                  onPlay={() => { mediamusicControls() }}
+                  onPlaying={() => { musicControls.updateIsPlaying(true) }}
+                  onEnded={() => dispatch(nextTrack())}
+                  onClickPrevious={() => dispatch(prevTrack())}
+                  onClickNext={() => dispatch(nextTrack())}
+                />
+              </IonCol>
+            </IonRow>
+          </IonToolbar>
+
         </div>
       )}
-
     </>
   );
 };
-export default React.memo(SoundPlayer);
+
+
+export default withRouter(SoundPlayer);
