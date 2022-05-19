@@ -111,7 +111,7 @@ export const reducer = (state: any, action: any) => {
         return {
           ...state,
           ui: {
-            playerOpen: true,
+            playerOpen: false,
           },
           user: {
             ...user,

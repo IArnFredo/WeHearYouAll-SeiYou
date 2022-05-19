@@ -16,6 +16,7 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
@@ -33,6 +34,7 @@ const EditProfile: React.FC = () => {
   const db = getFirestore();
   const storage = getStorage();
   const user = useContext(userContext);
+  const [presentToast, dismissToast] = useIonToast();
   const [disabledSubmitBtn, setDisabledSubmitBtn] = useState(false);
   const [userData, setUserData] = useState<DocumentData>();
   const [name, setName] = useState('');
@@ -79,6 +81,11 @@ const EditProfile: React.FC = () => {
         console.log(auth.currentUser!);
       }).catch((error) => {
         console.error("Error updating profile: ", error);
+      });
+      presentToast({
+        message: 'Your profile has been updated!',
+        buttons: [{ text: 'hide', handler: () => dismissToast() }],
+        duration: 3000,
       });
       history.push('/profile');
     } catch (error) {
