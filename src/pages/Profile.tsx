@@ -124,7 +124,6 @@ const Profile: React.FC = () => {
     }
   };
 
-<<<<<<< Updated upstream
   const recordBtn = () => {
     history.push('/record-voice')
   }
@@ -132,9 +131,7 @@ const Profile: React.FC = () => {
   const uploadBtn = () => {
     history.push('/record-voice')
   }
-=======
   if(!user) return null;
->>>>>>> Stashed changes
 
   return (
     <IonPage>
