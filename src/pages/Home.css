@@ -66,6 +66,14 @@
     --background: #f8c051;
 }
 
-#margin-for-float-btn{
-    margin-bottom: 70px;
+#margin-for-float-btn-home{
+    margin-bottom: 100px;
+}
+
+#margin-for-float-btn-search{
+    margin-bottom: 100px;
+}
+
+#margin-for-float-btn-profile{
+    margin-bottom: 100px;
 }

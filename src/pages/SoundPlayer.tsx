@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import "./Playing.css";
-import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
-import { IonButton, IonButtons, IonCol, IonContent, IonFab, IonFooter, IonHeader, IonIcon, IonItem, IonModal, IonPage, IonRow, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from "@ionic/react";
-import { Redirect, useHistory, useLocation, useParams, withRouter } from "react-router";
-import "./SoundPlayer.css";
-import { useSoundsContext, getTracks, nextTrack, prevTrack, playTrack, pauseTrack, closePlayer, favTrack, getCurrentTrack, getPlaying, isPlayerOpen, openPlayer } from "../provider/Sounds";
-import Home from "./Home";
 import { MusicControls } from '@awesome-cordova-plugins/music-controls/';
-import H5AudioPlayer from "react-h5-audio-player";
-import { arrowDown } from "ionicons/icons";
-import { Link } from "react-router-dom";
+import { IonCol, IonRow, IonToolbar } from "@ionic/react";
+import React, { useEffect, useRef, useState } from "react";
+import { default as AudioPlayer, default as H5AudioPlayer } from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import { useLocation, withRouter } from "react-router";
+import { getPlaying, getTracks, nextTrack, openPlayer, pauseTrack, playTrack, prevTrack, useSoundsContext } from "../provider/Sounds";
+import "./Playing.css";
+import "./SoundPlayer.css";
 
 // const media = Media;
 // const fileMusic = media.create('https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/owari.mp3?alt=media&token=b48d2294-717d-438e-998e-961ade0dfd9a');
@@ -37,20 +33,29 @@ const SoundPlayer: React.FC = () => {
   const trackSounds = getTracks(state);
   const track = trackSounds[state.playing.index];
   const playing = getPlaying(state);
-  const open = isPlayerOpen(state);
-  console.log(open);
-
   const mediaplayer = useRef<H5AudioPlayer>(null);
-  console.log(mediaplayer);
-
   const musicControls = MusicControls;
+  const text = document.getElementsByClassName("rhap_header")[0];
+  const textControl = document.getElementsByClassName("rhap_header");
+
+
+
+  if (text) {
+    text.addEventListener("click", e => {
+      if (state.ui.initiate == true) {
+        dispatch(openPlayer())
+      } else {
+        
+      }
+    })
+  }
 
   const mediamusicControls = () => {
     if (track) {
       musicControls.create({
         track: track.name,        // optional, default : ''
-        artist: 'Muse',                       // optional, default : ''
-        cover: 'albums/absolution.jpg',      // optional, default : nothing
+        artist: track.userName,                       // optional, default : ''
+        cover: track.images,      // optional, default : nothing
         // cover can be a local path (use fullpath 'file:///storage/emulated/...', or only 'my_image.jpg' if my_image.jpg is in the www folder of your app)
         //           or a remote url ('http://...', 'https://...', 'ftp://...')
         isPlaying: false,                         // optional, default : true
@@ -164,16 +169,22 @@ const SoundPlayer: React.FC = () => {
       }
     })
     if (location === "/welcome") {
+      musicControls.updateIsPlaying(false);
       setDisable(true);
     }
     if (location === "/login") {
+      musicControls.updateIsPlaying(false);
       setDisable(true);
     }
     if (location === "/register") {
+      musicControls.updateIsPlaying(false);
       setDisable(true);
     }
     if (location === "/home") {
       setDisable(false);
+    }
+    if (location === "/record-voice") {
+      setDisable(true);
     }
     if (location === "/edit-profile") {
       Changer.style.left = "-999px"
@@ -187,19 +198,22 @@ const SoundPlayer: React.FC = () => {
         Changer.style.left = "0px"
         Changer.style.bottom = "107px"
         ToolbarPlaying.classList.add("ion-notoolbar-playing");
+        if (state.ui.initiate == true) {
+          text.classList.add("hide");
+        }
       }
     }
     else {
       if (ToolbarPlaying != null) {
         Changer.style.bottom = "57px";
         ToolbarPlaying.classList.remove("ion-notoolbar-playing");
+        text.classList.remove("hide");
       }
       return;
     }
     return
   }, [location]);
 
-  console.log(top);
 
   if (!playing) {
     return null;
@@ -218,10 +232,11 @@ const SoundPlayer: React.FC = () => {
           zIndex: '1000',
           bottom: `${top}px`,
         }} className="false">
-          <IonToolbar id="toolbar-playing" onClick={() => dispatch(openPlayer())}>
+          <IonToolbar id="toolbar-playing" >
             <IonRow>
               <IonCol size="12" className="ion-text-justify">
                 <AudioPlayer
+                  header={state.ui.initiate == true ? track.name : "No sound playing"}{...state.ui.playerOpen == true ? track.name : null}
                   ref={mediaplayer}
                   customVolumeControls={[]}
                   showSkipControls={true}
@@ -229,13 +244,14 @@ const SoundPlayer: React.FC = () => {
                   showJumpControls={false}
                   autoPlay={false}
                   layout="horizontal"
-                  src={track.soundsURL}
-                  onPlay={() => { mediamusicControls() }}
-                  onPlaying={() => { musicControls.updateIsPlaying(true) }}
+                  src={state.ui.initiate == true ? track.soundsURL : null}
+                  onPlay={() => { { mediamusicControls(); musicControls.updateIsPlaying(true) } }}
+                  // onPlaying={() => { musicControls.updateIsPlaying(true) }}
+                  onPause={() => { musicControls.updateIsPlaying(false) }}
                   onEnded={() => dispatch(nextTrack())}
                   onClickPrevious={() => dispatch(prevTrack())}
                   onClickNext={() => dispatch(nextTrack())}
-                />
+                ></AudioPlayer>
               </IonCol>
             </IonRow>
           </IonToolbar>

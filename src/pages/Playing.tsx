@@ -1,28 +1,14 @@
 import {
-  IonToolbar,
-  IonTitle,
-  IonBackButton,
-  IonButtons,
-  IonPage,
-  IonContent,
-  IonRow,
-  IonCol,
-  IonIcon,
-  IonFooter,
-  IonHeader,
-  IonButton,
-  IonModal,
+  IonButtons, IonCol, IonContent, IonIcon, IonPage, IonRow, IonTitle, IonToolbar
 } from "@ionic/react";
 import {
-  alertCircleOutline, arrowBackCircle, arrowDown,
+  alertCircleOutline, arrowBackCircle
 } from "ionicons/icons";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import "./Playing.css";
-import AudioPlayer from 'react-h5-audio-player';
+import React from "react";
 import 'react-h5-audio-player/lib/styles.css';
-import { closePlayer, getCurrentTrack, getPlaying, getTracks, isPlayerOpen, soundsContext, useSoundsContext } from "../provider/Sounds";
 import { Redirect } from "react-router";
-import SoundPlayer from "./SoundPlayer";
+import { closePlayer, getCurrentTrack, getPlaying, getTracks, isPlayerOpen, useSoundsContext } from "../provider/Sounds";
+import "./Playing.css";
 
 
 // const media = Media;
@@ -31,14 +17,14 @@ import SoundPlayer from "./SoundPlayer";
 const Playing: React.FC = () => {
   const { state, dispatch } = useSoundsContext();
   const playing = getPlaying(state);
-
+  const trackSounds = getTracks(state);
+  const track = trackSounds[state.playing.index];
   if (!playing) {
     return null;
   }
 
   const open = isPlayerOpen(state);
   const currentTrack = getCurrentTrack(state, state.playing.index);
-  console.log(open);
 
 
   let gender = "male";
@@ -81,7 +67,7 @@ const Playing: React.FC = () => {
           <IonRow>
             <IonCol className="">
               <IonTitle>
-                {currentTrack.name} <br />
+                {state.ui.initiate == true ? currentTrack.name : null} <br />
                 <span style={{ color: "grey", fontSize: "15px" }}>{currentTrack.userName}</span>
               </IonTitle>
             </IonCol>

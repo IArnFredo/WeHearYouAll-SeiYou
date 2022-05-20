@@ -13,6 +13,8 @@ import {
   IonBackButton,
   IonButtons,
   IonText,
+  useIonLoading,
+  useIonToast,
 } from "@ionic/react";
 import React, { useContext, useRef, useState } from "react";
 import {
@@ -22,11 +24,13 @@ import {
 import "./Account.css";
 import "../firebaseConfig";
 import app from "../firebaseConfig";
-import { Redirect } from "react-router";
+import { Redirect, useHistory, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { userContext } from "../provider/User";
+import { query, collection, onSnapshot, getFirestore } from "firebase/firestore";
 const auth = getAuth(app);
+const db = getFirestore();
 
 const Login: React.FC = () => {
   const [toastMessage, setToastMessage] = useState("");
@@ -34,20 +38,39 @@ const Login: React.FC = () => {
   const loginFailed = () => {
     setToastMessage("Email or Password is incorrect!");
   };
-
+  const from  = useLocation().state;
+  const history = useHistory();
+  async function fetchData() {
+    const q = query(
+        collection(db, "sounds")
+    );
+    // const querySnapshot = await getDocs(q);
+}
+fetchData();
   // Sign in email pass
   const Email = useRef<HTMLIonInputElement>(null);
   const Password = useRef<HTMLIonInputElement>(null);
+  const [loading, dismissLoading] = useIonLoading();
+  const [presentToast, dismissToast] = useIonToast();
 
   const LoginWithEmail = () => {
+    loading({
+      message: 'Login...',
+      spinner: "crescent",
+    })
     let email = Email.current?.value as string;
     let password = Password.current?.value as string;
     const hash = CryptoJS.SHA1(password).toString();
     signInWithEmailAndPassword(auth, email, hash)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        return <Redirect to="/home" />;
+        dismissLoading();
+        presentToast({
+          message: "Login Successful",
+          buttons: [{ text: 'hide', handler: () => dismissToast() }],
+          duration: 1000,
+        })
+        history.push("/home");
         // ...
       })
       .catch((error) => {
@@ -63,12 +86,12 @@ const Login: React.FC = () => {
     <IonPage>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/welcome" />
+          <IonBackButton defaultHref={ from == "/welcome" ? '/welcome' : '/home'} />
           <IonText>Sign In</IonText>
         </IonButtons>
       </IonToolbar>
       {user.loggedIn == true && (
-        <Redirect to={"/home"} />
+        history.push("/home")
       )}
 
       {user.loggedIn == false && (

@@ -15,6 +15,7 @@ import {
   useIonAlert,
   IonSegment,
   IonSegmentButton,
+  useIonLoading,
 } from "@ionic/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Account.css";
@@ -26,7 +27,7 @@ import {
 } from "firebase/auth";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { userContext } from "../provider/User";
 
 const auth = getAuth();
@@ -36,15 +37,20 @@ const Register: React.FC = () => {
   const db = getFirestore();
   const user = useContext(userContext);
   const [present] = useIonAlert();
+  const [loading, dismissLoading] = useIonLoading();
   const email = useRef<HTMLIonInputElement>(null);
   const password = useRef<HTMLIonInputElement>(null);
   const confirmPassword = useRef<HTMLIonInputElement>(null);
   const name = useRef<HTMLIonInputElement>(null);
   const dob = useRef<HTMLIonInputElement>(null);
   const [gender, setGender] = useState("Male");
+  const history = useHistory();
 
   const signUp = async () => {
-    // console.log(dob.current?.value as string);
+    loading({
+      message: 'Creating New User...',
+      spinner: "crescent"
+    })
     const enteredName = name.current?.value as string;
     const enteredEmail = email.current?.value as string;
     const pass = password.current?.value as string;
@@ -53,7 +59,6 @@ const Register: React.FC = () => {
     const pattern =
       /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
     const result = pattern.test(enteredEmail);
-
     if (enteredEmail?.toString().length === 0 || !enteredEmail) {
       present({
         message: "<b>Email!</b> field not entered!",
@@ -134,13 +139,14 @@ const Register: React.FC = () => {
           console.error("Error updating profile: ", error);
         });
         addData(pathReference, user.uid);
+        dismissLoading();
         sendEmailVerification(auth.currentUser!).then(() => {
           present({
             message: "Verify your email to finish signing up for SeiYou!",
             header: "Please Check Your Email",
             buttons: [{
               text: "OK", handler: () => {
-                return <Redirect to={"/profile"} />;
+                history.push("/profile");
               },
             }],
           });
@@ -168,21 +174,8 @@ const Register: React.FC = () => {
         console.error("Error adding document: ", e);
       }
     };
-    // addData();
   };
 
-  // const addData = async (pathReference: string, userID: string) => {
-  //   try {
-  //     // gender / tgl lahir belum
-  //     const docRef = await addDoc(collection(db, "users"), {
-  //       userId: userID,
-  //       photoUrl: pathReference,
-  //     });
-  //     console.log("Document written with ID", docRef.id);
-  //   } catch (err) {
-  //     console.log("Error adding document : ", err);
-  //   }
-  // };
   return (
     <IonPage>
       <IonToolbar className="register-toolbar">

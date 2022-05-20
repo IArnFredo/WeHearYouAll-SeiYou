@@ -94,3 +94,7 @@ ion-title {
     border-radius: 50px;
     box-shadow: rgba(176, 86, 86, 0.5) 0 0 5px;
 }
+
+.hide{
+    display: none;
+}

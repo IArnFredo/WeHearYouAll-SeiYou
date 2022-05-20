@@ -1,39 +1,31 @@
 import {
-  IonContent,
-  IonPage,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonLabel,
-  IonList,
-  IonItem,
-  IonAvatar,
-  IonFab,
+  IonAvatar, IonCol, IonContent, IonGrid, IonItem, IonLabel,
+  IonList, IonPage, IonRow
 } from "@ionic/react";
-import "./Home.css";
-import AudioPlayer from 'react-h5-audio-player';
+import React, { useCallback } from "react";
 import 'react-h5-audio-player/lib/styles.css';
-import React, { useCallback, useRef } from "react";
+import { useHistory } from "react-router";
 import { getMostpopular, getTracks, isPlayerOpen, playTrack, useSoundsContext } from "../provider/Sounds";
-import { Redirect } from "react-router";
+import "./Home.css";
 
 const Home: React.FC = () => {
   const { state, dispatch } = useSoundsContext();
-  
+
   const trackSounds = getTracks(state);
   const mostPopular = getMostpopular(state);
   const open = isPlayerOpen(state);
+  const history = useHistory();
 
   const doPlay = useCallback(sound => {
     dispatch(playTrack(sound));
   }, []);
   if (open == true) {
-    return <Redirect to={'/playing'}/>
+    history.push("/playing");
   }
   return (
     <IonPage className="bg-app-home">
       <IonContent className="home-content">
-        <IonRow id="margin-for-float-btn">
+        <IonRow id="margin-for-float-btn-home">
           <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
             <IonRow className="home-title">
               <IonLabel className="ion-margin-top"><b>Welcome!</b></IonLabel>
@@ -103,7 +95,7 @@ const Home: React.FC = () => {
                         </div>
                       </IonItem>
                     </IonCol>
-                  ))}
+                  ))}                         
                 </IonRow>
               </IonList>
               {/* End Most Popular */}

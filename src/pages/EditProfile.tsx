@@ -16,6 +16,7 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
+  useIonLoading,
   useIonToast,
 } from "@ionic/react";
 import { getAuth, updateProfile } from "firebase/auth";
@@ -35,6 +36,7 @@ const EditProfile: React.FC = () => {
   const storage = getStorage();
   const user = useContext(userContext);
   const [presentToast, dismissToast] = useIonToast();
+  const [loading, dismissLoading] = useIonLoading();
   const [disabledSubmitBtn, setDisabledSubmitBtn] = useState(false);
   const [userData, setUserData] = useState<DocumentData>();
   const [name, setName] = useState('');
@@ -57,7 +59,6 @@ const EditProfile: React.FC = () => {
           setGender(userData.gender);
           setName(userData.name);
           setSelectedDate(userData.dob);
-          console.log(userData.dob)
         }
       }
     }
@@ -78,10 +79,11 @@ const EditProfile: React.FC = () => {
         displayName: name,
         photoURL: photoUrl !== '' ? photoUrl : userData!.photoUrl,
       }).then(() => {
-        console.log(auth.currentUser!);
+
       }).catch((error) => {
         console.error("Error updating profile: ", error);
       });
+      dismissLoading();
       presentToast({
         message: 'Your profile has been updated!',
         buttons: [{ text: 'hide', handler: () => dismissToast() }],
@@ -89,6 +91,7 @@ const EditProfile: React.FC = () => {
       });
       history.push('/profile');
     } catch (error) {
+      dismissLoading();
       console.error(error);
     }
   }
@@ -103,6 +106,18 @@ const EditProfile: React.FC = () => {
   };
 
   const choosePicture = async () => {
+    await Camera.checkPermissions().then((result) => {
+      if (result.camera == "granted" && result.photos == "granted") {
+        getPicture();
+      }
+      else{
+        Camera.requestPermissions();
+      }
+    }
+    );
+  };
+
+  const getPicture = async () => {
     const photo = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Prompt,
@@ -123,9 +138,15 @@ const EditProfile: React.FC = () => {
       path: photo.path,
       preview: photo.webPath,
     });
+
   };
 
+
   const updateHandler = async () => {
+    loading({
+      message: 'Updating profile...',
+      spinner: 'crescent',
+    })
     setDisabledSubmitBtn(true);
     if (!name || name.toString().trim().length === 0 || !gender || !selectedDate) {
       console.log(takenPhoto);
@@ -192,7 +213,6 @@ const EditProfile: React.FC = () => {
                     color="dark"
                     icon={pencilOutline}
                   ></IonIcon>
-                  {/* <p style={{ color: "black" }}>Change</p> */}
                 </div>
               </IonCol>
             )}
@@ -206,22 +226,6 @@ const EditProfile: React.FC = () => {
               </IonItem>
             </IonCol>
             <IonCol className="ion-text-center" size="12">
-              {/* <IonRadioGroup
-              value={selected}
-              onIonChange={(e) => setSelected(e.detail.value)}
-            >
-              <IonListHeader>
-                <IonLabel>Gender</IonLabel>
-              </IonListHeader>
-              <IonItem className="ion-item-bg inner-border-none">
-                <IonLabel>Male</IonLabel>
-                <IonRadio value="Male">Male</IonRadio>
-              </IonItem>
-              <IonItem className="ion-item-bg inner-border-none">
-                <IonLabel>Female</IonLabel>
-                <IonRadio value="Female"></IonRadio>
-              </IonItem>
-            </IonRadioGroup> */}
               <IonLabel position="stacked">
                 {" "}
                 <p id="label">Gender</p>

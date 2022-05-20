@@ -8,23 +8,18 @@ import './YourVoiceList.css';
 import { userContext } from '../provider/User';
 import { isPlayerOpen, playTrack, useSoundsContext } from '../provider/Sounds';
 
-export const VOICE_DATA = [
-  { id: 'd1', name: 'Alvin', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png' },
-  { id: 'd2', name: 'Martin', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png' },
-  { id: 'd3', name: 'Djong', image: 'http://cdn.onlinewebfonts.com/svg/img_258083.png' }
-];
-
 const YourVoiceList = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [startDeleting, setStartDeleting] = useState(false);
   const slidingOptionRef = useRef<HTMLIonItemSlidingElement>(null);
+  const [voiceID, setVoiceID] = useState('');
   const history = useHistory();
   const user = useContext(userContext);
-  const [voices, setVoices] = useState<Array<any>>([]);
+  const [voices, setVoices] = useState<Array<any>>([])!;
   const db = getFirestore();
   const { state, dispatch } = useSoundsContext();
   const open = isPlayerOpen(state);
-  
+
   useEffect(() => {
     async function fetchData() {
       const q = query(
@@ -49,12 +44,25 @@ const YourVoiceList = () => {
     history.push('/edit-voice');
   };
 
-  const startDeleteVoiceHandler = () => {
+  const startDeleteVoiceHandler = (voice: any) => {
+    setVoiceID(voice);
     slidingOptionRef.current?.closeOpened();
     setStartDeleting(true);
   };
 
-  const deleteVoiceHandler = () => {
+  function deleteVoiceHandler() {
+    async function fetchData() {
+      const users = collection(db,"sounds");
+
+      // console.log(querySnapshot);
+
+
+      // deleteDoc(querySnapshot);
+      // lol.docs.map((doc) => {
+      //   return deleteDoc(doc);
+      // });
+    }
+    fetchData();
     setStartDeleting(false);
     setToastMessage("Deleted Friend!")
   };
@@ -64,7 +72,7 @@ const YourVoiceList = () => {
   }, []);
 
   if (open == true) {
-    return <Redirect to={'/playing'}/>
+    return <Redirect to={'/playing'} />
   }
 
   return (
@@ -74,7 +82,7 @@ const YourVoiceList = () => {
         message="Do you want to delete your Voice? This cannot be undone."
         buttons={[
           { text: 'No', role: 'cancel', handler: () => { setStartDeleting(false) } },
-          { text: 'Yes', handler: deleteVoiceHandler }
+          { text: 'Yes', handler: (e) => deleteVoiceHandler() }
         ]} />
       <IonToast isOpen={!!toastMessage}
         message={toastMessage}

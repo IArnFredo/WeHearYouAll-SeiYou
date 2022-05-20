@@ -13,13 +13,18 @@ import {
   IonText,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  useIonViewWillEnter
 } from '@ionic/react';
 import React, { useRef } from 'react';
 import './UploadVoice.css';
 
 const UploadVoice: React.FC = () => {
   const voiceNameRef = useRef<HTMLIonInputElement>(null);
+
+  useIonViewWillEnter(() => {
+    
+  })
 
   return (
     <IonPage className='bg-app'>

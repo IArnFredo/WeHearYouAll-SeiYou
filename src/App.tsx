@@ -1,56 +1,46 @@
+import { App as app } from '@capacitor/app';
+import { IonApp, IonRouterOutlet, setupIonicReact, useIonActionSheet } from "@ionic/react";
+/* Core CSS required for Ionic components to work properly */
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/display.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/float-elements.css";
+/* Basic CSS for apps built with Ionic */
+import "@ionic/react/css/normalize.css";
+/* Optional CSS utils that can be commented out */
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/typography.css";
+import React from "react";
 import {
   Redirect,
   Route,
-  Switch,
-  useHistory,
-  useLocation,
-  withRouter,
+  Switch
 } from "react-router-dom";
-import { IonApp, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
-
-import AnotherProfile from "./pages/AnotherProfile";
+import "./firebaseConfig";
 import EditProfile from "./pages/EditProfile";
-import EditVoice from "./pages/EditVoice";
-import Home from "./pages/Home";
 import LandingScreen from "./pages/LandingScreen";
 import Login from "./pages/Login";
 import Playing from "./pages/Playing";
-import Profile from "./pages/Profile";
 import RecordVoice from "./pages/RecordVoice";
 import Register from "./pages/Register";
-import Search from "./pages/Search";
-import UploadVoice from "./pages/UploadVoice";
-import YourVoiceList from "./pages/YourVoiceList";
-
-/* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
-import "@ionic/react/css/normalize.css";
-import "@ionic/react/css/structure.css";
-import "@ionic/react/css/typography.css";
-
-/* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
-import "@ionic/react/css/float-elements.css";
-import "@ionic/react/css/text-alignment.css";
-import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
-
+import SoundPlayer from "./pages/SoundPlayer";
+import UrlChanger from "./pages/UrlChanger";
+import SoundsContext from "./provider/SoundsContext";
+import UserContextProvider from "./provider/UserContextProvider";
+import MenuTabs from "./tabsmenu/MenuTabs";
 /* Theme variables */
 import "./theme/variables.css";
-import "./firebaseConfig";
-import MenuTabs from "./tabsmenu/MenuTabs";
-import React, { useContext, useEffect } from "react";
-import { homeOutline, searchOutline, ellipsisVerticalCircleOutline } from "ionicons/icons";
-import UserContextProvider from "./provider/UserContextProvider";
-import { userContext } from "./provider/User";
-import UrlChanger from "./pages/UrlChanger";
-import { createBrowserHistory } from 'history';
-import SoundPlayer from "./pages/SoundPlayer";
-import SoundsContext from "./provider/SoundsContext";
+
+
+
+
+
+
+
+
 
 setupIonicReact({
   hardwareBackButton: true,
@@ -59,7 +49,25 @@ setupIonicReact({
 
 
 const App: React.FC = () => {
-  const location = useLocation();
+  const [actionSheet, dismiss] = useIonActionSheet();
+  document.addEventListener('ionBackButton', (ev:any) => {
+    ev.detail.register(10, () => {
+      actionSheet({
+        header: 'Are you sure you want to exit?',
+        buttons: [{
+          text: 'Yes',
+          handler: () => {
+            app.exitApp();
+          }
+        }, {
+          text: 'No',
+          handler: () => {
+            dismiss();
+          }
+        }]
+      })
+    })
+  });
 
   return (
     <UserContextProvider>
@@ -80,7 +88,7 @@ const App: React.FC = () => {
             <Route path="/login" exact={true}>
               <Login />
             </Route>
-            <Route path="/playing" component={Playing} exact/>
+            <Route path="/playing" component={Playing} exact />
             <Route path="/record-voice" exact={true} >
               <RecordVoice />
             </Route>

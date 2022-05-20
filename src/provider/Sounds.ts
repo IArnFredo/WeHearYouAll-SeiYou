@@ -112,6 +112,7 @@ export const reducer = (state: any, action: any) => {
           ...state,
           ui: {
             playerOpen: false,
+            initiate:true,
           },
           user: {
             ...user,
@@ -127,6 +128,10 @@ export const reducer = (state: any, action: any) => {
       }
       return {
         ...state,
+        ui: {
+          playerOpen: false,
+          initiate:true,
+        },
         playing: {
           ...playing,
           paused: false,
@@ -136,6 +141,10 @@ export const reducer = (state: any, action: any) => {
     case "NEXT": {
       return {
         ...state,
+        ui:{
+          playerOpen: false,
+          initiate:true,
+        },
         playing: {
           index: (playing.index + 1) % getTracks(state).length,
           progress: 0,
@@ -145,6 +154,10 @@ export const reducer = (state: any, action: any) => {
     case "PREV": {
       return {
         ...state,
+        ui:{
+          playerOpen: false,
+          initiate:true,
+        },
         playing: {
           index: (playing.index + 1) % getTracks(state).length,
           progress: 0,

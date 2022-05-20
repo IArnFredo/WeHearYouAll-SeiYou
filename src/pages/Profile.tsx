@@ -11,6 +11,8 @@ import {
   IonPage,
   IonRow,
   useIonAlert,
+  useIonLoading,
+  useIonToast,
 } from "@ionic/react";
 import { getAuth, signOut } from "firebase/auth";
 import {
@@ -31,7 +33,7 @@ import {
   playOutline,
 } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect, Router, useHistory } from "react-router";
+import { Redirect, Router, useHistory, useLocation } from "react-router";
 import { userContext } from "../provider/User";
 import "./Profile.css";
 
@@ -41,31 +43,38 @@ const Profile: React.FC = () => {
   const user = useContext(userContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
   const [userAge, setAge] = useState<number>(0);
+  const [presentToast, dismissToast] = useIonToast();
+  const [loading, dismissLoading] = useIonLoading();
   const [readData, setReadData] = useState<Array<any>>([]);
   const [signout, setSignOut] = useState<string>("false");
   const [present] = useIonAlert();
   const history = useHistory();
+  const location = useLocation().pathname;
 
   useEffect(() => {
     async function fetchData() {
-      const q = query(
-        collection(db, "users"),
-        where("UserID", "==", user.userId!)
-      );
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setReadData(data);
-      localStorage.setItem("dob", JSON.stringify(data[0].dob));
-      AgeCal();
+      if (user) {
+        const q = query(
+          collection(db, "users"),
+          where("UserID", "==", user.userId!)
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => doc.data());
+        setReadData(data);
+        localStorage.setItem("dob", JSON.stringify(data[0].dob));
+        AgeCal();
+      }
+      else {
+        return null;
+      }
     }
-    if (user !== null) {
+    if (user.userId != undefined) {
       fetchData();
     } else {
       setReadData([]);
     }
     return;
   }, [db, user]);
-
   const unsubscribe = onSnapshot(collection(db, "users"), () => {
     // Respond to data
     // ...
@@ -92,9 +101,19 @@ const Profile: React.FC = () => {
         {
           text: "Yes",
           handler: () => {
+            loading({
+              message: "Signing out...",
+              spinner: "crescent",
+            })
             signOut(auth)
               .then(() => {
+                dismissLoading();
                 setSignOut("true");
+                presentToast({
+                  message: 'Sign out successful',
+                  buttons: [{ text: 'hide', handler: () => dismissToast() }],
+                  duration: 3000,
+                });
               })
               .catch((error) => {
                 console.log(error);
@@ -114,13 +133,18 @@ const Profile: React.FC = () => {
 
   const changePage = () => {
     if (signout == "true") {
-      return <Redirect to="/home" />;
+      history.push("/home");
     }
     if (user.loggedIn == false) {
-      return <Redirect to="/login" />;
+      return <Redirect
+        to={{
+          pathname: '/login',
+          state: { from: location }
+        }}
+      />
     }
     else {
-      return <Redirect to="/profile" />;
+      return <Redirect to={'/profile'} />
     }
   };
 
@@ -131,11 +155,12 @@ const Profile: React.FC = () => {
   const uploadBtn = () => {
     history.push('/record-voice')
   }
-  if(!user) return null;
+
+  if (user == undefined) return null;
 
   return (
     <IonPage>
-      {user.loggedIn == true && (
+      {user && (
         <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
             {readData.map((data) => (
@@ -180,7 +205,7 @@ const Profile: React.FC = () => {
               </IonCol>
             ))}
           </IonRow>
-          <IonRow id="margin-for-float-btn">
+          <IonRow id="margin-for-float-btn-profile">
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonCardContent>
                 <IonButton

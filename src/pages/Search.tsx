@@ -1,16 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  IonRow,
-  IonAvatar,
-  IonContent,
+  IonAvatar, IonCol, IonContent,
   IonItem,
   IonLabel,
   IonList,
-  IonPage,
-  IonSearchbar,
+  IonPage, IonRow, IonSearchbar,
   IonSegment,
-  IonSegmentButton,
-  IonCol,
+  IonSegmentButton
 } from '@ionic/react';
 import { collection, DocumentData, getDocs, getFirestore } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -36,9 +32,9 @@ const Search: React.FC = () => {
   const [tracks, setTracks] = useState<TrackTypes[]>([]);
   const [usersData, setUsersData] = useState<DocumentData[]>([]);
   const [searchText, setSearchText] = useState('');
+  const [show, setShow] = useState(true);
   const [searchGender, setSearchGender] = useState('all');
   const history = useHistory();
-
   const openVoiceHandler = () => {
     console.log('Edit voice');
     history.push('/playing');
@@ -63,7 +59,6 @@ const Search: React.FC = () => {
         return currTracks;
       });
     });
-    console.log(tracks);
   }, [db, state.music.tracks, tracks]);
 
   const searchVoiceHandler = () => {
@@ -96,33 +91,39 @@ const Search: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent className='bg-app' id='ion-content-search'>
+      <IonContent className='bg-app fixed-nav' id='ion-content-search'>
         <IonRow>
           <IonCol size-sm='8' offset-sm='2' size-md='6' offset-md='3'>
-            <IonRow className='search-title'>
-              <IonLabel className='ion-margin-vertical'>
-                <b>Search</b>
-              </IonLabel>
-            </IonRow>
 
-            <IonSearchbar
-              className='searchBar'
-              value={searchText}
-              onIonChange={(e) => setSearchText(e.detail.value!)}
-              placeholder='Artist, Voices'
-            ></IonSearchbar>
+              <IonRow className='search-title ion-margin-top'>
+                <IonLabel className='ion-margin-vertical ion-margin-horizontal'>
+                  <b>Search</b>
+                </IonLabel>
+              </IonRow>
 
-            <IonSegment className='segment' value={searchGender} onIonChange={(e) => setSearchGender(e.detail.value!)}>
-              <IonSegmentButton className='segment-btn' value='all'>
-                <IonLabel className='segment-label'>All</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton className='segment-btn' value='male'>
-                <IonLabel className='segment-label'>Male</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton className='segment-btn' value='female'>
-                <IonLabel className='segment-label'>Female</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
+              <IonSearchbar
+                className='searchBar'
+                value={searchText}
+                onIonChange={(e) => setSearchText(e.detail.value!)}
+                placeholder='Artist, Voices'
+              ></IonSearchbar>
+
+              <IonSegment className='segment' value={searchGender} onIonChange={(e) => setSearchGender(e.detail.value!)}>
+                <IonSegmentButton className='segment-btn' value='all'>
+                  <IonLabel className='segment-label'>All</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton className='segment-btn' value='male'>
+                  <IonLabel className='segment-label'>Male</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton className='segment-btn' value='female'>
+                  <IonLabel className='segment-label'>Female</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
+
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol size-sm='8' offset-sm='2' size-md='6' offset-md='3'>
 
             {/* Version 1. Show all when search text is empty */}
             <h3 className='ion-margin ion-text-center'>Voices</h3>
@@ -151,7 +152,7 @@ const Search: React.FC = () => {
             </IonRow>
 
             <h3 className='ion-margin ion-text-center'>Artists</h3>
-            <IonRow id='margin-for-float-btn'>
+            <IonRow id='margin-for-float-btn-search'>
               <IonCol>
                 <IonList className='ion-margin-start ion-margin-end'>
                   {searchUserHandler().map((user) => (
