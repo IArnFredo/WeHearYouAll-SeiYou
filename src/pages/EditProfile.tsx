@@ -43,6 +43,7 @@ const EditProfile: React.FC = () => {
   const [gender, setGender] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState('');
   const [, setSelectedFile] = useState<File>();
+
   const [takenPhoto, setTakenPhoto] = useState<{
     path: string | undefined,
     preview: string,
@@ -110,7 +111,7 @@ const EditProfile: React.FC = () => {
       if (result.camera == "granted" && result.photos == "granted") {
         getPicture();
       }
-      else{
+      else {
         Camera.requestPermissions();
       }
     }

@@ -1,43 +1,54 @@
 .bg-app {
-  background: url('../../public/assets/images/background.png') !important;
+    background: url('../../public/assets/images/background.png') !important;
 }
 
 .ion-content-uploadvoice {
-  --background: transparent;
+    --background: transparent;
 }
 
 .select-voice-btn {
-  --background: #f2f2f2;
-  --background-focused: #c6c6c6;
-  --background-hover: #c6c6c6;
-  --color: #000;
-  text-transform: none;
+    --background: #f2f2f2;
+    --background-focused: #c6c6c6;
+    --background-hover: #c6c6c6;
+    --color: #000;
+    text-transform: none;
 }
 
 .select-voice-status {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 .upload-btn {
-  margin-top: 20px;
-  --background: #F7BF50;
-  --background-focused: #bf7f00;
-  --background-hover: #bf7f00;
-  --color: #000;
-  text-transform: none;
+    margin-top: 20px;
+    --background: #F7BF50;
+    --background-focused: #bf7f00;
+    --background-hover: #bf7f00;
+    --color: #000;
+    text-transform: none;
 }
 
 .voice-name {
-  margin: 0 15px;
+    margin: 0 15px;
 }
 
 .voice-desc-label {
-  padding: 0 15px;
-  font-size: 1.3em;
+    padding: 0 15px;
+    font-size: 1.3em;
 }
 
 .voice-desc-textarea {
-  --background: #F2F2F2;
-  padding: 15px;
-  border-radius: 10px;
+    --background: #F2F2F2;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.voice-cover-image-label {
+    padding: 0 42px;
+    font-size: 1.3em;
+}
+
+.cover-image-button {
+    --background: #f2f2f2;
+    --background-focused: #c6c6c6;
+    --background-hover: #c6c6c6;
 }

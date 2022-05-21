@@ -1,3 +1,4 @@
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import {
   IonBackButton,
@@ -6,6 +7,7 @@ import {
   IonCol,
   IonContent,
   IonGrid,
+  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -24,7 +26,8 @@ import {
 } from '@ionic/react';
 import { doc, DocumentData, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import React, { useContext, useEffect, useRef } from 'react';
+import { pencilOutline, phonePortraitOutline } from 'ionicons/icons';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { userContext } from '../provider/User';
 import './UploadVoice.css';
@@ -40,13 +43,19 @@ const UploadVoice: React.FC = () => {
   const [loading, dismissLoading] = useIonLoading();
   const location = useLocation();
   const history = useHistory();
+  const [, setSelectedFile] = useState<File>();
+
+  const [takenPhoto, setTakenPhoto] = useState<{
+    path: string | undefined,
+    preview: string,
+  }>();
+
   const [takenSounds, setTakenSounds] = React.useState<{
     id: string,
     path: string | undefined,
     preview: string,
   }>();
 
-  ;
   useIonViewDidEnter(() => {
     const state: any = location.state;
     console.log(state);
@@ -95,6 +104,14 @@ const UploadVoice: React.FC = () => {
     const saveData = async (url: string) => {
       try {
         const docRef = doc(db, 'sounds', takenSounds.id);
+        if (takenPhoto?.preview) {
+          return;
+        } else {
+          setTakenPhoto({
+            path: '',
+            preview: 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
+          });
+        }
         await setDoc(docRef, {
           UserID: user.userId,
           id: takenSounds.id,
@@ -104,7 +121,7 @@ const UploadVoice: React.FC = () => {
           uploadTime: new Date().toISOString(),
           userName: user.userData.displayName,
           play: 1,
-          images: "https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a",
+          images: takenPhoto?.preview,
         });
         dismissLoading();
         toast({
@@ -147,6 +164,28 @@ const UploadVoice: React.FC = () => {
     });
   }
 
+  const selectCoverImage = async () => {
+    const photo = await Camera.getPhoto({
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Photos,
+      quality: 80,
+      width: 500
+    });
+
+    const response = await fetch(photo.webPath!);
+    const bin = await response.blob();
+    setSelectedFile(bin as File);
+
+    if (!photo || !photo.webPath) {
+      return;
+    }
+
+    setTakenPhoto({
+      path: photo.path,
+      preview: photo.webPath,
+    });
+  }
+
   return (
     <IonPage className='bg-app'>
       <IonToolbar>
@@ -174,7 +213,30 @@ const UploadVoice: React.FC = () => {
               </IonItem>
             </IonCol>
           </IonRow>
-          <IonRow>
+          <IonRow className='ion-margin-top'>
+            <IonLabel position='stacked' color='dark'>
+              <span className='voice-cover-image-label'>Voice Cover Image</span>
+            </IonLabel>
+            <IonCol size='12'>
+              <IonButton shape='round' className='cover-image-button' onClick={selectCoverImage}>Select Cover Image</IonButton>
+              {takenPhoto ? (
+                <img
+                  src={takenPhoto!.preview}
+                  className="radius-pic-edit-profile"
+                  alt="profile"
+                  onClick={selectCoverImage}
+                />
+              ) : (
+                <img
+                  src={'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a'}
+                  className="radius-pic-edit-profile"
+                  alt="profile"
+                  onClick={selectCoverImage}
+                />
+              )}
+            </IonCol>
+          </IonRow>
+          <IonRow className='ion-margin-top'>
             <IonCol>
               <IonItem lines='none'>
                 <IonLabel position='stacked' color='dark'>
