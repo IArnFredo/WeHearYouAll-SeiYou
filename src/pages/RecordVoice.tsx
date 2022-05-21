@@ -35,7 +35,7 @@ const RecordVoice: React.FC = () => {
         message: 'You can only record one sound at a time',
         duration: 2000,
       })
-    }else{
+    } else {
       if (recording == true) {
         return;
       }
@@ -53,11 +53,11 @@ const RecordVoice: React.FC = () => {
       setRecording(false);
       if (result.value && result.value.recordDataBase64) {
         console.log(result);
-        
+
         const recordData = result.value.recordDataBase64;
         const id = new Date().getTime().toString();
         const fileName = id + '.mp3';
-  
+
         setTakenSounds({
           id: id,
           path: fileName,
@@ -74,7 +74,7 @@ const RecordVoice: React.FC = () => {
     )
   };
 
-  
+
 
   const getAudio = async () => {
     if (takenSounds) {
@@ -122,10 +122,17 @@ const RecordVoice: React.FC = () => {
   };
 
   const Continue = async () => {
+    if (!takenSounds) {
+      toast({
+        message: 'No audio. Please record a sound first.',
+        duration: 2000,
+      })
+    } else {
       history.push({
         pathname: '/upload-voice',
         state: { detail: takenSounds! }
-    });
+      });
+    }
   }
 
   return (

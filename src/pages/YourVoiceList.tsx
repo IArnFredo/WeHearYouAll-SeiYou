@@ -2,7 +2,7 @@ import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, Ion
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useRef, useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import './YourVoiceList.css';
 import { userContext } from '../provider/User';
@@ -18,6 +18,7 @@ const YourVoiceList = () => {
   const [voiceID, setVoiceID] = useState('');
   const history = useHistory();
   const user = useContext(userContext);
+  const from = useLocation().state;
   const [voices, setVoices] = useState<Array<any>>([])!;
   const db = getFirestore();
   const storage = getStorage();
@@ -55,17 +56,17 @@ const YourVoiceList = () => {
     })
     async function fetchData() {
       await deleteDoc(doc(db, "sounds", voiceID));
-      const desertRef = ref(storage, 'sounds' + '/' + voiceID + '.mp3');
+      const soundsRef = ref(storage, 'sounds' + '/' + voiceID + '.mp3');
 
       // Delete the file
-      deleteObject(desertRef).then(() => {
+      deleteObject(soundsRef).then(() => {
         dismissLoading();
       }).catch((error) => {
         // Uh-oh, an error occurred!
       });
 
       setStartDeleting(false);
-      setToastMessage("Deleted Friend!");
+      setToastMessage("Deleted voices");
       return
     }
     fetchData();
@@ -94,7 +95,7 @@ const YourVoiceList = () => {
         onDidDismiss={() => { setToastMessage('') }} />
       <IonToolbar class="ion-toolbar-yourvoice">
         <IonButtons slot="start">
-          <IonBackButton defaultHref="/profile" />
+          <IonBackButton defaultHref={from == "/profile" ? "/profile" : "/profile"} />
         </IonButtons>
         <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>

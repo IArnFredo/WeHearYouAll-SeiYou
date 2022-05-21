@@ -45,7 +45,7 @@ const SoundPlayer: React.FC = () => {
       if (state.ui.initiate == true) {
         dispatch(openPlayer())
       } else {
-        
+
       }
     })
   }
@@ -189,11 +189,12 @@ const SoundPlayer: React.FC = () => {
     if (location === "/edit-profile") {
       Changer.style.left = "-999px"
     }
-    if (location === "/profile" && disable === false) {
+    if (location === "/profile") {
+      setDisable(false);
       if (Changer != null) {
         Changer.style.left = "0px"
       }
-    } if (location === "/playing" && disable === false) {
+    }if (location === "/playing") {
       if (ToolbarPlaying != null) {
         Changer.style.left = "0px"
         Changer.style.bottom = "107px"

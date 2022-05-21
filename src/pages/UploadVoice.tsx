@@ -43,6 +43,7 @@ const UploadVoice: React.FC = () => {
   const [loading, dismissLoading] = useIonLoading();
   const location = useLocation();
   const history = useHistory();
+  const from = useLocation().state;
   const [, setSelectedFile] = useState<File>();
 
   const [takenPhoto, setTakenPhoto] = useState<{
@@ -70,6 +71,7 @@ const UploadVoice: React.FC = () => {
     } else {
       return
     }
+    return
   });
 
   const upload = async () => {
@@ -101,7 +103,7 @@ const UploadVoice: React.FC = () => {
       spinner: 'crescent',
     });
 
-    const saveData = async (url: string) => {
+    const saveData = async (url: string, urlPhoto: string) => {
       try {
         const docRef = doc(db, 'sounds', takenSounds.id);
         await setDoc(docRef, {
@@ -113,7 +115,7 @@ const UploadVoice: React.FC = () => {
           uploadTime: new Date().toISOString(),
           userName: user.userData.displayName,
           play: 1,
-          images: takenPhoto ? takenPhoto.preview : 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
+          images: urlPhoto != '' ? urlPhoto : 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
         });
         dismissLoading();
         toast({
@@ -128,6 +130,8 @@ const UploadVoice: React.FC = () => {
       }
     }
 
+
+
     const audioFile = await Filesystem.readFile({
       path: takenSounds.path!,
       directory: Directory.Documents,
@@ -140,20 +144,43 @@ const UploadVoice: React.FC = () => {
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'audio/mp3' });
-
-    const storageRef = ref(storage, `sounds/${id}.mp3`);
-    uploadBytes(storageRef, blob).then((snapshot) => {
-      console.log(snapshot);
-      getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
-        saveData(url)
+    if (takenPhoto) {
+      const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
+      const storageRef = ref(storage, `imagesounds/${id}.jpg`);
+      uploadBytes(storageRef, photoBlob).then((snapshot) => {
+        console.log('photo uploaded', snapshot);
+        getDownloadURL(ref(storage, `imagesounds/${id}.jpg`)).then((photoUrl) => {
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'audio/mp3' });
+          const storageRef = ref(storage, `sounds/${id}.mp3`);
+          uploadBytes(storageRef, blob).then((snapshot) => {
+            console.log(snapshot);
+            getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+              saveData(url, photoUrl);
+            }).catch((error) => {
+              console.log(error);
+            });
+          }).catch((error) => {
+            console.log(error);
+          });
+        }).catch((err) => console.error(err));
+      });
+    }
+    else {
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'audio/mp3' });
+      const storageRef = ref(storage, `sounds/${id}.mp3`);
+      uploadBytes(storageRef, blob).then((snapshot) => {
+        console.log(snapshot);
+        getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+          saveData(url ,'');
+        }).catch((error) => {
+          console.log(error);
+        });
       }).catch((error) => {
         console.log(error);
       });
-    }).catch((error) => {
-      console.log(error);
-    });
+    }
   }
 
   const selectCoverImage = async () => {
