@@ -30,6 +30,7 @@ import { pencilOutline, phonePortraitOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { userContext } from '../provider/User';
+import { Chooser } from '@awesome-cordova-plugins/chooser'
 import './UploadVoice.css';
 
 const UploadVoice: React.FC = () => {
@@ -144,6 +145,8 @@ const UploadVoice: React.FC = () => {
     for (let i = 0; i < byteCharacters.length; i++) {
       byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'audio/mp3' });
     if (takenPhoto) {
       const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
       const storageRef = ref(storage, `imagesounds/${id}.jpg`);
@@ -167,8 +170,6 @@ const UploadVoice: React.FC = () => {
       });
     }
     else {
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'audio/mp3' });
       const storageRef = ref(storage, `sounds/${id}.mp3`);
       uploadBytes(storageRef, blob).then((snapshot) => {
         console.log(snapshot);
@@ -205,6 +206,10 @@ const UploadVoice: React.FC = () => {
     });
   }
 
+  const selectVoice = async () => {
+      const file = await Chooser.getFile("audio/*");
+      console.log(file ? file : 'canceled');
+  }
   return (
     <IonPage className='bg-app'>
       <IonToolbar>
@@ -217,7 +222,7 @@ const UploadVoice: React.FC = () => {
         <IonGrid className='ion-text-center' id='margin-for-float-btn-upload'>
           <IonRow>
             <IonCol size='12'>
-              <IonButton shape='round' disabled={recordVoice ? true : false} className='select-voice-btn'>Select Voice</IonButton>
+              <IonButton shape='round' disabled={recordVoice ? true : false} onClick={selectVoice} className='select-voice-btn'>Select Voice</IonButton>
             </IonCol>
             <IonCol size='12' className='ion-align-self-center'>
               <IonText>

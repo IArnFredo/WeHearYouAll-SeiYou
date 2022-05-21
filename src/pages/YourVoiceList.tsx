@@ -18,14 +18,15 @@ const YourVoiceList = () => {
   const [voiceID, setVoiceID] = useState('');
   const history = useHistory();
   const user = useContext(userContext);
-  const from = useLocation().state;
+  const from = useLocation();
   const [voices, setVoices] = useState<Array<any>>([])!;
   const db = getFirestore();
   const storage = getStorage();
   const { state, dispatch } = useSoundsContext();
   const open = isPlayerOpen(state);
   const [loading, dismissLoading] = useIonLoading();
-
+  console.log(history);
+  
   useEffect(() => {
     if (user != undefined) {
       onSnapshot(query(collection(db, "sounds"), where("UserID", "==", user.userId)), (querySnapshot) =>
@@ -95,7 +96,7 @@ const YourVoiceList = () => {
         onDidDismiss={() => { setToastMessage('') }} />
       <IonToolbar class="ion-toolbar-yourvoice">
         <IonButtons slot="start">
-          <IonBackButton defaultHref={from == "/profile" ? "/profile" : "/profile"} />
+          <IonBackButton defaultHref={from.pathname == "/your-voice-list" ? "/profile" : "/profile"}/>
         </IonButtons>
         <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>
