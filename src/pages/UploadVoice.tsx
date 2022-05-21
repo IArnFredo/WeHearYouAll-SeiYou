@@ -28,7 +28,7 @@ import { doc, DocumentData, getDoc, getFirestore, setDoc } from 'firebase/firest
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { pencilOutline, phonePortraitOutline } from 'ionicons/icons';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { userContext } from '../provider/User';
 import { Chooser } from '@awesome-cordova-plugins/chooser'
 import './UploadVoice.css';
@@ -55,13 +55,13 @@ const UploadVoice: React.FC = () => {
   const [takenSounds, setTakenSounds] = React.useState<{
     id: string,
     path: string | undefined,
-    preview: string,
+    preview: string | Uint8Array,
   }>();
-
+  console.log(recordVoice);
+  
   useIonViewDidEnter(() => {
     const state: any = location.state;
     console.log(state);
-
     if (state) {
       setTakenSounds({
         id: state.detail.id,
@@ -70,6 +70,7 @@ const UploadVoice: React.FC = () => {
       });
       setRecordVoice(true);
     } else {
+      setRecordVoice(false);
       return
     }
     return
@@ -125,62 +126,107 @@ const UploadVoice: React.FC = () => {
         });
         setTakenSounds(undefined);
         setRecordVoice(false);
-        history.push('/your-voice-list');
+        history.push('/your-voice-list', { state: { from: location } });
       } catch (error) {
         console.log(error);
       }
     }
-
-
-
-    const audioFile = await Filesystem.readFile({
-      path: takenSounds.path!,
-      directory: Directory.Documents,
-    });
-
-    const audio = audioFile.data;
-    const id = takenSounds.id;
-    const byteCharacters = atob(audio);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'audio/mp3' });
-    if (takenPhoto) {
-      const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
-      const storageRef = ref(storage, `imagesounds/${id}.jpg`);
-      uploadBytes(storageRef, photoBlob).then((snapshot) => {
-        console.log('photo uploaded', snapshot);
-        getDownloadURL(ref(storage, `imagesounds/${id}.jpg`)).then((photoUrl) => {
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: 'audio/mp3' });
+    if (recordVoice != true) {
+      if (takenSounds) {
+        const id = takenSounds.id;
+        // const byteNumbers = new Array(takenSounds.preview.length);
+        // for (let i = 0; i < takenSounds.preview.length; i++) {
+        //   byteNumbers[i] = takenSounds.preview.charCodeAt(i);
+        // }
+        // const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([takenSounds.preview], { type: 'audio/mp3' });
+        console.log(blob);
+        if (takenPhoto) {
+          const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
+          const storageRef = ref(storage, `imagesounds/${id}.jpg`);
+          uploadBytes(storageRef, photoBlob).then((snapshot) => {
+            console.log('photo uploaded', snapshot);
+            getDownloadURL(ref(storage, `imagesounds/${id}.jpg`)).then((photoUrl) => {
+              // const byteArray = new Uint8Array(takenSounds.preview);
+              const blob = new Blob([takenSounds.preview], { type: 'audio/mp3' });
+              const storageRef = ref(storage, `sounds/${id}.mp3`);
+              uploadBytes(storageRef, blob).then((snapshot) => {
+                console.log(snapshot);
+                getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+                  saveData(url, photoUrl);
+                }).catch((error) => {
+                  console.log(error);
+                });
+              }).catch((error) => {
+                console.log(error);
+              });
+            }).catch((err) => console.error(err));
+          });
+        } else {
           const storageRef = ref(storage, `sounds/${id}.mp3`);
           uploadBytes(storageRef, blob).then((snapshot) => {
             console.log(snapshot);
             getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
-              saveData(url, photoUrl);
+              saveData(url, '');
             }).catch((error) => {
               console.log(error);
             });
           }).catch((error) => {
             console.log(error);
           });
-        }).catch((err) => console.error(err));
+        }
+      }
+
+    } else {
+      const audioFile = await Filesystem.readFile({
+        path: takenSounds.path!,
+        directory: Directory.Documents,
       });
-    }
-    else {
-      const storageRef = ref(storage, `sounds/${id}.mp3`);
-      uploadBytes(storageRef, blob).then((snapshot) => {
-        console.log(snapshot);
-        getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
-          saveData(url ,'');
+      const audio = audioFile.data;
+      const id = takenSounds.id;
+      const byteCharacters = atob(audio);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'audio/mp3' });
+
+      if (takenPhoto) {
+        const photoBlob = await fetch(takenPhoto.preview).then(res => res.blob());
+        const storageRef = ref(storage, `imagesounds/${id}.jpg`);
+        uploadBytes(storageRef, photoBlob).then((snapshot) => {
+          console.log('photo uploaded', snapshot);
+          getDownloadURL(ref(storage, `imagesounds/${id}.jpg`)).then((photoUrl) => {
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'audio/mp3' });
+            const storageRef = ref(storage, `sounds/${id}.mp3`);
+            uploadBytes(storageRef, blob).then((snapshot) => {
+              console.log(snapshot);
+              getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+                saveData(url, photoUrl);
+              }).catch((error) => {
+                console.log(error);
+              });
+            }).catch((error) => {
+              console.log(error);
+            });
+          }).catch((err) => console.error(err));
+        });
+      }
+      else {
+        const storageRef = ref(storage, `sounds/${id}.mp3`);
+        uploadBytes(storageRef, blob).then((snapshot) => {
+          console.log(snapshot);
+          getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+            saveData(url, '');
+          }).catch((error) => {
+            console.log(error);
+          });
         }).catch((error) => {
           console.log(error);
         });
-      }).catch((error) => {
-        console.log(error);
-      });
+      }
     }
   }
 
@@ -207,8 +253,16 @@ const UploadVoice: React.FC = () => {
   }
 
   const selectVoice = async () => {
-      const file = await Chooser.getFile("audio/*");
-      console.log(file ? file : 'canceled');
+    const file = await Chooser.getFile("audio/*");
+    const id = new Date().getTime().toString();
+    if (file) {
+      setTakenSounds({
+        id: id,
+        path: file.name,
+        preview: file.data!,
+      })
+    }
+    console.log(file ? file : 'canceled');
   }
   return (
     <IonPage className='bg-app'>

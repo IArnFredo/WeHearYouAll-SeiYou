@@ -39,6 +39,7 @@ const Login: React.FC = () => {
     setToastMessage("Email or Password is incorrect!");
   };
   const from = useLocation().state;
+  
   const history = useHistory();
   
   // Sign in email pass

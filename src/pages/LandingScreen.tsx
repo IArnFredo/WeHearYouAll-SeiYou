@@ -1,7 +1,7 @@
-import { IonContent, IonPage, IonButton, IonGrid, IonRow, IonLabel, useIonViewWillEnter } from '@ionic/react';
-import React, { useContext, useEffect, useState } from 'react';
+import { IonButton, IonContent, IonGrid, IonLabel, IonPage, IonRow } from '@ionic/react';
+import React from 'react';
 import { Redirect } from 'react-router';
-import { Auth, userContext, useUser, useUserInit } from '../provider/User';
+import { useUser } from '../provider/User';
 import './LandingScreen.css';
 
 const LandingScreen: React.FC = () => {

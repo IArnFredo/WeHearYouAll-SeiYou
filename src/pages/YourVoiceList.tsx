@@ -11,21 +11,21 @@ import { deleteObject, getStorage, ref, StringFormat } from 'firebase/storage';
 import { exit } from 'process';
 
 
-const YourVoiceList = () => {
+const YourVoiceList = (props:any) => {
   const [toastMessage, setToastMessage] = useState('');
   const [startDeleting, setStartDeleting] = useState(false);
   const slidingOptionRef = useRef<HTMLIonItemSlidingElement>(null);
   const [voiceID, setVoiceID] = useState('');
   const history = useHistory();
   const user = useContext(userContext);
-  const from = useLocation();
+  const from = useLocation().state;
   const [voices, setVoices] = useState<Array<any>>([])!;
   const db = getFirestore();
   const storage = getStorage();
   const { state, dispatch } = useSoundsContext();
   const open = isPlayerOpen(state);
   const [loading, dismissLoading] = useIonLoading();
-  console.log(history);
+  console.log(props);
   
   useEffect(() => {
     if (user != undefined) {
@@ -96,7 +96,7 @@ const YourVoiceList = () => {
         onDidDismiss={() => { setToastMessage('') }} />
       <IonToolbar class="ion-toolbar-yourvoice">
         <IonButtons slot="start">
-          <IonBackButton defaultHref={from.pathname == "/your-voice-list" ? "/profile" : "/profile"}/>
+          <IonBackButton defaultHref={from == "/upload-voice" ? "/profile" : "/profile"}/>
         </IonButtons>
         <IonText class="ion-margin">Your Voices</IonText>
       </IonToolbar>
