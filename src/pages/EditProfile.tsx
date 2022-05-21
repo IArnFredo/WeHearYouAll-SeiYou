@@ -124,7 +124,6 @@ const EditProfile: React.FC = () => {
       quality: 80,
       width: 500
     });
-    console.log(photo);
 
     const response = await fetch(photo.webPath!);
     const bin = await response.blob();
@@ -138,7 +137,6 @@ const EditProfile: React.FC = () => {
       path: photo.path,
       preview: photo.webPath,
     });
-
   };
 
 

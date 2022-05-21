@@ -38,15 +38,9 @@ const Login: React.FC = () => {
   const loginFailed = () => {
     setToastMessage("Email or Password is incorrect!");
   };
-  const from  = useLocation().state;
+  const from = useLocation().state;
   const history = useHistory();
-  async function fetchData() {
-    const q = query(
-        collection(db, "sounds")
-    );
-    // const querySnapshot = await getDocs(q);
-}
-fetchData();
+  
   // Sign in email pass
   const Email = useRef<HTMLIonInputElement>(null);
   const Password = useRef<HTMLIonInputElement>(null);
@@ -74,19 +68,20 @@ fetchData();
         // ...
       })
       .catch((error) => {
+        dismissLoading();
         const errorMessage = error.message;
         console.log(errorMessage);
         loginFailed();
       });
   };
-  
+
   if (!user) return null;
 
   return (
     <IonPage>
       <IonToolbar>
         <IonButtons slot="start">
-          <IonBackButton defaultHref={ from == "/welcome" ? '/welcome' : '/home'} />
+          <IonBackButton defaultHref={from == "/welcome" ? '/welcome' : '/home'} />
           <IonText>Sign In</IonText>
         </IonButtons>
       </IonToolbar>

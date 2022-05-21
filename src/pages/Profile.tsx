@@ -12,28 +12,24 @@ import {
   IonRow,
   useIonAlert,
   useIonLoading,
-  useIonToast,
+  useIonToast
 } from "@ionic/react";
 import { getAuth, signOut } from "firebase/auth";
 import {
-  query,
-  collection,
-  where,
-  getDocs,
+  collection, getDocs,
   getFirestore,
-  onSnapshot,
+  onSnapshot, query, where
 } from "firebase/firestore";
-import { link } from "fs";
 import {
   arrowUpOutline,
   cloudUploadOutline,
   logOutOutline,
   mic,
   pencilOutline,
-  playOutline,
+  playOutline
 } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect, Router, useHistory, useLocation } from "react-router";
+import { Redirect, useHistory, useLocation } from "react-router";
 import { userContext } from "../provider/User";
 import "./Profile.css";
 
@@ -68,7 +64,7 @@ const Profile: React.FC = () => {
         return null;
       }
     }
-    if (user.userId != undefined) {
+    if (user != undefined) {
       fetchData();
     } else {
       setReadData([]);
@@ -153,7 +149,7 @@ const Profile: React.FC = () => {
   }
 
   const uploadBtn = () => {
-    history.push('/record-voice')
+    history.push('/upload-voice')
   }
 
   if (user == undefined) return null;

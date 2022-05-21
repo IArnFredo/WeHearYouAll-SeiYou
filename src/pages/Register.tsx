@@ -16,6 +16,7 @@ import {
   IonSegment,
   IonSegmentButton,
   useIonLoading,
+  useIonToast,
 } from "@ionic/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Account.css";
@@ -36,8 +37,8 @@ const auth = getAuth();
 const Register: React.FC = () => {
   const db = getFirestore();
   const user = useContext(userContext);
-  const [present] = useIonAlert();
-  const [loading, dismissLoading] = useIonLoading();
+  const [present] = useIonToast();
+  const [loading, dismiss] = useIonLoading();
   const email = useRef<HTMLIonInputElement>(null);
   const password = useRef<HTMLIonInputElement>(null);
   const confirmPassword = useRef<HTMLIonInputElement>(null);
@@ -47,10 +48,6 @@ const Register: React.FC = () => {
   const history = useHistory();
 
   const signUp = async () => {
-    loading({
-      message: 'Creating New User...',
-      spinner: "crescent"
-    })
     const enteredName = name.current?.value as string;
     const enteredEmail = email.current?.value as string;
     const pass = password.current?.value as string;
@@ -124,7 +121,11 @@ const Register: React.FC = () => {
     }
 
     const hash = CryptoJS.SHA1(pass).toString();
-
+    loading({
+      message: 'Creating New User...',
+      spinner: "crescent", 
+      duration:2000,
+    })  
     createUserWithEmailAndPassword(auth, enteredEmail, hash)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -139,8 +140,8 @@ const Register: React.FC = () => {
           console.error("Error updating profile: ", error);
         });
         addData(pathReference, user.uid);
-        dismissLoading();
         sendEmailVerification(auth.currentUser!).then(() => {
+          dismiss();
           present({
             message: "Verify your email to finish signing up for SeiYou!",
             header: "Please Check Your Email",
@@ -153,10 +154,18 @@ const Register: React.FC = () => {
         });
       })
       .catch((error) => {
+        dismiss();
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
+        present({
+          message: "This email is already registered!",
+          header: "Warning",
+          buttons: [{
+            text: "OK", handler: () => {
+              return
+            },
+          }],
+        });
       });
 
     const addData = async (pathReference: string, userId: string) => {

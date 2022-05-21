@@ -1,12 +1,15 @@
-import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol } from '@ionic/react';
+import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol, useIonLoading } from '@ionic/react';
 import { trashSharp, createSharp } from 'ionicons/icons';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useRef, useState } from 'react';
 import { Redirect, useHistory } from 'react-router';
-import { collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import './YourVoiceList.css';
 import { userContext } from '../provider/User';
 import { isPlayerOpen, playTrack, useSoundsContext } from '../provider/Sounds';
+import { deleteObject, getStorage, ref, StringFormat } from 'firebase/storage';
+import { exit } from 'process';
+
 
 const YourVoiceList = () => {
   const [toastMessage, setToastMessage] = useState('');
@@ -17,26 +20,21 @@ const YourVoiceList = () => {
   const user = useContext(userContext);
   const [voices, setVoices] = useState<Array<any>>([])!;
   const db = getFirestore();
+  const storage = getStorage();
   const { state, dispatch } = useSoundsContext();
   const open = isPlayerOpen(state);
+  const [loading, dismissLoading] = useIonLoading();
 
   useEffect(() => {
-    async function fetchData() {
-      const q = query(
-        collection(db, "sounds"),
-        where("UserID", "==", user.userId!)
-      );
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setVoices(data);
-    }
-    if (user !== null) {
-      fetchData();
+    if (user != undefined) {
+      onSnapshot(query(collection(db, "sounds"), where("UserID", "==", user.userId)), (querySnapshot) =>
+        setVoices(querySnapshot.docs.map((doc) => doc.data()))
+      )
     } else {
       setVoices([]);
     }
     return;
-  }, [db, user]);
+  }, [])
 
   const startEditVoiceHandler = () => {
     slidingOptionRef.current?.closeOpened();
@@ -51,20 +49,26 @@ const YourVoiceList = () => {
   };
 
   function deleteVoiceHandler() {
+    loading({
+      message: 'Deleting voice...',
+      spinner: 'crescent'
+    })
     async function fetchData() {
-      const users = collection(db,"sounds");
+      await deleteDoc(doc(db, "sounds", voiceID));
+      const desertRef = ref(storage, 'sounds' + '/' + voiceID + '.mp3');
 
-      // console.log(querySnapshot);
+      // Delete the file
+      deleteObject(desertRef).then(() => {
+        dismissLoading();
+      }).catch((error) => {
+        // Uh-oh, an error occurred!
+      });
 
-
-      // deleteDoc(querySnapshot);
-      // lol.docs.map((doc) => {
-      //   return deleteDoc(doc);
-      // });
+      setStartDeleting(false);
+      setToastMessage("Deleted Friend!");
+      return
     }
     fetchData();
-    setStartDeleting(false);
-    setToastMessage("Deleted Friend!")
   };
 
   const playingVoiceHandler = useCallback(sound => {

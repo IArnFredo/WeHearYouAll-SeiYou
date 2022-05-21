@@ -169,22 +169,3 @@ export const reducer = (state: any, action: any) => {
   }
 };
 const loggerReducer = logger(reducer);
-
-// export function useSoundsContext(): Sounds {
-//   return React.useContext(soundsContext);
-// }
-
-// export function useSounds(): SoundsInit {
-//     const db = getFirestore();
-//     const [soundsInit, setSoundsInit] = React.useState<SoundsInit>({});
-//     const q = collection(db, "sounds");
-//     useEffect(() => {
-//         async function fetchData() {
-//           const querySnapshot = await getDocs(q);
-//           const data = querySnapshot.docs.map((doc) => doc.data());
-//           setSoundsInit({ sounds: data });
-//         }
-//         fetchData();
-//       }, []);
-//     return soundsInit;
-// }
