@@ -10,8 +10,7 @@ import {
 } from '@ionic/react';
 import { collection, DocumentData, getDocs, getFirestore } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-import { useSoundsContext } from '../provider/Sounds';
+import { playTrack, useSoundsContext } from '../provider/Sounds';
 import './Search.css';
 
 interface TrackTypes {
@@ -28,17 +27,15 @@ interface TrackTypes {
 
 const Search: React.FC = () => {
   const db = getFirestore();
-  const { state } = useSoundsContext();
+  const { state, dispatch } = useSoundsContext();
   const [tracks, setTracks] = useState<TrackTypes[]>([]);
   const [usersData, setUsersData] = useState<DocumentData[]>([]);
   const [searchText, setSearchText] = useState('');
-  const [show, setShow] = useState(true);
   const [searchGender, setSearchGender] = useState('all');
-  const history = useHistory();
-  const openVoiceHandler = () => {
-    console.log('Edit voice');
-    history.push('/playing');
-  };
+
+  const playVoiceHandler = useCallback((voice) => {
+    dispatch(playTrack(voice));
+  }, []);
 
   const fetchData = useCallback(async () => {
     const userCollectionRef = collection(db, 'users');
@@ -125,7 +122,7 @@ const Search: React.FC = () => {
         <IonRow>
           <IonCol size-sm='8' offset-sm='2' size-md='6' offset-md='3'>
 
-            {/* Version 1. Show all when search text is empty */}
+            {/* Version 1. Show all voices & users if search text is empty */}
             <h3 className='ion-margin ion-text-center'>Voices</h3>
             <IonRow>
               <IonCol>
@@ -136,7 +133,7 @@ const Search: React.FC = () => {
                       className='vList item-list-color-search'
                       lines='full'
                       button
-                      onClick={openVoiceHandler}
+                      onClick={() => playVoiceHandler(voice)}
                     >
                       <IonAvatar className='avatar' slot='start'>
                         <img src={voice.images} alt={voice.name} />
@@ -176,58 +173,58 @@ const Search: React.FC = () => {
               </IonCol>
             </IonRow>
 
-            {/* Version 2: show nothing when search text is empty */}
+            {/* Version 2: show nothing if search text is empty */}
             {/* {searchText ? (
               <>
                 <h3 className='ion-margin ion-text-center'>Voices</h3>
-                <IonRow>
-                  <IonCol>
-                    <IonList className='ion-margin-start ion-margin-end'>
-                      {searchVoiceHandler().map((voice) => (
-                        <IonItem
-                          key={voice.id}
-                          className='vList item-list-color-search'
-                          lines='full'
-                          button
-                          onClick={openVoiceHandler}
-                        >
-                          <IonAvatar className='avatar' slot='start'>
-                            <img src={voice.images} alt={voice.name} />
-                          </IonAvatar>
-                          <IonLabel className='label'>{voice.name}</IonLabel>
-                        </IonItem>
-                      ))}
-                      {searchVoiceHandler().length === 0 && (
-                        <p>No voice found.</p>
-                      )}
-                    </IonList>
-                  </IonCol>
-                </IonRow>
+                  <IonRow>
+                    <IonCol>
+                      <IonList className='ion-margin-start ion-margin-end'>
+                        {searchVoiceHandler().map((voice) => (
+                          <IonItem
+                            key={voice.id}
+                            className='vList item-list-color-search'
+                            lines='full'
+                            button
+                            onClick={() => playVoiceHandler(voice)}
+                          >
+                            <IonAvatar className='avatar' slot='start'>
+                              <img src={voice.images} alt={voice.name} />
+                            </IonAvatar>
+                            <IonLabel className='label'>{voice.name}</IonLabel>
+                          </IonItem>
+                        ))}
+                        {searchVoiceHandler().length === 0 && (
+                          <p>No voice found.</p>
+                        )}
+                      </IonList>
+                    </IonCol>
+                  </IonRow>
 
-                <h3 className='ion-margin ion-text-center'>Artists</h3>
-                <IonRow id='margin-for-float-btn'>
-                  <IonCol>
-                    <IonList className='ion-margin-start ion-margin-end'>
-                      {searchUserHandler().map((user) => (
-                        <IonItem
-                          key={user.id}
-                          className='vList item-list-color-search'
-                          lines='full'
-                          button
-                          onClick={openVoiceHandler}
-                        >
-                          <IonAvatar className='avatar' slot='start'>
-                            <img src={user.photoUrl} alt='' />
-                          </IonAvatar>
-                          <IonLabel className='label'>{user.name}</IonLabel>
-                        </IonItem>
-                      ))}
-                      {searchUserHandler().length === 0 && (
-                        <p>No artist found.</p>
-                      )}
-                    </IonList>
-                  </IonCol>
-                </IonRow>
+                  <h3 className='ion-margin ion-text-center'>Artists</h3>
+                  <IonRow id='margin-for-float-btn-search'>
+                    <IonCol>
+                      <IonList className='ion-margin-start ion-margin-end'>
+                        {searchUserHandler().map((user) => (
+                          <IonItem
+                            key={user.id}
+                            className='vList item-list-color-search'
+                            lines='full'
+                            button
+                            routerLink={`/another-profile/${user.id}`}
+                          >
+                            <IonAvatar className='avatar' slot='start'>
+                              <img src={user.photoUrl} alt='' />
+                            </IonAvatar>
+                            <IonLabel className='label'>{user.name}</IonLabel>
+                          </IonItem>
+                        ))}
+                        {searchUserHandler().length === 0 && (
+                          <p>No artist found.</p>
+                        )}
+                      </IonList>
+                    </IonCol>
+                  </IonRow>
               </>
             ) : (
               <h3 className='ion-margin ion-text-center'>Search something...</h3>
