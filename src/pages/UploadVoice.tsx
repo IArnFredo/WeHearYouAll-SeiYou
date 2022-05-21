@@ -104,14 +104,6 @@ const UploadVoice: React.FC = () => {
     const saveData = async (url: string) => {
       try {
         const docRef = doc(db, 'sounds', takenSounds.id);
-        if (takenPhoto?.preview) {
-          return;
-        } else {
-          setTakenPhoto({
-            path: '',
-            preview: 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
-          });
-        }
         await setDoc(docRef, {
           UserID: user.userId,
           id: takenSounds.id,
@@ -121,7 +113,7 @@ const UploadVoice: React.FC = () => {
           uploadTime: new Date().toISOString(),
           userName: user.userData.displayName,
           play: 1,
-          images: takenPhoto?.preview,
+          images: takenPhoto ? takenPhoto.preview : 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
         });
         dismissLoading();
         toast({

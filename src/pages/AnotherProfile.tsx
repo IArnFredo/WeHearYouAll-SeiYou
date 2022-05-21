@@ -1,29 +1,30 @@
-import { IonAvatar, IonBackButton, IonButtons, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react'
-import { query, collection, where, getFirestore, getDocs } from 'firebase/firestore';
+import { IonAvatar, IonBackButton, IonButtons, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { collection, getFirestore, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import './Profile.css';
 
 const AnotherProfile: React.FC = () => {
   const db = getFirestore();
   const userid = useParams<{ userID: string }>().userID;
   const [anotherUser, setAnotherUser] = useState<Array<any>>([]);
+  const [voices, setAnotherVoices] = useState<Array<any>>([]);
   const [userAge, setAge] = useState<number>(0);
+  const history = useHistory();
 
-  console.log(userid);
-  
   useEffect(() => {
-    async function fetchData() {
-      const q = query(collection(db, "users"), where("UserID", "==", userid));
-      const querySnapshot = await getDocs(q);
-      setAnotherUser(
-        querySnapshot.docs.map((doc) => ({ ...doc.data() }))
-      );
-      AgeCal();
-      
-    }
-    fetchData();
-    return
+    const q = query(collection(db, "users"), where("UserID", "==", userid));
+    onSnapshot(q, (querySnapshot) => {
+      const data = querySnapshot.docs.map((doc) => ({ ...doc.data() }));
+      setAnotherUser(data);
+    });
+    const q2 = query(collection(db, "sounds"), where("UserID", "==", userid));
+    onSnapshot(q2, (querySnapshot) => {
+      const voices = querySnapshot.docs.map((doc) => ({ ...doc.data() }));
+      setAnotherVoices(voices);
+    });
+    AgeCal();
+    return;
   }, [])
 
 
@@ -36,21 +37,29 @@ const AnotherProfile: React.FC = () => {
       age--;
     }
     setAge(age);
+    return
   };
-  return (
-    <IonPage className='bg-app'>
-      <IonToolbar>
-        <IonButtons slot="start">
-          <IonBackButton defaultHref="/home" />
-        </IonButtons>
-        <IonTitle>Back Button</IonTitle>
-      </IonToolbar>
 
+  if (userid == undefined) {
+    history.push("/home");
+  }
+  return (
+    <IonPage className='bg-app' id='margin-for-float-btn-another-profile'>
       {anotherUser.map((user) => (
-        <IonContent fullscreen className='ion-padding' id='bg' key={user.UserID}>
+        <IonToolbar key={user.UserID}>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/home" />
+          </IonButtons>
+          <IonTitle>{user.name}</IonTitle>
+        </IonToolbar>
+      ))}
+      {anotherUser.map((user) => (
+        <IonContent fullscreen id='bg' className='ion-content-account' key={user.UserID}>
           <IonRow>
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
-              <img className='avatar-profile' src='./assets/images/shionne.jpg' />
+              <div className='avatar-profile-cont'>
+                <img className='avatar-profile' src={user.photoUrl} />
+              </div>
               <IonCardHeader class='text-profile'>
                 <IonCardTitle>{user.name}</IonCardTitle>
                 <IonCardSubtitle>{user.gender}, 20</IonCardSubtitle>
@@ -61,15 +70,18 @@ const AnotherProfile: React.FC = () => {
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonCardTitle class='text-profile'>Voices</IonCardTitle>
               <IonList className="ion-margin">
-
-                <IonItem className="vList" lines="full"
-                  button>
-                  <IonAvatar className="avatar" slot="start">
-                    <img src='https://icon-library.com/images/song-icon-png/song-icon-png-13.jpg' alt="" />
-                  </IonAvatar>
-                  <IonLabel className="label">judul voice</IonLabel>
-                </IonItem>
-
+                {voices.map((voice) => (
+                  <IonItem key={voice.id} className="vList" lines="full"
+                    button>
+                    <IonAvatar className="avatar" slot="start">
+                      <img src={voice.images} alt="" />
+                    </IonAvatar>
+                    <IonLabel className="label">{voice.name}</IonLabel>
+                  </IonItem>
+                ))}
+                {voices.length === 0 && (
+                  <IonLabel className="label">No voice's uploaded by user</IonLabel>
+                )}
               </IonList>
             </IonCol>
           </IonRow>

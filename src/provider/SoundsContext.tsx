@@ -1,4 +1,4 @@
-import { query, collection, where, getDocs, getFirestore, onSnapshot } from "firebase/firestore";
+import { collection, getFirestore, onSnapshot, query } from "firebase/firestore";
 import React, { useEffect, useReducer, useState } from "react";
 import { reducer, soundsContext } from "./Sounds";
 const initialState = {
