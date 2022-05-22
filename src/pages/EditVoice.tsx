@@ -61,7 +61,6 @@ const EditVoice: React.FC = () => {
     }
     )
 
-
     return
   }, [])
 
@@ -80,7 +79,6 @@ const EditVoice: React.FC = () => {
         userName: voices![0].userName,
         images: photoUrl !== '' ? photoUrl : voices![0].images,
       });
-      dismissLoading();
       presentToast({
         message: 'Your profile has been updated!',
         buttons: [{ text: 'hide', handler: () => dismissToast() }],
@@ -129,8 +127,9 @@ const EditVoice: React.FC = () => {
 
   const updateHandler = async () => {
     loading({
-      message: 'Updating profile...',
+      message: 'Updating...',
       spinner: 'crescent',
+      duration: 4000,
     })
     setDisabledSubmitBtn(true);
     if (!voiceNameRef || voiceNameRef.toString().trim().length === 0 || !descText || descText.toString().trim().length === 0) {

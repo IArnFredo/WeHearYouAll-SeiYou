@@ -54,7 +54,7 @@ const Playing: React.FC = () => {
     <>
       <IonPage className="bg-app">
         <IonToolbar class="ion-notoolbar-playing">
-          <IonButtons class="ion-margin-start" style={{ marginTop: '10px', marginLeft: '20px' }} slot="start" onClick={ChangeURLandState}>
+          <IonButtons class="ion-margin-start" style={{ marginTop: '10px', marginLeft: '30px' }} slot="start" onClick={ChangeURLandState}>
             <IonIcon size="large" icon={arrowBackCircle} />
           </IonButtons>
 

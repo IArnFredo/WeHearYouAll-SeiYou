@@ -95,7 +95,7 @@ const Search: React.FC = () => {
           <IonCol size-sm='8' offset-sm='2' size-md='6' offset-md='3'>
 
             <IonRow className='search-title ion-margin-top'>
-              <IonLabel className='ion-margin-vertical ion-margin-horizontal'>
+              <IonLabel style={{marginLeft:"40px"}} className='ion-margin-vertical ion-margin-horizontal'>
                 <b>Search</b>
               </IonLabel>
             </IonRow>

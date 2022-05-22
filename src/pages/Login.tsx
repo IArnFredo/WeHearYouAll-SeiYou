@@ -53,14 +53,11 @@ const Login: React.FC = () => {
   const [presentToast, dismissToast] = useIonToast();
   const history = useHistory();
 
-  const loginFailed = () => {
-    setToastMessage("Email or Password is incorrect!");
-  };
-
   const LoginWithEmail = () => {
     loading({
       message: 'Login...',
       spinner: "crescent",
+      duration: 1000,
     })
     let email = Email.current?.value as string;
     let password = Password.current?.value as string;
@@ -91,8 +88,8 @@ const Login: React.FC = () => {
       });
       return;
     }
-    const hash = CryptoJS.SHA1(password).toString();
-    signInWithEmailAndPassword(auth, email, hash)
+    // const hash = CryptoJS.SHA1(password).toString();
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const signout = doc(db, "users", userCredential.user.uid);
         const ok = async () => {
@@ -102,7 +99,6 @@ const Login: React.FC = () => {
         }
         ok();
         // Signed in
-        dismissLoading();
         presentToast({
           message: "Login Successful",
           buttons: [{ text: 'hide', handler: () => dismissToast() }],
@@ -110,11 +106,12 @@ const Login: React.FC = () => {
         })
       })
       .catch((error) => {
-        dismissLoading();
         const errorMessage = error.message;
-        loginFailed();
+        presentToast({
+          message: "Email or Password is incorrect!",
+          buttons: [{ text: 'hide', handler: () => dismissToast() }],
+        })
       });
-    history.push("/home");
   };
 
   const LoginForgot = () => {
@@ -147,7 +144,10 @@ const Login: React.FC = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
+        presentToast({
+          message: "Email is not registered!",
+          buttons: [{ text: 'hide', handler: () => dismissToast() }],
+        })
       });
   }
 
@@ -221,15 +221,6 @@ const Login: React.FC = () => {
           </IonGrid>
         </IonContent>
       )}
-
-      <IonToast
-        isOpen={!!toastMessage}
-        message={toastMessage}
-        duration={2000}
-        onDidDismiss={() => {
-          setToastMessage("");
-        }}
-      />
       <IonModal isOpen={showModal} className="ion-content-account">
         <IonToolbar className="ion-notoolbar-playing">
           {/* <IonTitle>Forgot Password</IonTitle> */}
