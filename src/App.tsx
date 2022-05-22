@@ -33,24 +33,14 @@ import UserContextProvider from "./provider/UserContextProvider";
 import MenuTabs from "./tabsmenu/MenuTabs";
 /* Theme variables */
 import "./theme/variables.css";
-
-
-
-
-
-
-
-
-
 setupIonicReact({
   hardwareBackButton: true,
   // animated: false,
 });
 
-
 const App: React.FC = () => {
   const [actionSheet, dismiss] = useIonActionSheet();
-  document.addEventListener('ionBackButton', (ev:any) => {
+  document.addEventListener('ionBackButton', (ev: any) => {
     ev.detail.register(10, () => {
       actionSheet({
         header: 'Are you sure you want to exit?',
@@ -75,9 +65,7 @@ const App: React.FC = () => {
         <IonApp>
           <SoundPlayer />
           <IonRouterOutlet>
-            <Route exact path="/">
-              <Redirect to="/default" />
-            </Route>
+            <Route path="/" exact={true} render={() => <Redirect to={'/default'} />} />
             <Route path="/default" component={UrlChanger} />
             <Route path="/welcome" exact={true}>
               <LandingScreen />
@@ -89,9 +77,7 @@ const App: React.FC = () => {
               <Login />
             </Route>
             <Route path="/playing" component={Playing} exact />
-            <Route path="/record-voice" exact={true} >
-              <RecordVoice />
-            </Route>
+            <Route path="/record-voice" exact={true} component={RecordVoice} />
             <Route path="/register" exact={true}>
               <Register />
             </Route>

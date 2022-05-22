@@ -1,5 +1,7 @@
 import { MusicControls } from '@awesome-cordova-plugins/music-controls/';
 import { IonCol, IonRow, IonToolbar } from "@ionic/react";
+import { updateProfile } from 'firebase/auth';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import React, { useEffect, useRef, useState } from "react";
 import { default as AudioPlayer, default as H5AudioPlayer } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
@@ -24,6 +26,7 @@ const waitForElement = (sel: any, cb: any) => {
 
 
 const SoundPlayer: React.FC = () => {
+  const db = getFirestore();
   const [top, setTop] = useState(0);
   const [disable, setDisable] = useState(false);
   const Changer = document.getElementById("classChanger")!;
@@ -36,9 +39,9 @@ const SoundPlayer: React.FC = () => {
   const mediaplayer = useRef<H5AudioPlayer>(null);
   const musicControls = MusicControls;
   const text = document.getElementsByClassName("rhap_header")[0];
-  const textControl = document.getElementsByClassName("rhap_header");
-
-
+  const location = useLocation().pathname;
+  console.log(location);
+  
 
   if (text) {
     text.addEventListener("click", e => {
@@ -154,10 +157,6 @@ const SoundPlayer: React.FC = () => {
     }
   }
 
-
-  const location = useLocation().pathname;
-
-
   useEffect(() => {
     waitForElement('ion-tab-bar', (tabBar: any) => {
       if (tabBar) {
@@ -176,6 +175,12 @@ const SoundPlayer: React.FC = () => {
       musicControls.updateIsPlaying(false);
       setDisable(true);
     }
+    else if (location === "/profile") {
+      setDisable(false);
+      if (Changer != null) {
+        Changer.style.left = "0px"
+      }
+    }
     if (location === "/register") {
       musicControls.updateIsPlaying(false);
       setDisable(true);
@@ -186,18 +191,25 @@ const SoundPlayer: React.FC = () => {
     if (location === "/record-voice") {
       setDisable(true);
     }
+    if (location === "/upload-voice") {
+      setDisable(false);
+    }
+    if (location.toLowerCase().includes("/chat")) {
+      if (Changer != null) {
+        Changer.style.left = "-999px"
+        console.log("chat")
+      }
+    }
+    if (location.toLowerCase().includes("/another-profile")) {
+      Changer.style.left = "0px"
+    }
     if (location === "/edit-profile") {
       Changer.style.left = "-999px"
     }
-    if (location === "/profile") {
-      setDisable(false);
-      if (Changer != null) {
-        Changer.style.left = "0px"
-      }
-    }if (location === "/playing") {
+    if (location === "/playing") {
       if (ToolbarPlaying != null) {
         Changer.style.left = "0px"
-        Changer.style.bottom = "107px"
+        Changer.style.bottom = "67px"
         ToolbarPlaying.classList.add("ion-notoolbar-playing");
         if (state.ui.initiate == true) {
           text.classList.add("hide");
@@ -206,6 +218,7 @@ const SoundPlayer: React.FC = () => {
     }
     else {
       if (ToolbarPlaying != null) {
+        // Changer.style.left = "0px"
         Changer.style.bottom = "57px";
         ToolbarPlaying.classList.remove("ion-notoolbar-playing");
         text.classList.remove("hide");
@@ -214,6 +227,20 @@ const SoundPlayer: React.FC = () => {
     }
     return
   }, [location]);
+
+  const PlusPlay = async () => {
+    console.log("sss");
+    const docRef = doc(db, 'sounds', track.id);
+    try {
+      await setDoc(docRef, {
+        ...track,
+        play: track.play + 1
+      });
+      return
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
   if (!playing) {
@@ -249,7 +276,7 @@ const SoundPlayer: React.FC = () => {
                   onPlay={() => { { mediamusicControls(); musicControls.updateIsPlaying(true) } }}
                   // onPlaying={() => { musicControls.updateIsPlaying(true) }}
                   onPause={() => { musicControls.updateIsPlaying(false) }}
-                  onEnded={() => dispatch(nextTrack())}
+                  onPlaying={() => { PlusPlay() }}
                   onClickPrevious={() => dispatch(prevTrack())}
                   onClickNext={() => dispatch(nextTrack())}
                 ></AudioPlayer>

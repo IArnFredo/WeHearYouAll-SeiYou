@@ -11,8 +11,10 @@ import {
   homeOutline,
   searchOutline,
 } from "ionicons/icons";
+import { useContext } from "react";
 import { Route, Switch, withRouter } from "react-router";
 import AnotherProfile from "../pages/AnotherProfile";
+import Chatting from "../pages/Chatting";
 import EditProfile from "../pages/EditProfile";
 import EditVoice from "../pages/EditVoice";
 import Home from "../pages/Home";
@@ -21,17 +23,22 @@ import Search from "../pages/Search";
 import SoundPlayer from "../pages/SoundPlayer";
 import UploadVoice from "../pages/UploadVoice";
 import YourVoiceList from "../pages/YourVoiceList";
+import { userContext } from "../provider/User";
 
 const MenuTabs: React.FC = () => {
+  const user = useContext(userContext);
+
+  if (!user) return null;
   return (
     <>
       <IonTabs>
-        <IonRouterOutlet>
+        <IonRouterOutlet ionPage>
           <Route exact path="/search">
             <Search />
           </Route>
           <Route exact path="/home" component={Home} />
-          <Route exact path="/another-profile/:userID" component={AnotherProfile} />
+          <Route exact path="/another-profile/" component={AnotherProfile} />
+          <Route exact path="/chat/" component={Chatting} />
           <Route path="/profile" component={Profile} />
           <Route path="/edit-profile" exact>
             <EditProfile />
@@ -49,7 +56,7 @@ const MenuTabs: React.FC = () => {
             <IonIcon icon={searchOutline} />
             <IonLabel>Search</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/profile">
+          <IonTabButton tab="tab3" href={user.loggedIn == false ? '/login' : '/profile'}>
             <IonIcon icon={ellipsisVerticalCircleOutline} />
             <IonLabel>Profile</IonLabel>
           </IonTabButton>

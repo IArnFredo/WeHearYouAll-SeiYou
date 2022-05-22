@@ -52,11 +52,36 @@
     font-size: 12px;
 }
 
-.vList {
+.voices-vList {
     border-radius: 10px;
-    margin: 5px;
+    margin: 10px 7px 0 3px;
     height: 45px;
     --background: var(--ion-color-primary);
+    box-shadow: 4px 4px 0px #2d3958;
+    transition: transform 200ms, box-shadow 200ms;
+}
+
+.voices-vList:active {
+    transform: translateY(4px) translateX(4px);
+    box-shadow: #2d3958 0px 0px 0px;
+}
+
+.artist-vList {
+    border-radius: 10px;
+    margin: 10px 7px 0 3px;
+    height: 45px;
+    --background: var(--ion-color-primary);
+    box-shadow: 4px 4px 0px #2d3958;
+    transition: transform 200ms, box-shadow 200ms;
+}
+
+.artist-vList:active {
+    transform: translateY(4px) translateX(4px);
+    box-shadow: #2d3958 0px 0px 0px;
+}
+
+.artist {
+    --background: rgba(135, 188, 218,1);
 }
 
 .avatar {

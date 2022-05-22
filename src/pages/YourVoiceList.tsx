@@ -1,5 +1,5 @@
-import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol, useIonLoading } from '@ionic/react';
-import { trashSharp, createSharp } from 'ionicons/icons';
+import { IonButtons, IonBackButton, IonContent, IonList, IonAvatar, IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonAlert, IonToast, IonToolbar, IonText, IonPage, IonRow, IonCol, useIonLoading, IonButton, IonTitle } from '@ionic/react';
+import { trashSharp, createSharp, arrowBackCircle, arrowBackOutline } from 'ionicons/icons';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useRef, useState } from 'react';
 import { Redirect, useHistory, useLocation } from 'react-router';
@@ -11,7 +11,7 @@ import { deleteObject, getStorage, ref, StringFormat } from 'firebase/storage';
 import { exit } from 'process';
 
 
-const YourVoiceList = (props:any) => {
+const YourVoiceList = (props: any) => {
   const [toastMessage, setToastMessage] = useState('');
   const [startDeleting, setStartDeleting] = useState(false);
   const slidingOptionRef = useRef<HTMLIonItemSlidingElement>(null);
@@ -25,22 +25,22 @@ const YourVoiceList = (props:any) => {
   const { state, dispatch } = useSoundsContext();
   const open = isPlayerOpen(state);
   const [loading, dismissLoading] = useIonLoading();
-  console.log(props);
-  
+
   useEffect(() => {
     if (user != undefined) {
       onSnapshot(query(collection(db, "sounds"), where("UserID", "==", user.userId)), (querySnapshot) =>
         setVoices(querySnapshot.docs.map((doc) => doc.data()))
       )
+      return;
     } else {
       setVoices([]);
     }
     return;
   }, [])
 
-  const startEditVoiceHandler = () => {
+  const startEditVoiceHandler = (voice:any) => {
+    localStorage.setItem('voiceID', voice);
     slidingOptionRef.current?.closeOpened();
-    console.log('Edit voice');
     history.push('/edit-voice');
   };
 
@@ -53,7 +53,8 @@ const YourVoiceList = (props:any) => {
   function deleteVoiceHandler() {
     loading({
       message: 'Deleting voice...',
-      spinner: 'crescent'
+      spinner: 'crescent',
+      duration: 500,
     })
     async function fetchData() {
       await deleteDoc(doc(db, "sounds", voiceID));
@@ -61,16 +62,16 @@ const YourVoiceList = (props:any) => {
 
       // Delete the file
       deleteObject(soundsRef).then(() => {
-        dismissLoading();
+
       }).catch((error) => {
         // Uh-oh, an error occurred!
       });
-
       setStartDeleting(false);
       setToastMessage("Deleted voices");
       return
     }
     fetchData();
+    dismissLoading();
   };
 
   const playingVoiceHandler = useCallback(sound => {
@@ -94,37 +95,44 @@ const YourVoiceList = (props:any) => {
         message={toastMessage}
         duration={2000}
         onDidDismiss={() => { setToastMessage('') }} />
-      <IonToolbar class="ion-toolbar-yourvoice">
+      <IonToolbar class="ion-toolbar-yourvoice ion-margin-top">
         <IonButtons slot="start">
-          <IonBackButton defaultHref={from == "/upload-voice" ? "/profile" : "/profile"}/>
+          <IonButton routerLink='/profile'>
+            <IonIcon size='large' icon={arrowBackOutline}></IonIcon>
+          </IonButton>
         </IonButtons>
-        <IonText class="ion-margin">Your Voices</IonText>
+        <IonTitle>Your Voices</IonTitle>
       </IonToolbar>
       <IonContent class='ion-content-yourvoice'>
         <IonRow>
           <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
             <h3 className="ion-margin ion-text-center">Voices</h3>
             <IonList>
-              {voices.map((voice: any, index: any) => (
-                <IonItemSliding key={index} ref={slidingOptionRef}>
-                  <IonItemOptions side="end">
-                    <IonItemOption className="sliding" color="warning" onClick={startEditVoiceHandler}>
-                      <IonIcon slot="icon-only" icon={createSharp}></IonIcon>
-                    </IonItemOption>
-                    <IonItemOption className="sliding" color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
-                      <IonIcon slot="icon-only" icon={trashSharp}></IonIcon>
-                    </IonItemOption>
-                  </IonItemOptions>
+              {voices.length == 0 && (
+                <IonTitle>
+                  User has no voices
+                </IonTitle>
+              )}
 
-                  <IonItem className="list item-list-color-yourvoice " lines="full"
-                    button
-                    onClick={() => playingVoiceHandler(voice)}>
-                    <IonAvatar slot="start">
-                      <img src={voice.images} alt="" />
-                    </IonAvatar>
-                    <IonLabel>{voice.name}</IonLabel>
-                  </IonItem>
-                </IonItemSliding>
+              {voices.map((voice: any, index: any) => (
+                  <IonItemSliding key={index} ref={slidingOptionRef}>
+                    <IonItemOptions side="end">
+                      <IonItemOption expandable className="sliding" color="warning" onClick={startEditVoiceHandler.bind(null,voice.id)}>
+                        <IonIcon slot="icon-only" icon={createSharp}></IonIcon>
+                      </IonItemOption>
+                      <IonItemOption className="sliding" color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
+                        <IonIcon slot="icon-only" icon={trashSharp}></IonIcon>
+                      </IonItemOption>
+                    </IonItemOptions>
+                    <IonItem className="list item-list-color-yourvoice " lines="full"
+                      button
+                      onClick={() => playingVoiceHandler(voice)}>
+                      <IonAvatar slot="start">
+                        <img src={voice.images} alt="" />
+                      </IonAvatar>
+                      <IonLabel>{voice.name}</IonLabel>
+                    </IonItem>
+                  </IonItemSliding>
               ))}
             </IonList>
           </IonCol>

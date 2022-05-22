@@ -1,10 +1,11 @@
+
+import React, { useCallback } from "react";
 import {
   IonAvatar, IonCol, IonContent, IonGrid, IonItem, IonLabel,
   IonList, IonPage, IonRow
-} from "@ionic/react";
-import React, { useCallback } from "react";
+} from "ionic/react";
 import 'react-h5-audio-player/lib/styles.css';
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { getMostpopular, getTracks, isPlayerOpen, playTrack, useSoundsContext } from "../provider/Sounds";
 import "./Home.css";
 
@@ -20,8 +21,10 @@ const Home: React.FC = () => {
     dispatch(playTrack(sound));
   }, []);
   if (open == true) {
-    history.push("/playing");
+    // history.push("/playing");
+    return <Redirect to="/playing" />;
   }
+
   return (
     <IonPage className="bg-app-home">
       <IonContent className="home-content">

@@ -152,10 +152,10 @@ const RecordVoice: React.FC = () => {
           <img src="../assets/images/playButton.png" alt="" />
         </IonButton>
         <IonRow className='ion-justify-content-center ion-margin-top'>
-          <IonButton className='buttonSize' shape='round' onClick={deleteFile}>Delete</IonButton>
+          <IonButton id='rec-Button' className='buttonSize' shape='round' onClick={deleteFile}>Delete</IonButton>
         </IonRow>
         <IonRow className='ion-justify-content-center'>
-          <IonButton shape='round' disabled={disabledSubmitBtn} onClick={Continue}>Continue</IonButton>
+          <IonButton id='rec-Button' shape='round' disabled={disabledSubmitBtn} onClick={Continue}>Continue</IonButton>
         </IonRow>
       </IonContent>
     </IonPage>

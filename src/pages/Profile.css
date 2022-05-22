@@ -5,8 +5,8 @@
     margin: auto;
     margin-bottom: 10%;
     margin-top: 10%;
-    width: 52vw;
-    height: 52vw;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     overflow: hidden;
     /* commented for demo
@@ -35,7 +35,7 @@
     padding-top: 0px;
 }
 
-ion-button {
+#profile-Button{
     --background: #F7BF50;
     --background-focused: #bf7f00;
     --background-hover: #bf7f00;
@@ -47,7 +47,41 @@ ion-button {
 
 .vList {
     --background: #C4C4C4;
+    border-radius: 10px;
+    margin: 0px 7px 0 3px;
+    box-shadow: 4px 4px 0px #2d3958;
+    transition: transform 200ms, box-shadow 200ms;
 }
 
+.vList:active {
+    transform: translateY(4px) translateX(4px);
+    box-shadow: #2d3958 0px 0px 0px;
+}
 
+.name-profile{
+    padding: 0;
+    margin: 10px 10px 4px 10px;
+}
 
+.genderAge-profile {
+    margin: 10px;
+}
+
+.chatBtn {
+    margin: 10px;
+}
+
+.animated-btn {
+    color: #FFF;
+    font-weight: bold;
+    margin: 0px 2px 0px -2px;
+    border-radius: 50px;
+    box-shadow: 4px 4px 0px #000000;
+    transition: transform 200ms, box-shadow 200ms;
+}
+
+.animated-btn:active {
+    color: #000;
+    transform: translateY(4px) translateX(4px);
+    box-shadow: #2d3958 0px 0px 0px;
+}

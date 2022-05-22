@@ -130,7 +130,7 @@ const Search: React.FC = () => {
                   {searchVoiceHandler().map((voice) => (
                     <IonItem
                       key={voice.id}
-                      className='vList item-list-color-search'
+                      className='voices-vList item-list-color-search'
                       lines='full'
                       button
                       onClick={() => playVoiceHandler(voice)}
@@ -155,7 +155,7 @@ const Search: React.FC = () => {
                   {searchUserHandler().map((user) => (
                     <IonItem
                       key={user.id}
-                      className='vList item-list-color-search'
+                      className='artist-vList artist item-list-color-search'
                       lines='full'
                       button
                       routerLink={`/another-profile/${user.id}`}

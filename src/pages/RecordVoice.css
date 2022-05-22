@@ -10,6 +10,16 @@
     --background: transparent;
 }
 
+#rec-Button{
+    --background: #F7BF50;
+    --background-focused: #bf7f00;
+    --background-hover: #bf7f00;
+    --color: #000;
+    text-transform: none;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
 .recButton {
     --border-radius: 100%;
     width: 220px;

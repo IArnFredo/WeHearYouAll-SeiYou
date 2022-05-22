@@ -11,14 +11,22 @@ body {
   padding-top: 1rem;
 }
 
+.big-container{
+  display: flex;
+  margin-bottom: 100px !important;
+  --padding-bottom: 20px !important;
+  width: 100%;
+}
+
 .base-container {
     padding-top: 10px;
+    margin-bottom: 10px;
     width: 100%;
 }
 
 .friend-text-div {
   display: flex;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
 }
 
 .friend-text-div > img {
@@ -26,10 +34,10 @@ body {
   align-self: flex-end;
 }
 
-.friend-text-container {
-  width: 10rem;
+.msg-time{
   display: flex;
   flex-direction: column;
+  font-size: 13px;
 }
 
 .friend-text {
@@ -39,37 +47,53 @@ body {
   height: fit-content;
   width: fit-content;
   padding: 0.5rem 1rem;
-  margin: 0.12rem 0.5rem;
+  margin-right: 0.5rem;
+  margin-left: 0rem;
+  word-break: break-all;
 }
 
 .my-text-div {
   display: flex;
+  margin-right: 1rem;
   justify-content: flex-end;
 }
+
 .my-text-container {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  width: fit-content;
 }
 
+.friend-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+}
+
+
+
 .my-text {
+  display: flex;
   background: linear-gradient(
       180deg,
-      rgb(247, 201, 111) 0%,
-      rgb(247, 178, 42) 51%,
+      rgb(252, 223, 166) 0%,
+      rgb(252, 196, 85) 51%,
       rgba(255, 170, 0, 1) 92%
     )
     no-repeat center;
   background-attachment: fixed;
   color: rgb(0, 0, 0);
   border-radius: 0.5rem 0.2rem 0.2rem 0.5rem;
-  height: fit-content;
   width: fit-content;
   padding: 0.5rem 1rem;
-  margin: 0.12rem 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0rem;
+  word-break: break-all;
 }
 
-.my-text-container > div:first-child {
+/* .my-text-container > div:first-child {
   border-radius: 0.5rem 1rem 0.2rem 0.5rem;
 }
 .my-text-container > div:last-child {
@@ -80,4 +104,33 @@ body {
 }
 .friend-text-container > div:last-child {
   border-radius: 0.5rem 0.2rem 0.5rem 1rem;
+} */
+
+.user_status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
 }
+
+.online{
+  background: #34eb52;
+}
+
+.offline{
+  background: #eb4634;
+}
+.container-half{
+  width: 50%;
+}
+
+.chatbox__title-avatar-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbox__title{
+  display: flex;
+}
+
+

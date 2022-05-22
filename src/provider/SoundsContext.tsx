@@ -1,6 +1,9 @@
+import { useIonActionSheet } from "@ionic/react";
 import { collection, getFirestore, onSnapshot, query } from "firebase/firestore";
 import React, { useEffect, useReducer, useState } from "react";
+import app from "../firebaseConfig";
 import { reducer, soundsContext } from "./Sounds";
+import { App as ap } from '@capacitor/app';
 const initialState = {
     playing: {
         index: 0,
@@ -31,6 +34,25 @@ const initialState = {
 export const instigate = initialState;
 
 const SoundsContext: React.FC = (props) => {
+    const [actionSheet, dismiss] = useIonActionSheet();
+    document.addEventListener('ionBackButton', (ev: any) => {
+        ev.detail.register(10, () => {
+          actionSheet({
+            header: 'Are you sure you want to exit?',
+            buttons: [{
+              text: 'Yes',
+              handler: () => {
+                ap.exitApp();
+              }
+            }, {
+              text: 'No',
+              handler: () => {
+                dismiss();
+              }
+            }]
+          })
+        })
+      });
     const initiate = initialState;
     const db = getFirestore();
     let [state, dispatch] = useReducer(reducer, initiate);
@@ -40,22 +62,21 @@ const SoundsContext: React.FC = (props) => {
     const [mostData, setMostData] = useState<Array<any>>([]);
 
     useEffect(() => {
-        const q = query(
-            collection(db, "sounds")
-        );
-        onSnapshot(q, (querySnapshot) => {
+        onSnapshot(collection(db, "sounds"), (querySnapshot) => {
+            console.log(querySnapshot.docs);
+            console.log(querySnapshot.docChanges);
             const data = querySnapshot.docs.map((doc) => doc.data());
             let most = JSON.parse(JSON.stringify(data));
             most.sort((a: any, b: any) => (a.play <= b.play) ? 1 : -1);
-            setMostData(most);
             setAllData(data);
+            setAllData(data);
+            setMostData(most);
         })
         return;
     }, []);
-
+    state.music.tracks = allData;
     state.music.tracks = allData;
     state.music.mostPopular = mostData;
-
     return (
         <soundsContext.Provider value={value}>
             {props.children}

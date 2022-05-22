@@ -31,7 +31,7 @@
 
 .home-vList {
     border-radius: 10px;
-    margin: 5px;
+    margin: 5px 6px 5px 4px;
     height: 55px;
     /* --background: #C4C4C4; */
     /* --background: rgb(138,138,138);
@@ -43,14 +43,14 @@
 }
 
 .home-vList:active {
-    transform: translate(4px) translateX(4px);
+    transform: translateY(4px) translateX(4px);
     box-shadow: #505b74 0px 0px 0px;
 }
 
 .title-text {
-    font-size: 11px;
+    font-size: 10px;
     padding: 0;
-    margin: 4px;
+    margin: 2px;
 }
 
 .float-btn {

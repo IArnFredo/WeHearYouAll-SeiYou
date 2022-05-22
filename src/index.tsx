@@ -8,6 +8,9 @@ import { BrowserRouter as Route } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import SoundsContext from './provider/SoundsContext';
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
+
+
+
 ReactDOM.render(
   // <React.StrictMode>
   //     </React.StrictMode>,

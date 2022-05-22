@@ -140,18 +140,29 @@ const Register: React.FC = () => {
           console.error("Error updating profile: ", error);
         });
         addData(pathReference, user.uid);
-        sendEmailVerification(auth.currentUser!).then(() => {
-          dismiss();
-          present({
-            message: "Verify your email to finish signing up for SeiYou!",
-            header: "Please Check Your Email",
-            buttons: [{
-              text: "OK", handler: () => {
-                history.push("/profile");
-              },
-            }],
-          });
+
+        dismiss();
+        present({
+          // auto login
+          message: "Registration Successful!, you account has been auto logged in.",
+          header: "Success, Welcome!",
+          buttons: [{
+            text: "OK", handler: () => {
+              history.push("/profile");
+            },
+          }],
         });
+        // sendEmailVerification(auth.currentUser!).then(() => {
+        //   present({
+        //     message: "Verify your email to finish signing up for SeiYou!",
+        //     header: "Please Check Your Email",
+        //     buttons: [{
+        //       text: "OK", handler: () => {
+        //         history.push("/profile");
+        //       },
+        //     }],
+        //   });
+        // });
       })
       .catch((error) => {
         dismiss();
@@ -178,6 +189,7 @@ const Register: React.FC = () => {
           dob: dob.current!.value,
           gender: gender,
           photoUrl: pathReference,
+          isOnline: true,
         });
       } catch (e) {
         console.error("Error adding document: ", e);

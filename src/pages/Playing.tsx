@@ -1,10 +1,11 @@
 import {
-  IonButtons, IonCol, IonContent, IonIcon, IonPage, IonRow, IonTitle, IonToolbar
+  IonButton,
+  IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonIcon, IonItem, IonPage, IonRow, IonTitle, IonToolbar
 } from "@ionic/react";
 import {
   alertCircleOutline, arrowBackCircle
 } from "ionicons/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import 'react-h5-audio-player/lib/styles.css';
 import { Redirect } from "react-router";
 import { closePlayer, getCurrentTrack, getPlaying, getTracks, isPlayerOpen, useSoundsContext } from "../provider/Sounds";
@@ -19,15 +20,20 @@ const Playing: React.FC = () => {
   const playing = getPlaying(state);
   const trackSounds = getTracks(state);
   const track = trackSounds[state.playing.index];
+
+  useEffect(()=> {
+    
+  },[])
+  
   if (!playing) {
     return null;
   }
+  console.log(state);
+
+
 
   const open = isPlayerOpen(state);
   const currentTrack = getCurrentTrack(state, state.playing.index);
-
-
-  let gender = "male";
 
   // if (open == false) {
   //   return <Redirect to={'/home'}/>
@@ -41,15 +47,17 @@ const Playing: React.FC = () => {
     dispatch(closePlayer());
   }
 
+
   if (open == false) {
-    return <Redirect to={'/home'}/>
+    return <Redirect to={'/home'} />
   }
+
 
   return (
     <>
-      <IonPage className={gender === "female" ? "" : "playing-app"}>
+      <IonPage>
         <IonToolbar class="ion-notoolbar-playing">
-          <IonButtons class="ion-margin-start" style={{marginTop : '10px'}} slot="start" onClick={ChangeURLandState}>
+          <IonButtons class="ion-margin-start" style={{ marginTop: '10px' }} slot="start" onClick={ChangeURLandState}>
             <IonIcon size="large" icon={arrowBackCircle} />
           </IonButtons>
 
@@ -58,10 +66,13 @@ const Playing: React.FC = () => {
         <IonContent className="ion-padding ion-content-playing">
           <IonRow>
             <IonCol className="ion-text-center ion-margin-top">
+              <div className="radius-pic-player-cont">
               <img
-                src={"assets/images/allphen.png"}
-                className="radius-pic"
+                src={currentTrack.images}
+                className="radius-pic-player"
                 alt="" />
+              </div>
+
             </IonCol>
           </IonRow>
           <IonRow>
@@ -71,8 +82,21 @@ const Playing: React.FC = () => {
                 <span style={{ color: "grey", fontSize: "15px" }}>{currentTrack.userName}</span>
               </IonTitle>
             </IonCol>
-            <IonCol className="ion-text-right ion-margin-top ion-margin-end">
-              <IonIcon icon={alertCircleOutline} size="large"></IonIcon>
+            <IonCol size="2" className="ion-text-right ion-margin-top ion-margin-end">
+              <IonButtons>
+                <IonButton routerLink={`/another-profile/${currentTrack.UserID}`}>
+                  <IonIcon icon={alertCircleOutline} size="large"></IonIcon>
+                </IonButton>
+              </IonButtons>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonCard color="dark">
+                <IonCardContent>
+                  {currentTrack.description}
+                </IonCardContent>
+              </IonCard>
             </IonCol>
           </IonRow>
         </IonContent>

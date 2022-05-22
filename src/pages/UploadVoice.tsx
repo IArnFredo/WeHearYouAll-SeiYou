@@ -1,3 +1,4 @@
+import { Chooser } from '@awesome-cordova-plugins/chooser';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import {
@@ -6,9 +7,7 @@ import {
   IonButtons,
   IonCol,
   IonContent,
-  IonGrid,
-  IonIcon,
-  IonInput,
+  IonGrid, IonInput,
   IonItem,
   IonLabel,
   IonPage,
@@ -16,21 +15,16 @@ import {
   IonText,
   IonTextarea,
   IonTitle,
-  IonToolbar,
-  useIonActionSheet,
-  useIonAlert,
-  useIonLoading,
+  IonToolbar, useIonLoading,
   useIonToast,
-  useIonViewDidEnter,
-  useIonViewWillEnter
+  useIonViewDidEnter
 } from '@ionic/react';
-import { doc, DocumentData, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getFirestore, setDoc, Timestamp } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { pencilOutline, phonePortraitOutline } from 'ionicons/icons';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Redirect, useHistory, useLocation } from 'react-router';
+import React, { useContext, useRef, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import { userContext } from '../provider/User';
-import { Chooser } from '@awesome-cordova-plugins/chooser'
+import './EditProfile.css';
 import './UploadVoice.css';
 
 const UploadVoice: React.FC = () => {
@@ -46,6 +40,8 @@ const UploadVoice: React.FC = () => {
   const history = useHistory();
   const from = useLocation().state;
   const [, setSelectedFile] = useState<File>();
+  console.log(user);
+  
 
   const [takenPhoto, setTakenPhoto] = useState<{
     path: string | undefined,
@@ -114,7 +110,7 @@ const UploadVoice: React.FC = () => {
           name: enteredName,
           description: enteredDesc,
           soundsURL: url,
-          uploadTime: new Date().toISOString(),
+          uploadTime: Timestamp.fromDate(new Date()),
           userName: user.userData.displayName,
           play: 1,
           images: urlPhoto != '' ? urlPhoto : 'https://firebasestorage.googleapis.com/v0/b/seiyou-e9555.appspot.com/o/imagesounds%2Fdedeb100838e24e145964eb9310172f2.jpg?alt=media&token=a75d3384-bbf6-4be2-9874-2c04a27a934a',
@@ -122,7 +118,7 @@ const UploadVoice: React.FC = () => {
         dismissLoading();
         toast({
           message: 'Audio Uploaded',
-          duration: 2000,
+          duration: 1000,
         });
         setTakenSounds(undefined);
         setRecordVoice(false);
