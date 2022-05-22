@@ -17,7 +17,8 @@ import {
   IonTitle,
   IonToolbar, useIonLoading,
   useIonToast,
-  useIonViewDidEnter
+  useIonViewDidEnter,
+  useIonViewWillLeave
 } from '@ionic/react';
 import { doc, getFirestore, setDoc, Timestamp } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -40,7 +41,7 @@ const UploadVoice: React.FC = () => {
   const history = useHistory();
   const from = useLocation().state;
   const [, setSelectedFile] = useState<File>();
-  console.log(user);
+
   
 
   const [takenPhoto, setTakenPhoto] = useState<{
@@ -53,7 +54,12 @@ const UploadVoice: React.FC = () => {
     path: string | undefined,
     preview: string | Uint8Array,
   }>();
-  console.log(recordVoice);
+
+  useIonViewWillLeave(()=>{
+    setRecordVoice(false);
+    setTakenSounds(undefined);
+  })
+
   
   useIonViewDidEnter(() => {
     const state: any = location.state;
@@ -161,7 +167,6 @@ const UploadVoice: React.FC = () => {
         } else {
           const storageRef = ref(storage, `sounds/${id}.mp3`);
           uploadBytes(storageRef, blob).then((snapshot) => {
-            console.log(snapshot);
             getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
               saveData(url, '');
             }).catch((error) => {

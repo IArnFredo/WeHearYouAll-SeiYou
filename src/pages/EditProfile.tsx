@@ -148,7 +148,6 @@ const EditProfile: React.FC = () => {
     })
     setDisabledSubmitBtn(true);
     if (!name || name.toString().trim().length === 0 || !gender || !selectedDate) {
-      console.log(takenPhoto);
       setDisabledSubmitBtn(false);
       return;
     }
@@ -160,11 +159,9 @@ const EditProfile: React.FC = () => {
       // store image in firebase storage
       const storageRef = ref(storage, `images/${photoName}`);
       uploadBytes(storageRef, photoBlob).then((snapshot) => {
-        console.log('photo uploaded', snapshot);
         getDownloadURL(ref(storage, `images/${photoName}`)).then((photoUrl) => {
           // add memory to firestore
           saveUpdate(photoUrl);
-          console.log('photo url:', photoUrl);
         }).catch((err) => console.error(err));
       });
     } else {

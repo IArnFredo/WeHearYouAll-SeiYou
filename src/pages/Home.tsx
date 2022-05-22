@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import {
   IonAvatar, IonCol, IonContent, IonGrid, IonItem, IonLabel,
   IonList, IonPage, IonRow
-} from "ionic/react";
+} from "@ionic/react";
 import 'react-h5-audio-player/lib/styles.css';
 import { Redirect, useHistory } from "react-router";
 import { getMostpopular, getTracks, isPlayerOpen, playTrack, useSoundsContext } from "../provider/Sounds";

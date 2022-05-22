@@ -13,7 +13,6 @@ ion-title {
     width: 52vw;
     height: 52vw;
     border-radius: 20%;
-    overflow: hidden;
     /* commented for demo
     float: left;
     margin-left: 125px;
@@ -38,11 +37,6 @@ ion-title {
 .ion-content-playing {
     --background: transparent;
 }
-
-
-
-
-
 
 .rhap_container {
     box-sizing: border-box;

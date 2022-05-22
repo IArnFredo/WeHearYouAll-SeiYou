@@ -72,7 +72,7 @@
 }
 
 .animated-btn {
-    color: #FFF;
+    color: rgb(255, 255, 255);
     font-weight: bold;
     margin: 0px 2px 0px -2px;
     border-radius: 50px;

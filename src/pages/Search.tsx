@@ -8,7 +8,7 @@ import {
   IonSegment,
   IonSegmentButton
 } from '@ionic/react';
-import { collection, DocumentData, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, DocumentData, getDocs, getFirestore, onSnapshot } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 import { playTrack, useSoundsContext } from '../provider/Sounds';
 import './Search.css';
@@ -38,24 +38,26 @@ const Search: React.FC = () => {
   }, []);
 
   const fetchData = useCallback(async () => {
-    const userCollectionRef = collection(db, 'users');
-    const querySnapshot = await getDocs(userCollectionRef);
+    // const userCollectionRef = collection(db, 'users');
+    // const querySnapshot = await getDocs(userCollectionRef);
 
+    onSnapshot(collection(db, "users"), (querySnapshot) => {
+      setUsersData(querySnapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      }));
+      return
+    })
     // set state
-    setUsersData(querySnapshot.docs.map((doc) => {
-      return { id: doc.id, ...doc.data() };
-    }));
     setTracks(state.music.tracks);
-
-    // append necessary user data to track
-    tracks.forEach((track: TrackTypes, trackIdx: number) => {
-      const userData = usersData.find((user: DocumentData) => user.id === track.UserID);
-      const updatedTrack: TrackTypes = { ...track, gender: userData!.gender, userName: userData!.name };
-      setTracks(currTracks => {
-        currTracks[trackIdx] = updatedTrack;
-        return currTracks;
+      // append necessary user data to track
+      tracks.forEach((track: TrackTypes, trackIdx: number) => {
+        const userData = usersData.find((user: DocumentData) => user.id === track.UserID);
+        const updatedTrack: TrackTypes = { ...track, gender: userData!.gender, userName: userData!.name };
+        setTracks(currTracks => {
+          currTracks[trackIdx] = updatedTrack;
+          return currTracks;
+        });
       });
-    });
   }, [db, state.music.tracks, tracks]);
 
   const searchVoiceHandler = () => {
@@ -66,7 +68,7 @@ const Search: React.FC = () => {
     }
     return tracks.filter((track: TrackTypes) => (
       track.name.toLowerCase().includes(searchText.toLowerCase()) &&
-      track.gender!.toLowerCase() === searchGender.toLowerCase()
+      track.gender! === searchGender
     ));
   };
 
@@ -78,7 +80,7 @@ const Search: React.FC = () => {
     }
     return usersData.filter((user: DocumentData) => (
       user.name.toLowerCase().includes(searchText.toLowerCase()) &&
-      user.gender.toLowerCase() === searchGender.toLowerCase()
+      user.gender === searchGender
     ));
   };
 
@@ -92,30 +94,30 @@ const Search: React.FC = () => {
         <IonRow>
           <IonCol size-sm='8' offset-sm='2' size-md='6' offset-md='3'>
 
-              <IonRow className='search-title ion-margin-top'>
-                <IonLabel className='ion-margin-vertical ion-margin-horizontal'>
-                  <b>Search</b>
-                </IonLabel>
-              </IonRow>
+            <IonRow className='search-title ion-margin-top'>
+              <IonLabel className='ion-margin-vertical ion-margin-horizontal'>
+                <b>Search</b>
+              </IonLabel>
+            </IonRow>
 
-              <IonSearchbar
-                className='searchBar'
-                value={searchText}
-                onIonChange={(e) => setSearchText(e.detail.value!)}
-                placeholder='Artist, Voices'
-              ></IonSearchbar>
+            <IonSearchbar
+              className='searchBar'
+              value={searchText}
+              onIonChange={(e) => setSearchText(e.detail.value!)}
+              placeholder='Artist, Voices'
+            ></IonSearchbar>
 
-              <IonSegment className='segment' value={searchGender} onIonChange={(e) => setSearchGender(e.detail.value!)}>
-                <IonSegmentButton className='segment-btn' value='all'>
-                  <IonLabel className='segment-label'>All</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton className='segment-btn' value='male'>
-                  <IonLabel className='segment-label'>Male</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton className='segment-btn' value='female'>
-                  <IonLabel className='segment-label'>Female</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
+            <IonSegment className='segment' value={searchGender} onIonChange={(e) => setSearchGender(e.detail.value!)}>
+              <IonSegmentButton className='segment-btn' value='all'>
+                <IonLabel className='segment-label'>All</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton className='segment-btn' value='Male'>
+                <IonLabel className='segment-label'>Male</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton className='segment-btn' value='Female'>
+                <IonLabel className='segment-label'>Female</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
 
           </IonCol>
         </IonRow>

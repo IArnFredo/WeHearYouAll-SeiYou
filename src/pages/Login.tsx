@@ -106,13 +106,12 @@ const Login: React.FC = () => {
         presentToast({
           message: "Login Successful",
           buttons: [{ text: 'hide', handler: () => dismissToast() }],
-          duration: 1000,
+          duration: 400,
         })
       })
       .catch((error) => {
         dismissLoading();
         const errorMessage = error.message;
-        console.log(errorMessage);
         loginFailed();
       });
     history.push("/home");

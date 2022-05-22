@@ -7,7 +7,6 @@ const Messages: React.FC<{ msg: any, user1: any }> = (data) => {
         scrollRef.current!.scrollIntoView({ behavior: "smooth" });
     })
     const scrollRef = useRef<null | HTMLDivElement>(null);
-    console.log(data);
     useEffect(() => {
         scrollRef.current!.scrollIntoView({ behavior: "smooth" });
     }, [data.msg])

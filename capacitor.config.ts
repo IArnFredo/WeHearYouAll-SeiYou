@@ -8,10 +8,6 @@ const config: CapacitorConfig = {
       splashFullScreen: true,
     },
   },
-  "server": {
-    "url": "http://192.168.100.32:8100",
-    "cleartext": true
-  },
   appId: 'com.seiyou.app',
   appName: 'SeiYou',
   webDir: 'build',

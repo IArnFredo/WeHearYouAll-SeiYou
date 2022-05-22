@@ -37,8 +37,8 @@ const MenuTabs: React.FC = () => {
             <Search />
           </Route>
           <Route exact path="/home" component={Home} />
-          <Route exact path="/another-profile/" component={AnotherProfile} />
-          <Route exact path="/chat/" component={Chatting} />
+          <Route exact path="/another-profile/:userID" component={AnotherProfile} />
+          <Route exact path="/chat/:userID" component={Chatting} />
           <Route path="/profile" component={Profile} />
           <Route path="/edit-profile" exact>
             <EditProfile />

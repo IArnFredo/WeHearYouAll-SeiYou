@@ -134,7 +134,6 @@ const EditVoice: React.FC = () => {
     })
     setDisabledSubmitBtn(true);
     if (!voiceNameRef || voiceNameRef.toString().trim().length === 0 || !descText || descText.toString().trim().length === 0) {
-      console.log(takenPhoto);
       setDisabledSubmitBtn(false);
       return;
     }
@@ -145,11 +144,9 @@ const EditVoice: React.FC = () => {
       // store image in firebase storage
       const storageRef = ref(storage, `imagesounds/${photoName}`);
       uploadBytes(storageRef, photoBlob).then((snapshot) => {
-        console.log('photo uploaded', snapshot);
         getDownloadURL(ref(storage, `imagesounds/${photoName}`)).then((photoUrl) => {
           // add memory to firestore
           saveUpdate(photoUrl);
-          console.log('photo url:', photoUrl);
         }).catch((err) => console.error(err));
       });
     } else {

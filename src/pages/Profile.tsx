@@ -23,10 +23,10 @@ import {
   useIonToast,
   useIonViewWillLeave
 } from "@ionic/react";
+import { clear } from "console";
 import { getAuth, signOut } from "firebase/auth";
 import {
-  collection, collectionGroup, doc, getDocs,
-  getFirestore,
+  collection, doc, getFirestore,
   onSnapshot, query, updateDoc, where
 } from "firebase/firestore";
 import {
@@ -76,7 +76,6 @@ const Profile: React.FC = () => {
         onSnapshot(q, (querySnapshot) => {
           const data = querySnapshot.docs.map((doc) => doc.data());
           setReadData(data);
-          localStorage.setItem("dob", JSON.stringify(data[0].dob));
         })
         AgeCal();
       }
@@ -107,9 +106,10 @@ const Profile: React.FC = () => {
     return;
   }, [db, user]);
 
+
   const AgeCal = () => {
     var today = new Date();
-    const birthDate = new Date(JSON.parse(localStorage.getItem("dob")!));
+    const birthDate = new Date(readData[0].dob);
     var age = today.getFullYear() - birthDate!.getFullYear();
     var m = today.getMonth() - birthDate!.getMonth();
     if (m < 0 || (m === 0 && today.getDate() < birthDate!.getDate())) {
@@ -118,6 +118,9 @@ const Profile: React.FC = () => {
     setAge(age);
   };
 
+  const interval = setInterval(()=>{
+    AgeCal();
+  },2000);
 
   const SignOut = () => {
     present({
@@ -147,18 +150,22 @@ const Profile: React.FC = () => {
                 presentToast({
                   message: 'Sign out successful',
                   buttons: [{ text: 'hide', handler: () => dismissToast() }],
-                  duration: 3000,
+                  duration: 1000,
                 });
               })
               .catch((error) => {
-                console.log(error);
+                console.error(error);
+                presentToast({
+                  message: 'Sign out failed',
+                  buttons: [{ text: 'hide', handler: () => dismissToast() }],
+                  duration: 1000,
+                });
               });
           },
         },
         {
           text: "No",
           handler: () => {
-            console.log("cancel");
             return;
           },
         },
@@ -200,7 +207,7 @@ const Profile: React.FC = () => {
           <IonRow>
             {readData.map((data) => (
               <>
-                <IonCol key={data.UserID} size-sm="8" offset-sm="2" size-md="6" offset-md="3">
+                <IonCol key={data.UserID} size="12">
                   <div className="avatar-profile-cont">
                     <img className="avatar-profile" src={data.photoUrl} />
                   </div>
@@ -214,10 +221,9 @@ const Profile: React.FC = () => {
                       <IonButton
                         color="secondary"
                         onClick={() => setShowModal(true)}
-                        id="trigger-button"
                         className="chatBtn animated-btn"
-                        // routerLink={`/chat/${data.UserID}`}
-                        shape="round" disabled={undefined} strong={undefined} size={undefined} fill={undefined} mode={undefined} expand={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined}                      >
+                        shape="round"
+                      >
                         Chat List &nbsp;
                         <IonIcon icon={chatboxEllipsesSharp} />&nbsp;
                       </IonButton>
@@ -227,26 +233,26 @@ const Profile: React.FC = () => {
 
                   <IonCardContent>
                     <IonButton id="profile-Button"
-                    routerLink="/edit-profile"
-                    expand="block"
-                    shape="round"
-                    className="animated-btn" disabled={undefined} strong={undefined} color={undefined} size={undefined} fill={undefined} mode={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined}                    >
+                      routerLink="/edit-profile"
+                      expand="full"
+                      shape="round"
+                      className="animated-btn">
                       <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
                       Edit Profile
                     </IonButton>
                     <IonButton id="profile-Button"
-                    routerLink="/your-voice-list"
-                    expand="block"
-                    shape="round"
-                    className="animated-btn" disabled={undefined} strong={undefined} color={undefined} size={undefined} fill={undefined} mode={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined}                    >
+                      routerLink="/your-voice-list"
+                      expand="block"
+                      shape="round"
+                      className="animated-btn">
                       <IonIcon className="button-icon" icon={playOutline} />&nbsp;
                       Your Voices
                     </IonButton>
                     <IonButton id="profile-Button"
-                    onClick={() => setShowActionSheet(true)}
-                    expand="block"
-                    shape="round"
-                    className="animated-btn" disabled={undefined} strong={undefined} color={undefined} size={undefined} fill={undefined} mode={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined}                    >
+                      onClick={() => setShowActionSheet(true)}
+                      expand="block"
+                      shape="round"
+                      className="animated-btn">
                       <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
                       Upload New Voices
                     </IonButton>
@@ -259,11 +265,11 @@ const Profile: React.FC = () => {
             <IonCol size-sm="8" offset-sm="2" size-md="6" offset-md="3">
               <IonCardContent>
                 <IonButton id="profile-Button"
-                expand="block"
-                shape="round"
-                onClick={SignOut}
-                color="danger"
-                className="animated-btn" disabled={undefined} strong={undefined} size={undefined} fill={undefined} mode={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined}                >
+                  expand="block"
+                  shape="round"
+                  onClick={SignOut}
+                  color="danger"
+                  className="animated-btn">
                   <IonIcon className="button-icon" icon={logOutOutline} />&nbsp;
                   Sign Out
                 </IonButton>
@@ -298,12 +304,11 @@ const Profile: React.FC = () => {
         ]}
       ></IonActionSheet>
       <IonModal isOpen={showModal}>
-
         <IonHeader translucent>
           <IonToolbar>
             <IonTitle>Chat List</IonTitle>
             <IonButtons slot="end">
-              <IonButton onClick={() => setShowModal(false)} disabled={undefined} strong={undefined} color={undefined} size={undefined} fill={undefined} mode={undefined} expand={undefined} onIonBlur={undefined} onIonFocus={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} buttonType={undefined} download={undefined} shape={undefined}>Close</IonButton>
+              <IonButton onClick={() => setShowModal(false)}>Close</IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -311,7 +316,7 @@ const Profile: React.FC = () => {
         <IonContent>
           {listChat.map((data) => (
             <>
-              <IonItem button routerLink={`/chat/${data.UserID}`} disabled={undefined} color={undefined} fill={undefined} mode={undefined} type={undefined} routerAnimation={undefined} href={undefined} rel={undefined} target={undefined} download={undefined} shape={undefined} lines={undefined} counter={undefined} detail={undefined} detailIcon={undefined}>
+              <IonItem key={data.UserID} button routerLink={`/chat/${data.UserID}`}>
                 <IonThumbnail slot="start">
                   <img src={data.photoUrl} />
                 </IonThumbnail>

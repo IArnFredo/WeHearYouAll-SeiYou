@@ -49,10 +49,10 @@ const RecordVoice: React.FC = () => {
     if (!recording) {
       return;
     }
-    VoiceRecorder.stopRecording().then(async (result) => {
+    VoiceRecorder.stopRecording().then(async (result:any) => {
       setRecording(false);
       if (result.value && result.value.recordDataBase64) {
-        console.log(result);
+
 
         const recordData = result.value.recordDataBase64;
         const id = new Date().getTime().toString();

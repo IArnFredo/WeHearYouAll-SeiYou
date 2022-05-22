@@ -64,7 +64,7 @@ const App: React.FC = () => {
       <SoundsContext>
         <IonApp>
           <SoundPlayer />
-          <IonRouterOutlet>
+          <Switch>
             <Route path="/" exact={true} render={() => <Redirect to={'/default'} />} />
             <Route path="/default" component={UrlChanger} />
             <Route path="/welcome" exact={true}>
@@ -85,12 +85,13 @@ const App: React.FC = () => {
               <Route path="/edit-voice" exact={true} component={MenuTabs} />
               <Route path="/upload-voice" exact={true} component={MenuTabs} />
               <Route path="/your-voice-list" exact={true} component={MenuTabs} />
-              <Route exact path="/another-profile/:userID" component={MenuTabs} />
+              <Route path="/chat/:userID" component={MenuTabs} />
+              <Route path="/another-profile/:userID" component={MenuTabs} />
               <Route exact path="/:tab(search)" component={MenuTabs} />
               <Route exact path="/:tab(home)" component={MenuTabs} />
               <Route exact={true} path="/:tab(profile)" component={MenuTabs} />
             </Switch>
-          </IonRouterOutlet>
+          </Switch>
         </IonApp>
       </SoundsContext>
     </UserContextProvider >

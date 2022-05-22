@@ -40,9 +40,7 @@ const SoundPlayer: React.FC = () => {
   const musicControls = MusicControls;
   const text = document.getElementsByClassName("rhap_header")[0];
   const location = useLocation().pathname;
-  console.log(location);
   
-
   if (text) {
     text.addEventListener("click", e => {
       if (state.ui.initiate == true) {
@@ -95,7 +93,6 @@ const SoundPlayer: React.FC = () => {
         events(action);
         function events(action: any) {
           const message = JSON.parse(action).message;
-          console.log(message);
           switch (message) {
             case 'music-controls-next':
               musicControls.updateIsPlaying(true);
@@ -197,7 +194,6 @@ const SoundPlayer: React.FC = () => {
     if (location.toLowerCase().includes("/chat")) {
       if (Changer != null) {
         Changer.style.left = "-999px"
-        console.log("chat")
       }
     }
     if (location.toLowerCase().includes("/another-profile")) {
@@ -229,7 +225,6 @@ const SoundPlayer: React.FC = () => {
   }, [location]);
 
   const PlusPlay = async () => {
-    console.log("sss");
     const docRef = doc(db, 'sounds', track.id);
     try {
       await setDoc(docRef, {
