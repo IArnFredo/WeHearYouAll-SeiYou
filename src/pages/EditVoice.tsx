@@ -49,7 +49,6 @@ const EditVoice: React.FC = () => {
   }>();
   const [, setSelectedFile] = useState<File>();
 
-
   useEffect(() => {
     setVoiceId(localStorage.getItem('voiceID')!);
     const voiceRef = localStorage.getItem('voiceID')!;
@@ -80,9 +79,9 @@ const EditVoice: React.FC = () => {
         images: photoUrl !== '' ? photoUrl : voices![0].images,
       });
       presentToast({
-        message: 'Your profile has been updated!',
+        message: 'Your voices has been updated!',
         buttons: [{ text: 'hide', handler: () => dismissToast() }],
-        duration: 3000,
+        duration: 2000,
       });
       history.push('/your-voice-list');
     } catch (error) {
@@ -129,7 +128,7 @@ const EditVoice: React.FC = () => {
     loading({
       message: 'Updating...',
       spinner: 'crescent',
-      duration: 4000,
+      duration: 500,
     })
     setDisabledSubmitBtn(true);
     if (!voiceNameRef || voiceNameRef.toString().trim().length === 0 || !descText || descText.toString().trim().length === 0) {
@@ -156,6 +155,11 @@ const EditVoice: React.FC = () => {
   if (user.loggedIn === false) {
     return <Redirect to="/login" />;
   }
+
+  if (localStorage.getItem('voiceID') === null || localStorage.getItem('voiceID') === undefined) {
+    return <Redirect to={'/your-voice-list'} />
+  }
+
   return (
     <IonPage className='bg-app'>
       <IonToolbar>

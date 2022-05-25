@@ -13,7 +13,8 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/typography.css";
-import React from "react";
+import { doc, getFirestore, updateDoc } from 'firebase/firestore';
+import React, { useContext } from "react";
 import {
   Redirect,
   Route,
@@ -29,6 +30,7 @@ import Register from "./pages/Register";
 import SoundPlayer from "./pages/SoundPlayer";
 import UrlChanger from "./pages/UrlChanger";
 import SoundsContext from "./provider/SoundsContext";
+import { userContext } from './provider/User';
 import UserContextProvider from "./provider/UserContextProvider";
 import MenuTabs from "./tabsmenu/MenuTabs";
 /* Theme variables */
@@ -39,6 +41,19 @@ setupIonicReact({
 });
 
 const App: React.FC = () => {
+  const user = useContext(userContext);
+  const db = getFirestore();
+  app.addListener('appStateChange', ({ isActive }) => {
+    if (isActive == false) {
+      const signout = doc(db, "users", user.userId!);
+      const ok = async () => {
+        await updateDoc(signout, {
+          isOnline: false,
+        });
+      }
+      ok();
+    }
+  });
   const [actionSheet, dismiss] = useIonActionSheet();
   document.addEventListener('ionBackButton', (ev: any) => {
     ev.detail.register(10, () => {
@@ -47,6 +62,13 @@ const App: React.FC = () => {
         buttons: [{
           text: 'Yes',
           handler: () => {
+            const signout = doc(db, "users", user.userId!);
+            const ok = async () => {
+              await updateDoc(signout, {
+                isOnline: false,
+              });
+            }
+            ok();
             app.exitApp();
           }
         }, {

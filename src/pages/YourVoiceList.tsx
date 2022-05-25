@@ -38,7 +38,7 @@ const YourVoiceList = (props: any) => {
     return;
   }, [])
 
-  const startEditVoiceHandler = (voice:any) => {
+  const startEditVoiceHandler = (voice: any) => {
     localStorage.setItem('voiceID', voice);
     slidingOptionRef.current?.closeOpened();
     history.push('/edit-voice');
@@ -54,7 +54,7 @@ const YourVoiceList = (props: any) => {
     loading({
       message: 'Deleting voice...',
       spinner: 'crescent',
-      duration: 500,
+      duration: 300,
     })
     async function fetchData() {
       await deleteDoc(doc(db, "sounds", voiceID));
@@ -70,6 +70,7 @@ const YourVoiceList = (props: any) => {
       setToastMessage("Deleted voices");
       return
     }
+    localStorage.removeItem('voiceID');
     fetchData();
     dismissLoading();
   };
@@ -81,6 +82,7 @@ const YourVoiceList = (props: any) => {
   if (open == true) {
     return <Redirect to={'/playing'} />
   }
+
 
   return (
     <IonPage className='bg-app'>
@@ -115,24 +117,24 @@ const YourVoiceList = (props: any) => {
               )}
 
               {voices.map((voice: any, index: any) => (
-                  <IonItemSliding key={index} ref={slidingOptionRef}>
-                    <IonItemOptions side="end">
-                      <IonItemOption expandable className="sliding" color="warning" onClick={startEditVoiceHandler.bind(null,voice.id)}>
-                        <IonIcon slot="icon-only" icon={createSharp}></IonIcon>
-                      </IonItemOption>
-                      <IonItemOption className="sliding" color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
-                        <IonIcon slot="icon-only" icon={trashSharp}></IonIcon>
-                      </IonItemOption>
-                    </IonItemOptions>
-                    <IonItem className="list item-list-color-yourvoice " lines="full"
-                      button
-                      onClick={() => playingVoiceHandler(voice)}>
-                      <IonAvatar slot="start">
-                        <img src={voice.images} alt="" />
-                      </IonAvatar>
-                      <IonLabel>{voice.name}</IonLabel>
-                    </IonItem>
-                  </IonItemSliding>
+                <IonItemSliding key={index} ref={slidingOptionRef}>
+                  <IonItemOptions side="end">
+                    <IonItemOption expandable className="sliding" color="warning" onClick={startEditVoiceHandler.bind(null, voice.id)}>
+                      <IonIcon slot="icon-only" icon={createSharp}></IonIcon>
+                    </IonItemOption>
+                    <IonItemOption className="sliding" color="danger" onClick={startDeleteVoiceHandler.bind(null, voice.id)}>
+                      <IonIcon slot="icon-only" icon={trashSharp}></IonIcon>
+                    </IonItemOption>
+                  </IonItemOptions>
+                  <IonItem className="list item-list-color-yourvoice " lines="full"
+                    button
+                    onClick={() => playingVoiceHandler(voice)}>
+                    <IonAvatar slot="start">
+                      <img src={voice.images} alt="" />
+                    </IonAvatar>
+                    <IonLabel>{voice.name}</IonLabel>
+                  </IonItem>
+                </IonItemSliding>
               ))}
             </IonList>
           </IonCol>

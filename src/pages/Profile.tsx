@@ -48,7 +48,7 @@ const Profile: React.FC = () => {
   const db = getFirestore();
   const user = useContext(userContext);
   const [showActionSheet, setShowActionSheet] = useState(false);
-  const [userAge, setAge] = useState<number>(0);
+  const [userAge, setAge] = useState<number>();
   const [presentToast, dismissToast] = useIonToast();
   const [loading, dismissLoading] = useIonLoading();
   const [readData, setReadData] = useState<Array<any>>([]);
@@ -76,8 +76,17 @@ const Profile: React.FC = () => {
         onSnapshot(q, (querySnapshot) => {
           const data = querySnapshot.docs.map((doc) => doc.data());
           setReadData(data);
+          var today = new Date();
+          console.log(readData);
+          
+          const birthDate = new Date(data[0].dob);
+          var age = today.getFullYear() - birthDate!.getFullYear();
+          var m = today.getMonth() - birthDate!.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < birthDate!.getDate())) {
+            age--;
+          }
+          setAge(age);
         })
-        AgeCal();
       }
       else {
         return null;
@@ -107,21 +116,6 @@ const Profile: React.FC = () => {
   }, [db, user]);
 
 
-  const AgeCal = () => {
-    var today = new Date();
-    const birthDate = new Date(readData[0].dob);
-    var age = today.getFullYear() - birthDate!.getFullYear();
-    var m = today.getMonth() - birthDate!.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate!.getDate())) {
-      age--;
-    }
-    setAge(age);
-  };
-
-  const interval = setInterval(()=>{
-    AgeCal();
-  },2000);
-
   const SignOut = () => {
     present({
       message: "Are you sure you want to sign out?",
@@ -138,13 +132,11 @@ const Profile: React.FC = () => {
             const signout = doc(db, "users", user.userId!);
             signOut(auth)
               .then(() => {
-
                 const ok = async () => {
                   await updateDoc(signout, {
                     isOnline: false,
                   });
                 }
-                // Set the "capital" field of the city 'DC'
                 ok();
                 setSignOut("true");
                 presentToast({

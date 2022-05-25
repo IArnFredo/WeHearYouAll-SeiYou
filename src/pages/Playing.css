@@ -10,9 +10,9 @@ ion-title {
 
 .radius-pic-player-cont {
     margin: auto;
-    width: 52vw;
-    height: 52vw;
-    border-radius: 20%;
+    width: 32vw;
+    height: 46vw;
+    border-radius: 50%;
     /* commented for demo
     float: left;
     margin-left: 125px;

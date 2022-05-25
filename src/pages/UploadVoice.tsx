@@ -20,9 +20,9 @@ import {
   useIonViewDidEnter,
   useIonViewWillLeave
 } from '@ionic/react';
-import { doc, getFirestore, setDoc, Timestamp } from 'firebase/firestore';
+import { collection, doc, getFirestore, onSnapshot, query, setDoc, Timestamp, where } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { userContext } from '../provider/User';
 import './EditProfile.css';
@@ -37,12 +37,13 @@ const UploadVoice: React.FC = () => {
   const [recordVoice, setRecordVoice] = React.useState(false);
   const [toast, dismissToast] = useIonToast();
   const [loading, dismissLoading] = useIonLoading();
+  const [gender,setGender] = useState<Array<any>>([]);
   const location = useLocation();
   const history = useHistory();
   const from = useLocation().state;
   const [, setSelectedFile] = useState<File>();
 
-  
+  console.log(user);
 
   const [takenPhoto, setTakenPhoto] = useState<{
     path: string | undefined,
@@ -54,13 +55,20 @@ const UploadVoice: React.FC = () => {
     path: string | undefined,
     preview: string | Uint8Array,
   }>();
+  useEffect(() => {
+    if (user) {
+      onSnapshot(query(collection(db, "users"), where("UserID", "==", user.userId)), (querySnapshot) =>
+        setGender(querySnapshot.docs.map((doc) => doc.data()))
+      )
+    }
+  }, [])
 
-  useIonViewWillLeave(()=>{
+  useIonViewWillLeave(() => {
     setRecordVoice(false);
     setTakenSounds(undefined);
   })
 
-  
+
   useIonViewDidEnter(() => {
     const state: any = location.state;
     console.log(state);
@@ -115,6 +123,7 @@ const UploadVoice: React.FC = () => {
           id: takenSounds.id,
           name: enteredName,
           description: enteredDesc,
+          gender: gender[0].gender,
           soundsURL: url,
           uploadTime: Timestamp.fromDate(new Date()),
           userName: user.userData.displayName,
@@ -126,8 +135,6 @@ const UploadVoice: React.FC = () => {
           message: 'Audio Uploaded',
           duration: 1000,
         });
-        setTakenSounds(undefined);
-        setRecordVoice(false);
         history.push('/your-voice-list', { state: { from: location } });
       } catch (error) {
         console.log(error);
@@ -155,6 +162,8 @@ const UploadVoice: React.FC = () => {
               uploadBytes(storageRef, blob).then((snapshot) => {
                 console.log(snapshot);
                 getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+                  setTakenSounds(undefined);
+                  setRecordVoice(false);
                   saveData(url, photoUrl);
                 }).catch((error) => {
                   console.log(error);
@@ -168,6 +177,8 @@ const UploadVoice: React.FC = () => {
           const storageRef = ref(storage, `sounds/${id}.mp3`);
           uploadBytes(storageRef, blob).then((snapshot) => {
             getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+              setTakenSounds(undefined);
+              setRecordVoice(false);
               saveData(url, '');
             }).catch((error) => {
               console.log(error);
@@ -205,6 +216,8 @@ const UploadVoice: React.FC = () => {
             uploadBytes(storageRef, blob).then((snapshot) => {
               console.log(snapshot);
               getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+                setTakenSounds(undefined);
+                setRecordVoice(false);
                 saveData(url, photoUrl);
               }).catch((error) => {
                 console.log(error);
@@ -220,6 +233,8 @@ const UploadVoice: React.FC = () => {
         uploadBytes(storageRef, blob).then((snapshot) => {
           console.log(snapshot);
           getDownloadURL(ref(storage, `sounds/${id}.mp3`)).then((url) => {
+            setTakenSounds(undefined);
+            setRecordVoice(false);
             saveData(url, '');
           }).catch((error) => {
             console.log(error);

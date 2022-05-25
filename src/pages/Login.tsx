@@ -139,6 +139,7 @@ const Login: React.FC = () => {
         presentToast({
           message: "Password reset email sent, please check your email",
           buttons: [{ text: 'hide', handler: () => dismissToast() }],
+          duration:2000,
         })
       })
       .catch((error) => {
@@ -147,6 +148,7 @@ const Login: React.FC = () => {
         presentToast({
           message: "Email is not registered!",
           buttons: [{ text: 'hide', handler: () => dismissToast() }],
+          duration:2000,
         })
       });
   }

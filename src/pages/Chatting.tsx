@@ -2,7 +2,7 @@ import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonFooter, Io
 import { addDoc, collection, getFirestore, onSnapshot, orderBy, query, Timestamp, where } from 'firebase/firestore';
 import { callOutline, videocamOutline, settingsOutline, sendOutline } from "ionicons/icons";
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 import { userContext } from '../provider/User';
 import './Chatting.css';
 import Messages from './Messages';
@@ -14,9 +14,11 @@ const Chatting: React.FC = () => {
   const [text, setText] = useState<string>('');
   const [userData, setUserData] = useState<Array<any>>([]);
   const [msgs, setMsgs] = useState<Array<any>>([]);
-  const [toast , useToast] = useIonToast();
+  const [toast, useToast] = useIonToast();
   const user2 = useParams<{ userID: string }>().userID;
   const user1 = user.userId;
+
+  console.log(user);
 
 
   useEffect(() => {
@@ -39,20 +41,28 @@ const Chatting: React.FC = () => {
 
   const submit = async (e: any) => {
     e.preventDefault();
-    
+
     if (text == '') {
       return
     }
 
     const id = user1! > user2 ? `${user1 + user2}` : `${user2 + user1}`;
     await addDoc(collection(db, "chats", id, "messages"), {
-      id:id,
+      id: id,
       text,
       from: user1,
       to: user2,
       createdAt: Timestamp.fromDate(new Date()),
     });
     setText("");
+  }
+
+  if (user.loggedIn == false) {
+    toast({
+      message: "You must login first before do chatting feature.",
+      duration: 2000,
+    })
+    return <Redirect to="/login" />;
   }
 
   return (
@@ -79,7 +89,7 @@ const Chatting: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent className='bg-app big-container ion-margin-bottom'>
-        {msgs.length ? msgs.map((msg, i) => <Messages key={i} msg={msg} user1={user1} />) : null}
+          {msgs.length ? msgs.map((msg, i) => <Messages key={i} msg={msg} user1={user1} />) : null}
           {/* <div className="base-container">
             <div className="friend-text-div">
               <div className="friend-text-container">
