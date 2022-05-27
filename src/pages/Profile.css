@@ -85,3 +85,6 @@
     transform: translateY(4px) translateX(4px);
     box-shadow: #2d3958 0px 0px 0px;
 }
+.another-profile-img{
+    --border-radius: 50%;
+}

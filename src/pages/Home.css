@@ -66,6 +66,10 @@
     --background: #f8c051;
 }
 
+.home-icon {
+    font-size: 24px;
+}
+
 #margin-for-float-btn-home{
     margin-bottom: 100px;
 }

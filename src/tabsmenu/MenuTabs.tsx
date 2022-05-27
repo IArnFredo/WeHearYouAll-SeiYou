@@ -1,3 +1,4 @@
+import { getElement } from "@ionic/core/dist/types/stencil-public-runtime";
 import {
   IonTabs,
   IonRouterOutlet,
@@ -5,14 +6,20 @@ import {
   IonTabButton,
   IonIcon,
   IonLabel,
+  IonActionSheet,
+  IonItem,
 } from "@ionic/react";
 import {
+  cloudUploadOutline,
+  duplicateOutline,
   ellipsisVerticalCircleOutline,
   homeOutline,
+  mic,
+  personCircleOutline,
   searchOutline,
 } from "ionicons/icons";
-import { useContext } from "react";
-import { Route, Switch, withRouter } from "react-router";
+import { useContext, useState } from "react";
+import { Route, Switch, useHistory, withRouter } from "react-router";
 import AnotherProfile from "../pages/AnotherProfile";
 import Chatting from "../pages/Chatting";
 import EditProfile from "../pages/EditProfile";
@@ -24,10 +31,13 @@ import SoundPlayer from "../pages/SoundPlayer";
 import UploadVoice from "../pages/UploadVoice";
 import YourVoiceList from "../pages/YourVoiceList";
 import { userContext } from "../provider/User";
+import './MenuTabs.css';
+
+
 
 const MenuTabs: React.FC = () => {
   const user = useContext(userContext);
-
+  const history = useHistory();
   if (!user) return null;
   return (
     <>
@@ -47,22 +57,26 @@ const MenuTabs: React.FC = () => {
           <Route path="/your-voice-list" exact={true} component={YourVoiceList} />
           <Route path="/edit-voice" exact={true} component={EditVoice} />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom">
+        <IonTabBar slot="bottom" >
           <IonTabButton tab="tab1" href="/home">
             <IonIcon icon={homeOutline} />
-            <IonLabel>Home</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab2" href="/search">
             <IonIcon icon={searchOutline} />
-            <IonLabel>Search</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href={user.loggedIn == false ? '/login' : '/profile'}>
-            <IonIcon icon={ellipsisVerticalCircleOutline} />
-            <IonLabel>Profile</IonLabel>
+            {user.loggedIn == false ?
+              <IonIcon icon={personCircleOutline} />
+              : <div className="radius-pic-menu-tabs">
+                <img className="radius-pic-menu" src={user.userData.photoURL} />
+              </div>}
+
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
+
     </>
+
   );
 };
 

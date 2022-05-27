@@ -1,0 +1,30 @@
+.ion-item-transparent{
+    --background: transparent;
+}
+
+.ion-item-transparent-color{
+    --color:#f8c051;
+}
+
+.radius-pic-menu-tabs{
+    margin: auto;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    /* commented for demo
+    float: left;
+    margin-left: 125px;
+    margin-top: 20px;
+    */
+
+    /*for demo*/
+
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    overflow: hidden;
+}
+
+.radius-pic-menu {
+    width: 100%;
+}

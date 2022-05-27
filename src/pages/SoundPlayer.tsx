@@ -205,8 +205,7 @@ const SoundPlayer: React.FC = () => {
     if (location === "/playing") {
       if (ToolbarPlaying != null) {
         Changer.style.left = "0px"
-        Changer.style.bottom = "67px"
-        ToolbarPlaying.classList.add("ion-notoolbar-playing");
+        Changer.style.bottom = "0px"
         if (state.ui.initiate == true) {
           text.classList.add("hide");
         }

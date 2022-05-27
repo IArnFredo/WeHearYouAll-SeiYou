@@ -10,9 +10,10 @@ ion-title {
 
 .radius-pic-player-cont {
     margin: auto;
-    width: 32vw;
-    height: 46vw;
+    width: 36vw;
+    height: 36vw;
     border-radius: 50%;
+
     /* commented for demo
     float: left;
     margin-left: 125px;
@@ -24,6 +25,7 @@ ion-title {
     align-items: center;
     justify-content: center;
     display: flex;
+    overflow: hidden;
 }
 
 .radius-pic-player {
@@ -36,6 +38,7 @@ ion-title {
 
 .ion-content-playing {
     --background: transparent;
+    --padding-bottom: 80px;
 }
 
 .rhap_container {
@@ -108,4 +111,23 @@ ion-title {
 
 .hide {
     display: none;
+}
+
+#comment-card {
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+#comment-box{
+    overflow: hidden;
+    overflow-y: auto;   
+}
+
+#comment-input {
+    font-size: 12px;
+}
+
+#comment-row{
+    height: 40px;
 }

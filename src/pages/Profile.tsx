@@ -77,8 +77,7 @@ const Profile: React.FC = () => {
           const data = querySnapshot.docs.map((doc) => doc.data());
           setReadData(data);
           var today = new Date();
-          console.log(readData);
-          
+
           const birthDate = new Date(data[0].dob);
           var age = today.getFullYear() - birthDate!.getFullYear();
           var m = today.getMonth() - birthDate!.getMonth();
@@ -194,63 +193,59 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       {user && (
-
         <IonContent fullscreen className="bg-app" id="bg">
           <IonRow>
-            {readData.map((data) => (
-              <>
-                <IonCol key={data.UserID} size="12">
-                  <div className="avatar-profile-cont">
-                    <img className="avatar-profile" src={data.photoUrl} />
-                  </div>
-                  <IonCardHeader class="text-profile">
-                    <IonCardTitle>{data.name}</IonCardTitle>
-                    <IonCardSubtitle>
-                      {/* {user.userData?.emailVerified ? "Verified" : "Not Verified"} <br /> */}
-                      {data.gender}, {userAge}
-                    </IonCardSubtitle>
-                    <IonCardContent>
-                      <IonButton
-                        color="secondary"
-                        onClick={() => setShowModal(true)}
-                        className="chatBtn animated-btn"
-                        shape="round"
-                      >
-                        Chat List &nbsp;
-                        <IonIcon icon={chatboxEllipsesSharp} />&nbsp;
-                      </IonButton>
-                    </IonCardContent>
-                  </IonCardHeader>
-
-
+            {readData.map((data, id) => (
+              <IonCol key={id} size="12">
+                <div className="avatar-profile-cont">
+                  <img className="avatar-profile" src={data.photoUrl} />
+                </div>
+                <IonCardHeader class="text-profile">
+                  <IonCardTitle>{data.name}</IonCardTitle>
+                  <IonCardSubtitle>
+                    {/* {user.userData?.emailVerified ? "Verified" : "Not Verified"} <br /> */}
+                    {data.gender}, {userAge}
+                  </IonCardSubtitle>
                   <IonCardContent>
-                    <IonButton id="profile-Button"
-                      routerLink="/edit-profile"
-                      expand="full"
+                    <IonButton
+                      color="secondary"
+                      onClick={() => setShowModal(true)}
+                      className="chatBtn animated-btn"
                       shape="round"
-                      className="animated-btn">
-                      <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
-                      Edit Profile
-                    </IonButton>
-                    <IonButton id="profile-Button"
-                      routerLink="/your-voice-list"
-                      expand="block"
-                      shape="round"
-                      className="animated-btn">
-                      <IonIcon className="button-icon" icon={playOutline} />&nbsp;
-                      Your Voices
-                    </IonButton>
-                    <IonButton id="profile-Button"
-                      onClick={() => setShowActionSheet(true)}
-                      expand="block"
-                      shape="round"
-                      className="animated-btn">
-                      <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
-                      Upload New Voices
+                    >
+                      Chat List &nbsp;
+                      <IonIcon icon={chatboxEllipsesSharp} />&nbsp;
                     </IonButton>
                   </IonCardContent>
-                </IonCol>
-              </>
+                </IonCardHeader>
+
+                <IonCardContent>
+                  <IonButton id="profile-Button"
+                    routerLink="/edit-profile"
+                    expand="full"
+                    shape="round"
+                    className="animated-btn">
+                    <IonIcon className="button-icon" icon={pencilOutline} />&nbsp;
+                    Edit Profile
+                  </IonButton>
+                  <IonButton id="profile-Button"
+                    routerLink="/your-voice-list"
+                    expand="block"
+                    shape="round"
+                    className="animated-btn">
+                    <IonIcon className="button-icon" icon={playOutline} />&nbsp;
+                    Your Voices
+                  </IonButton>
+                  <IonButton id="profile-Button"
+                    onClick={() => setShowActionSheet(true)}
+                    expand="block"
+                    shape="round"
+                    className="animated-btn">
+                    <IonIcon className="button-icon" icon={arrowUpOutline} />&nbsp;
+                    Upload New Voices
+                  </IonButton>
+                </IonCardContent>
+              </IonCol>
             ))}
           </IonRow>
           <IonRow id="margin-for-float-btn-profile">
@@ -306,15 +301,13 @@ const Profile: React.FC = () => {
         </IonHeader>
 
         <IonContent>
-          {listChat.map((data) => (
-            <>
-              <IonItem key={data.UserID} button routerLink={`/chat/${data.UserID}`}>
-                <IonThumbnail slot="start">
-                  <img src={data.photoUrl} />
-                </IonThumbnail>
-                <IonLabel>{data.name}</IonLabel>
-              </IonItem>
-            </>
+          {listChat.map((data, id) => (
+            <IonItem key={id} button routerLink={`/chat/${data.UserID}`}>
+              <IonThumbnail slot="start">
+                <img src={data.photoUrl} />
+              </IonThumbnail>
+              <IonLabel>{data.name}</IonLabel>
+            </IonItem>
           ))}
         </IonContent>
 

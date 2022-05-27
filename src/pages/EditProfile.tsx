@@ -20,7 +20,7 @@ import {
   useIonToast,
 } from "@ionic/react";
 import { getAuth, updateProfile } from "firebase/auth";
-import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, DocumentData, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { pencilOutline } from "ionicons/icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -67,6 +67,7 @@ const EditProfile: React.FC = () => {
   }, [db, user]);
 
   const saveUpdate = async (photoUrl: string) => {
+    const signout = doc(db, "sounds", user.userId!);
     const docRef = doc(db, 'users', user.userId!);
     try {
       await setDoc(docRef, {
@@ -84,6 +85,14 @@ const EditProfile: React.FC = () => {
       }).catch((error) => {
         console.error("Error updating profile: ", error);
       });
+      const ok = async () => {
+        await updateDoc(signout, {
+          userName: name,
+        });
+        console.log("lol");
+        
+      }
+      ok();
       dismissLoading();
       presentToast({
         message: 'Your profile has been updated!',

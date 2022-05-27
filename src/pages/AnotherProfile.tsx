@@ -78,7 +78,7 @@ const AnotherProfile: React.FC = () => {
                 <IonCardSubtitle>{user.gender}, 20</IonCardSubtitle>
               </IonCardHeader> */}
               <IonItem lines="none">
-                <IonThumbnail>
+                <IonThumbnail class='another-profile-img'>
                   <img src={user.photoUrl} />
                 </IonThumbnail>
                 <IonLabel>

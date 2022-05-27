@@ -43,7 +43,6 @@ const UploadVoice: React.FC = () => {
   const from = useLocation().state;
   const [, setSelectedFile] = useState<File>();
 
-  console.log(user);
 
   const [takenPhoto, setTakenPhoto] = useState<{
     path: string | undefined,
@@ -71,7 +70,6 @@ const UploadVoice: React.FC = () => {
 
   useIonViewDidEnter(() => {
     const state: any = location.state;
-    console.log(state);
     if (state) {
       setTakenSounds({
         id: state.detail.id,
