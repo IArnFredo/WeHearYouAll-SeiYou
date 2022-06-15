@@ -89,7 +89,7 @@ const Home: React.FC = () => {
       {user.loggedIn == false && (
         <>
           <IonToolbar className="toolbar-transparent">
-            <img src="/assets/icon/icon.png" style={{marginLeft:"8%", marginTop:"2%"}} width="23%" alt="" />
+            <img src="/assets/icon/icon.png" style={{marginLeft:"8%", marginTop:"2%"}} width="90vw" alt="" />
             <IonButton fill="default" class="ion-no-padding ion-margin" onClick={()=>setShowActionSheet(true)} slot="end">
               <IonIcon icon={duplicate} className="home-icon"/>
             </IonButton>
